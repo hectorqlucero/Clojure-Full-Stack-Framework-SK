@@ -31,7 +31,7 @@ A Clojure library designed to create a skeleton web application
   ```
 4. Create a mysql database tables. You can find all the tables an how to create them in: 
 
-   src/ciclismo/models/cdb.clj
+   src/sk/models/cdb.clj
 
 ## Running
 Go to project directory and type: Lein run
