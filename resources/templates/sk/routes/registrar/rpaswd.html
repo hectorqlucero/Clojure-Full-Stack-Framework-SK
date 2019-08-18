@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% style "/easyui/themes/default/easyui.css" %}
+{% style "/easyui/themes/icon.css" %}
+{% style "/easyui/themes/color.css" %}
+{% endblock %}
+
+{% block content %}
+<div class="container col-8">
+    <div class="card-header">
+        <h4 class="mb-0"><span style="color:rgb(18,123,163);">{{ title }}</span></h4>
+    </div>
+    <form id="mf" class="fm" method="post" novalidate style="width:100%;background-color:#EFEFEF;">
+        {% csrf-field %}
+        <div class="form-group col-10">
+            <label for="email">Email:</label>
+            <input name="email" class="form-control easyui-validatebox" id="email" data-options="required:true,validType:'email'">
+        </div>
+        <div class="form-group col-10">
+            <a href="javascript:void(0)" class="btn btn-primary easyui-linkbutton" id="submit">Resetear Contraseña</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% script "/easyui/jquery.easyui.min.js" %}
+{% script "/easyui/datagrid-detailview.js" %}
+{% script "/easyui/plugins/jquery.datagrid.js" %}
+{% script "/js/jquery.maskedinput.min.js" %}
+{% script "/easyui/locale/easyui-lang-es.js" %}
+<script>
+  $(document).ready(function() {
+
+    $("a#submit").click(function() {
+      $("#mf").form("submit", {
+        onSubmit: function() {
+          return $(this).form("enableValidation").form("validate");
+        },
+        success: function(data) {
+          try {
+            var dta = JSON.parse(data);
+            if(dta.hasOwnProperty('url')) {
+              $.messager.alert({
+                title: 'Información!',
+                msg: 'Revise su correo electronico donde vera instrucciones para resetear su contraseña!',
+                fn: function() {
+                  window.location.href = dta.url;
+                }
+              });
+            } else if(dta.hasOwnProperty('error')) {
+              $.messager.alert('Error', dta.error, 'error');
+            }
+          } catch(e) {
+            console.error("Invalid JSON");
+          }
+        }
+      });
+    });
+
+    function give_error () {
+      $.messager.alert({
+        title: 'Error',
+        msg: 'Este correo no existe en la base de datos, intente otra vez!',
+        fn: function() {
+          window.location.href="/rpaswd";
+        }
+      });
+    }
+
+    $("#email").textbox({
+      onChange: function(value) {
+        var url = "/table_ref/validate_email/"+value;
+        $.get(url, function(data) {
+          try {
+            var dta = JSON.parse(data);
+            if(dta.hasOwnProperty('email')) {
+              if(value !== dta.email) {
+                give_error();
+              }
+            } else {
+              give_error()
+            }
+          } catch(e) {
+            give_error()
+          }
+        });
+      }
+    });
+
+  });
+</script>
+{% endblock %}

@@ -1,4 +1,4 @@
-(ns sk.admin
+(ns sk.proutes
   (:require [compojure.core :refer [defroutes GET POST]]))
 
-(defroutes admin-routes)
+(defroutes proutes)

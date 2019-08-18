@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% style "/easyui/themes/default/easyui.css" %}
+{% style "/easyui/themes/icon.css" %}
+{% style "/easyui/themes/color.css" %}
+{% endblock %}
+
+{% block content %}
+<div class="container col-8">
+  <div class="card-header">
+    <h4 class="mb-0"><span style="color:rgb(18,123,163);">{{ title }}</span></h4>
+  </div>
+  <form class="fm" enctype="multipart/form-data" method="post" novalidate style="width:100%;background-color:#EFEFEF;">
+    {% csrf-field %}
+    <div class="form-group col-10">
+      <label for="email">Correo Electronico:</label>
+      <input name="email" class="form-control easyui-validatebox" id="email" data-options="required: true,validType:'email'">
+    </div>
+    <div class="form-group col-10">
+      <label for="password">Contraseña:</label>
+      <input name="password" id="password" class="form-control easyui-passwordbox">
+    </div>
+    <div class="form-group col-10">
+      <label for="password1">Confirmar Contraseña:</label>
+      <input class="form-control easyui-passwordbox" validType="confirmPass['#password']">
+    </div>
+    <div class="form-group col-10">
+      <label for="firstname">Nombre:</label>
+      <input name="firstname" class="form-control easyui-textbox" id="firstname" data-options="required:true">
+    </div>
+    <div class="form-group col-10">
+      <label for="lastname">Apellidos:</label>
+      <input name="lastname" class="form-control easyui-textbox" id="lastname" data-options="required:true">
+    </div>
+    <div class="form-group col-10">
+      <a href="javascript:void(0)" class="btn btn-primary easyui-linkbutton" id="submit">Registrarse</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% script "/easyui/jquery.easyui.min.js" %}
+{% script "/easyui/datagrid-detailview.js" %}
+{% script "/easyui/plugins/jquery.datagrid.js" %}
+{% script "/js/jquery.maskedinput.min.js" %}
+{% script "/easyui/locale/easyui-lang-es.js" %}
+<script>
+  $(document).ready(function() {
+    $("a#submit").click(function() {
+      $("form.fm").form("submit", {
+        onSubmit: function() {
+          return $(this).form("enableValidation").form("validate");
+        },
+        success: function(data) {
+          try {
+            var dta = JSON.parse(data);
+            if(dta.hasOwnProperty('url')) {
+              $.messager.alert({
+                title: 'Processado!',
+                msg: 'Usuario registrado correctamente!',
+                fn: function() {
+                  window.location.href = dta.url
+                }
+              })
+            } else if(dta.hasOwnProperty('error')) {
+              $.messager.alert('Error', dta.error, 'error');
+            }
+          } catch(e) {
+            console.error("Invalid JSON");
+          }
+        }
+      });
+    });
+
+    $("#email").textbox({
+      onChange: function(value) {
+        var url = "/table_ref/validate_email/"+value;
+        $.get(url, function(data) {
+          try {
+            var dta = JSON.parse(data);
+            if(dta.hasOwnProperty('email')) {
+              if(value == dta.email) {
+                $.messager.alert({
+                  title: 'Error',
+                  msg: 'Este usuario ya existe!',
+                  fn: function() {
+                    window.location.href="/registrar";
+                  }
+                });
+              }
+            }
+          } catch(e) {}
+        });
+      }
+    });
+
+    $.extend($.fn.validatebox.defaults.rules, {
+      confirmPass: {
+        validator: function(value, param) {
+          var password = $(param[0]).passwordbox('getValue');
+          return value == password;
+        },
+        message: 'La contraseña confirmadora no es igual.'
+      }
+    })
+  });
+</script> 
+{% endblock %}

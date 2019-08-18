@@ -1,6 +1,6 @@
 (ns sk.models.email
   (:require [postal.core :refer [send-message]]
-            [ciclismo.models.crud :refer [config]]))
+            [sk.models.crud :refer [config]]))
 
 ;;(send-message {:host "email-host"
 ;;               :user "email-user"
@@ -37,7 +37,7 @@
 
 (def body
   {:from    "hectorqlucero@gmail.com"
-   :to      "marthalucero56@gmail.com"
+   :to      "hectorqlucero@gmail.com"
    :subject "Hi!"
    :body    [{:type    "text/html;charset=utf-8"
               :content "<b>Testing</b>"}]})

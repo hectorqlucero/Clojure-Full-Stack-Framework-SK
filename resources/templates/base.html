@@ -9,8 +9,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no"> {% endblock %}
 
     <!-- Navbar header -->
-    {% block navbar_head %} {% style "/bootstrap/css/bootstrap.min.css" %} {% style
-    "/bootstrap/css/lumen.min.css" %} {% endblock %}
+    {% block navbar_head %}
+    {% style "/bootstrap/css/bootstrap.min.css" %}
+    {% style "/bootstrap/css/lumen.min.css" %}
+    {% endblock %}
 
     <!-- Block header -->
     {% block head %} {% endblock %}
@@ -27,7 +29,7 @@
 
     <!-- Navigation bar -->
     {% block navbar_content %}
-    {% include "menus.html" %}
+    {% include "sk/menus.html" %}
     {% endblock %}
 
     <!-- App container -->
@@ -37,8 +39,11 @@
     </div>
 
     <!-- Navbar scripts -->
-    {% block navbar_scripts %} {% script "/easyui/jquery.min.js" %} {% script "/popper/popper.min.js"
-    %} {% script "/bootstrap/js/bootstrap.min.js" %} {% endblock %}
+    {% block navbar_scripts %}
+    {% script "/easyui/jquery.min.js" %}
+    {% script "/popper/popper.min.js" %}
+    {% script "/bootstrap/js/bootstrap.min.js" %}
+    {% endblock %}
 
     <!-- Generic scripts -->
     {% block scripts %} {% endblock %}

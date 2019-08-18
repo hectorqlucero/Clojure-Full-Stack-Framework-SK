@@ -2,6 +2,8 @@
   (:require [sk.models.crud :refer :all]
             [clj-time.core :as t]
             [clj-time.format :as f]
+            [clj-time.coerce :as c]
+            [clj-jwt.core :refer :all]
             [clojure.string :refer [join]]
             [clojurewerkz.money.amounts :as ma]
             [clojurewerkz.money.currencies :as mc]
@@ -51,6 +53,39 @@
 (def internal-time-parser (f/formatter tz "HH:mm:ss" "H:k:s"))
 
 (def external-time-parser (f/formatter tz "hh:mm:ss a" "H:k:s"))
+
+(defn get-base-url [request]
+  (str (subs (str (:scheme request)) 1) "://" (:server-name request) ":" (:server-port request)))
+
+(defn get-reset-url [request token]
+  (str (get-base-url request) "/reset_password/" token))
+
+;; Start jwt token
+(defn create-token [k]
+  "Creates jwt token with 10 minutes expiration time"
+  (let [data {:iss k
+              :exp (t/plus (t/now) (t/minutes 10))
+              :iat (t/now)}]
+    (-> data jwt to-str)))
+
+(defn decode-token [t]
+  "Decodes jwt token"
+  (-> t str->jwt :claims))
+
+(defn verify-token [t]
+  "Verifies that token is good"
+  (-> t str->jwt verify))
+
+(defn check-token [t]
+  "Checks if token verifes and it's not expired, returns id or nil"
+  (let [token (decode-token t)
+        exp (:exp token)
+        cexp (c/to-epoch (t/now))
+        token-id (:iss token)]
+    (if (and (verify-token t) (> exp cexp))
+      token-id
+      nil)))
+;; End jwt token
 
 (defn get-session-id []
   (try

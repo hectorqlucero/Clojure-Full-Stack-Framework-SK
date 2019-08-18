@@ -1,8 +1,8 @@
 (ns sk.core
   (:gen-class)
   (:require [sk.models.crud :refer [config db KEY Query]]
-            [sk.routes :refer [sk-routes]]
-            [sk.admin :refer [admin-routes]]
+            [sk.routes :refer [open-routes]]
+            [sk.proutes :refer [proutes]]
             [compojure.core :refer :all]
             [compojure.handler :as handler]
             [compojure.route :as route]
@@ -43,10 +43,10 @@
         {:status 400 :body "Invalid data"}))))
 
 (defroutes public-routes
-  sk-routes)
+  open-routes)
 
 (defroutes protected-routes
-  admin-routes)
+  proutes)
 
 (defroutes app-routes
   (route/resources "/")

@@ -1,13 +1,31 @@
 (ns sk.table_ref
-  (:require [cheshire.core :refer [generate-string]]
-            [sk.models.crud :refer [db Query]]
+  (:require [sk.models.crud :refer [db Query]]
             [sk.models.util :refer [parse-int current_year]]
             [compojure.core :refer [defroutes GET]]))
 
+;; Start get_users
 (def get_users-sql
   "SELECT id AS value, concat(firstname,' ',lastname) AS text FROM users order by firstname,lastname")
 
+(defn get-users []
+  "Regresa todos los usuarios o vacio ex: (get-users)"
+  (Query db [get_users-sql]))
+;; End get_users
+
+;; Start get-users-email
+(def get-users-email-sql
+  "SELECT
+   email
+   FROM users
+   WHERE email = ?")
+
+(defn get-users-email [email]
+  "Regresa el correo del usuario o nulo"
+  (first (Query db [get-users-email-sql email])))
+;; End get-users-email
+
 (defn months []
+  "Regresa un arreglo de meses en español ex: (months)"
   (list
    {:value 1 :text "Enero"}
    {:value 2 :text "Febrero"}
@@ -23,13 +41,10 @@
    {:value 12 :text "Diciembre"}))
 
 (defn years [p n]
+  "Genera listado para dropdown dependiendo de p=anterioriores de este año, n=despues de este año,
+   ex: (years 5 4)"
   (let [year   (parse-int (current_year))
         pyears (for [n (range (parse-int p) 0 -1)] {:value (- year n) :text (- year n)})
         nyears (for [n (range 0 (+ (parse-int n) 1))] {:value (+ year n) :text (+ year n)})
         years  (concat pyears nyears)]
     years))
-
-(defroutes table_ref-routes
-  (GET "/table_ref/get_users" [] (generate-string (Query db [get_users-sql])))
-  (GET "/table_ref/months" [] (generate-string (months)))
-  (GET "/table_ref/years/:pyears/:nyears" [pyears nyears] (generate-string (years pyears nyears))))

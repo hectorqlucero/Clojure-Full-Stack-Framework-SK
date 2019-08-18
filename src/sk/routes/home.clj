@@ -7,13 +7,30 @@
             [noir.response :refer [redirect]]
             [selmer.parser :refer [render-file]]))
 
+;; Start Main
+(def main-sql
+  "SELECT
+   username
+   FROM users
+   WHERE id = ?")
+
+(defn get-main-title []
+  (let [id (get-session-id)
+        title (if id
+                (:username (first (Query db [main-sql id])))
+                "Hacer clic en el menu \"Entrar\" para accessar el sitio")]
+    title))
+
 (defn main [request]
-  (render-file "routes/main.html" {:title "Welcome to the Jungle!"}))
+  (render-file "sk/routes/home/main.html" {:title (get-main-title)
+                                      :ok (get-session-id)}))
+;; End main
 
 (defn login [_]
   (if-not (nil? (get-session-id))
     (redirect "/")
-    (render-file "routes/login.html" {:title "Accesar al Sitio!"})))
+    (render-file "sk/routes/home/login.html" {:title "Accesar al Sitio!"
+                                         :ok (get-session-id)})))
 
 (defn login! [username password]
   (let [row    (first (Query db ["select * from users where username = ?" username]))
