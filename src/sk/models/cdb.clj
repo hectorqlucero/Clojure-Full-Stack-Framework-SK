@@ -37,7 +37,7 @@
     :active    "T"}])
 
 (defn create-database []
-  "Creates database and a default admin users"
+  "Creates database via mysql client, this will create the users table"
   (Query! db users-sql)
   (Insert-multi db :users user-rows))
 
@@ -52,5 +52,4 @@
   (Query! db "DROP table IF EXISTS users")
   (Query! db users-sql)
   (Insert-multi db :users user-rows))
-
 ;;(create-database)
