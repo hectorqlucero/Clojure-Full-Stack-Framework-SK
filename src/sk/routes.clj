@@ -21,8 +21,8 @@
   ;; End home
 
   ;; Start registrar
-  (GET "/registrar" request [] (registrar/registrar request))
-  (POST "/registrar" request [] (registrar/registrar! request))
+  (GET "/register" request [] (registrar/registrar request))
+  (POST "/register" request [] (registrar/registrar! request))
   (GET "/rpaswd" request [] (registrar/reset-password request))
   (POST "/rpaswd" request [] (registrar/reset-password! request))
   (GET "/reset_password/:token" [token] (registrar/reset-jwt token))

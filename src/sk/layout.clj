@@ -69,6 +69,7 @@
     (include-js "/easyui/datagrid-bufferview.js")
     (include-js "/easyui/datagrid-scrollview.js")
     (include-js "/easyui/datagrid-filter.js")
+    (include-js "/easyui/locale/easyui-lang-en.js")
     (include-js "/RichText/src/jquery.richtext.min.js")
     (include-js "/js/main.js")))
 
