@@ -11,7 +11,7 @@
             [ring.middleware.session :refer :all]
             [ring.middleware.session.cookie :refer :all]
             [ring.util.anti-forgery :refer :all]
-            [sk.models.crud :refer [config db KEY Query]]
+            [sk.models.crud :refer [config db KEY]]
             [sk.routes :refer [open-routes]]
             [sk.proutes :refer [proutes]])
   (:gen-class))
@@ -38,7 +38,7 @@
 
 (defroutes app-routes
   (route/resources "/")
-  (route/files "/uploads/")
+  (route/files "/uploads/" {:root (:uploads config)})
   (route/not-found "Not Found"))
 
 (defn -main []

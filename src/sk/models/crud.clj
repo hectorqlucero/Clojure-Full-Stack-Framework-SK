@@ -189,7 +189,7 @@
     (catch Exception e (.getMessage e))))
 
 (defn crud-capitalize-words
-  "Captitalizar todas las palabras en una hilera"
+  "Capitalize words"
   [s]
   (try
     (->> (clojure.string/split (str s) #"\b")
@@ -347,8 +347,8 @@
           postvars (assoc postvars :imagen image-name :id the-id)
           result (Update db (keyword table) postvars ["id = ?" the-id])]
       (if (seq result)
-        (generate-string {:success "Correctamente Processado!"})
-        (generate-string {:error "No se pudo processar!"})))
+        (generate-string {:success "Processed Successfully!"})
+        (generate-string {:error "Unable to process!"})))
     (catch Exception e (.getMessage e))))
 ;; End upload form
 
@@ -369,6 +369,6 @@
                    (Delete db (keyword table) ["id = ?" id])
                    nil)]
       (if (seq result)
-        (generate-string {:success "Removido appropiadamente!"})
-        (generate-string {:error "No se pudo remover!"})))
+        (generate-string {:success "Removed Successfully!"})
+        (generate-string {:error "Unable to remove!"})))
     (catch Exception e (.getMessage e))))

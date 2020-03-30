@@ -14,7 +14,7 @@ function returnItem(url) {
 }
 
 function newItem() {
-  dlg.dialog("open").dialog("center").dialog('setTitle', 'Nuevo Record');
+  dlg.dialog("open").dialog("center").dialog('setTitle', 'New Record');
   windowHeight = $(window).height() - ($(window).height() * 0.2);
   dlg.dialog('resize', {height: windowHeight}).dialog('center');
   fm.form("clear");
@@ -24,7 +24,7 @@ function newItem() {
 function editItem(params) {
   var row = dg.datagrid('getSelected');
   if (row) {
-    dlg.dialog("open").dialog('center').dialog('setTitle', 'Editar Record');
+    dlg.dialog("open").dialog('center').dialog('setTitle', 'Edit Record');
     windowHeight = $(window).height() - ($(window).height() * 0.2);
     dlg.dialog('resize', {height: windowHeight}).dialog('center');
     fm.form("clear");
@@ -67,7 +67,7 @@ function deleteItem() {
   var row = dg.datagrid("getSelected");
   if(row) {
     var url = window.location.href + '/delete';
-    $.messager.confirm('Confirmar','Esta seguro que quiere eliminar este record?',function(r) {
+    $.messager.confirm('Confirmar','Are you sure you want to remove this record?',function(r) {
       $.post(url, {id:row.id,'__anti-forgery-token':token},function(result) {
         if(result.success) {
           dg.datagrid("reload");

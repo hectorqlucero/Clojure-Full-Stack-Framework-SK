@@ -11,7 +11,6 @@
   (GET "/table_ref/validate_email/:email" [email] (generate-string (table_ref/get-users-email email)))
   (GET "/table_ref/months" [] (generate-string (table_ref/months)))
   (GET "/table_ref/years/:pyears/:nyears" [pyears nyears] (generate-string (table_ref/years pyears nyears)))
-  (GET "/table_ref/get_imagen/:id" [id] (table_ref/imagen "eventos" "imagen" "id" id "eventos/"))
   ;; End table_ref
 
   ;; Start home

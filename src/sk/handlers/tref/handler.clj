@@ -14,7 +14,7 @@
   firstname,lastname")
 
 (defn get-users []
-  "Regresa todos los usuarios o vacio :ex: (get-users)"
+  "Gets all users from database :ex: (get-users)"
   (Query db [get-users-sql]))
 ;; End get-users
 
@@ -26,81 +26,25 @@
   WHERE email = ?")
 
 (defn get-users-email [email]
-  "Regresa el correo del usuario o nulo"
+  "Returns user email or nil"
   (first (Query db [get-users-email-sql email])))
 ;; End get-users-email
 
 (defn months []
-  "Regresa un arreglo de meses en español ex: (months)"
+  "Returns months name ex: (months)"
   (list
-    {:value 1 :text "Enero"}
-    {:value 2 :text "Febrero"}
-    {:value 3 :text "Marzo"}
-    {:value 4 :text "Abril"}
-    {:value 5 :text "Mayo"}
-    {:value 6 :text "Junio"}
-    {:value 7 :text "Julio"}
-    {:value 8 :text "Agosto"}
-    {:value 9 :text "Septiembre"}
-    {:value 10 :text "Octubre"}
-    {:value 11 :text "Noviembre"}
-    {:value 12 :text "Diciembre"}))
-
-;; Start calendar events
-(def rodadas-sql
-  "SELECT
-  id,
-  titulo as title,
-  detalles,
-  DATE_FORMAT(salida,'%h:%i %p') as hora,
-  DATE_FORMAT(fecha,'%d/%m/%Y') as fecha,
-  CONCAT(fecha,'T',salida) as start,
-  punto_reunion as donde,
-  CASE WHEN nivel = 'P' THEN 'Principiantes' WHEN nivel = 'M' THEN 'Medio' WHEN nivel = 'A' THEN 'Avanzado' WHEN nivel = 'T' THEN 'TODOS' END as nivel,
-  distancia as distancia,
-  velocidad as velocidad,
-  leader as leader,
-  leader_email as email,
-  repetir,
-  CONCAT('/rodadas/asistir/',id) as url
-  FROM rodadas
-  ORDER BY fecha,salida")
-
-(defn build-cal-popup [row]
-  (html5
-    [:div {:style "margin-bottom:10px;"}
-     [:label [:strong "Titulo: "] (:title row)]]
-    [:div {:style "margin-bottom:5px;"}
-     [:label [:strong "Describir Rodada: "] (:detalles row)]]
-    [:div {:style "margin-bottom:5px;"}
-     [:label [:strong "Punto de reunion: "] (:donde row)]]
-    [:div {:style "margin-bottom:5px;"}
-     [:label [:strong "Nivel: "] (:nivel row)]]
-    [:div {:style "margin-bottom:5px;"}
-     [:label [:strong "Distancia: "] (:distancia row)]]
-    [:div {:style "margin-bottom:5px;"}
-     [:label [:strong "Velocidad: "] (:velocidad row)]]
-    [:div {:style "margin-bottom:5px;"}
-     [:label [:strong "Fecha/Rodada: "] (:fecha row)]]
-    [:div {:style "margin-bottom:5px;"}
-     [:label [:strong "Salida: "] (:hora row)]]
-    [:div {:style "margin-bottom:5px;"}
-     [:label [:strong "Lider: "] (:leader row)]]
-    [:div {:style "margin-bottom:5px;"}
-     [:label [:strong "Lider Email: "] (:email row)]]))
-
-(defn calendar-events []
-  (let [rows (Query db rodadas-sql)
-        events (map #(assoc % :description (build-cal-popup %)) rows)]
-    events))
-;; End calendar events
-
-(defn nivel-options []
-  (list
-    {:value "P" :text "Principiantes"}
-    {:value "M" :text "Medio"}
-    {:value "A" :text "Avanzado"}
-    {:value "T" :text "TODOS"}))
+    {:value 1 :text "January"}
+    {:value 2 :text "February"}
+    {:value 3 :text "March"}
+    {:value 4 :text "April"}
+    {:value 5 :text "May"}
+    {:value 6 :text "June"}
+    {:value 7 :text "July"}
+    {:value 8 :text "August"}
+    {:value 9 :text "September"}
+    {:value 10 :text "October"}
+    {:value 11 :text "November"}
+    {:value 12 :text "Dicember"}))
 
 (defn imagen [table field idname value & extra-folder]
   (get-image table field idname value (first extra-folder)))

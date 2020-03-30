@@ -18,19 +18,19 @@
         {:id "password"
          :name "password"
          :class "easyui-passwordbox"
-         :data-options "label:'Contraseña:',labelPosition:'top',required:true,width:'100%'"})
+         :data-options "label:'Password:',labelPosition:'top',required:true,width:'100%'"})
       (build-button
         {:href "javascript:void(0)"
          :id "submit"
-         :text "Acceder al Sitio"
+         :text "Log In"
          :class "easyui-linkbutton c6"
          :onClick "submitForm(this)"})
       )
     (list
       [:div {:style "margin-bottom:10px;"}
-       [:a {:href "/registrar"} "Click para requistrarse"]]
+       [:a {:href "/register"} "Click here to register"]]
       [:div {:style "margin-bottom:10px;"}
-       [:a {:href "/rpaswd"} "Click para resetear su contraseña"]])))
+       [:a {:href "/rpaswd"} "Click here to reset your password"]])))
 
 (defn login-script []
   [:script

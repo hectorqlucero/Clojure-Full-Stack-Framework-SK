@@ -20,14 +20,22 @@
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8")
 
 (def users-rows
-  [{:lastname  "Lucero"
-    :firstname "Hector"
-    :username  "hectorqlucero@gmail.com"
-    :password  (crypt/encrypt "elmo1200")
+  [{:lastname  "User"
+    :firstname "Regular"
+    :username  "user@gmail.com"
+    :password  (crypt/encrypt "user")
     :dob       "1957-02-07"
-    :email     "hectorqlucero@gmail.com"
-    :level     "S"
-    :active    "T"}])
+    :email     "user@gmail.com"
+    :level     "U"
+    :active    "T"}
+   {:lastname "User"
+    :firstname "Admin"
+    :username "admin@gmail.com"
+    :password (crypt/encrypt "admin")
+    :dob "1957-02-07"
+    :email "admin@gmail.com"
+    :level "S"
+    :active "T"}])
 ;; End users table
 
 (defn create-database []

@@ -10,6 +10,7 @@
             [ring.util.anti-forgery :refer [anti-forgery-field]]
             [noir.util.crypt :as crypt]
             [sk.models.crud :refer [db 
+                                    config
                                     build-postvars
                                     Query 
                                     Save 
@@ -23,11 +24,11 @@
 
 ;; Start registrar
 (defn registrar [request]
-  (let [title "Registro de usuarios"
+  (let [title "Register Users"
         token (anti-forgery-field)
         ok (get-session-id)
         js (registrar-scripts)
-        error-text "Existe una session, no se puede crear un nuevo usuario"
+        error-text "A session exists, cannot create a new user"
         return-url "/"
         content (registrar-view title token)]
     (if (> ok 0)
@@ -35,7 +36,7 @@
       (application title ok js content))))
 
 (defn registrar! [{params :params}]
-  "Postear los datos de registro de un nuevo cliente el la tabla usuarios"
+  "Post user data to the users table"
   (let [email (clojure.string/lower-case (or (:email params) "0"))
         password (:password params)
         params (assoc params 
@@ -50,15 +51,15 @@
         result (Save db :users postvars ["username = ?" email])]
     (if (seq result)
       (generate-string {:url "/login"})
-      (generate-string {:error "No se pudo registrar el usuario"}))))
+      (generate-string {:error "Unable to register user!"}))))
 ;; End registrar
 
 ;; Start reset-password
 (defn reset-password [request]
-  (let [title "Resetear Contraseña"
+  (let [title "Reset Password"
         token (anti-forgery-field)
         ok (get-session-id)
-        error-text "Existe una session, no se puede cambiar la contraseña"
+        error-text "A session exists, cannot create a new user"
         return-url "/"
         js (reset-password-scripts)
         content (reset-password-view title token)]
@@ -70,19 +71,19 @@
   (first (Query db ["SELECT * FROM users WHERE username = ?" username])))
 
 (defn email-body [row url]
-  "Crear el cuerpo del email"
+  "Create the email body"
   (let [nombre       (str (:firstname row) " " (:lastname row))
         email        (:email row)
-        subject      "Resetear tu contraseña"
-        content      (str "<strong>Hola</strong> " nombre ",</br></br>"
-                          "Para resetear tu contraseña <strong>" "<a href='" url "'>Clic Aqui</a>" "</strong>.</br></br>"
-                          "Alternativamente, puedes copiar y pegar el siguiente link en la barra de tu browser:</br></br>"
+        subject      "Reset your password"
+        content      (str "<strong>Hi</strong> " nombre ",</br></br>"
+                          "To reset your password <strong>" "<a href='" url "'>Click Here</a>" "</strong>.</br></br>"
+                          "Alternatively you can copy and paste the following link on your browsers address field:</br></br>"
                           url "</br></br>"
-                          "Este link solo sera bueno por 10 minutos.</br></br>"
-                          "Si no solicito resetear su contraseña simplemente ignore este mensage.</br></br></br>"
-                          "Sinceramente,</br></br>"
-                          "La administracion")
-        body         {:from    "lucero_systems@fastmail.com"
+                          "This link is only good for 10 minutes.</br></br>"
+                          "If you did not request to change your password or don't want to change your password simply ignore this message.</br></br></br>"
+                          "Sincerely,</br></br>"
+                          "The administration")
+        body         {:from    (:email-user config)
                       :to      email
                       :subject subject
                       :body    [{:type    "text/html;charset=utf-8"
@@ -98,15 +99,15 @@
         email-body (email-body row url)]
     (if (future (send-email host email-body))
       (generate-string {:url "/"})
-      (generate-string {:error "No se pudo resetear su contraseña"}))))
+      (generate-string {:error "Unable to reset your password!"}))))
 ;; End reset-password
 
 (defn reset-jwt [token]
-  (let [title "Resetear Contrasseña"
+  (let [title "Reset Password"
         csrf (anti-forgery-field)
         ok (get-session-id)
         username (check-token token)
-        error-text "Su token es incorrecto o ya expiro!"
+        error-text "Your token is incorrect or it has expired!"
         return-url "/"
         js (reset-jwt-scripts)
         content (reset-jwt-view title csrf username)]
@@ -121,6 +122,6 @@
         result (Update db :users postvars ["username = ?" username])]
     (if (seq result)
       (generate-string {:url "/"})
-      (generate-string {:error "No se pudo cambiar su contraseña!"}))))
+      (generate-string {:error "Unable to reset your password!"}))))
 ;; End reset-password
 

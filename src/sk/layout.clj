@@ -5,9 +5,9 @@
 
 (defn build-admin []
   (list
-    [:a.dropdown-item {:href "#"} "Rodadas"]
-    [:a.dropdown-item {:href "#"} "Eventos"]
-    [:a.dropdown-item {:href "#"} "Grupos"]))
+    [:a.dropdown-item {:href "#"} "Item 1"]
+    [:a.dropdown-item {:href "#"} "Item 2"]
+    [:a.dropdown-item {:href "#"} "Item 3"]))
 
 (defn menus-private []
   (list
@@ -19,16 +19,16 @@
       [:span.navbar-toggler-icon]]
      [:div#collapsibleNavbar.collapse.navbar-collapse
       [:ul.navbar-nav
-       [:li.nav-item [:a.nav-link {:href "#"} "Eventos"]]
-       [:li.nav-item [:a.nav-link {:href "#"} "Rodadas"]]
-       [:li.nav-item [:a.nav-link {:href "#"} "Grupos"]]
+       [:li.nav-item [:a.nav-link {:href "#"} "Item 1"]]
+       [:li.nav-item [:a.nav-link {:href "#"} "Item 2"]]
+       [:li.nav-item [:a.nav-link {:href "#"} "Item 3"]]
        [:li.nav-item.dropdown
         [:a.nav-link.dropdown-toggle {:href "#"
                                       :id "navdrop"
-                                      :data-toggle "dropdown"} "Administrar"]
+                                      :data-toggle "dropdown"} "Admin menu"]
         [:div.dropdown-menu
          (build-admin)]]
-       [:li.nav-item [:a.nav-link {:href "/home/logoff"} "Salir"]]]]]))
+       [:li.nav-item [:a.nav-link {:href "/home/logoff"} "Logoff"]]]]]))
 
 (defn menus-public []
   (list
@@ -40,10 +40,10 @@
       [:span.navbar-toggler-icon]]
      [:div#collapsibleNavbar.collapse.navbar-collapse
       [:ul.navbar-nav
-       [:li.nav-item [:a.nav-link {:href "#"} "Eventos"]]
-       [:li.nav-item [:a.nav-link {:href "#"} "Rodadas"]]
-       [:li.nav-item [:a.nav-link {:href "#"} "Grupos"]]
-       [:li.nav-item [:a.nav-link {:href "/home/login"} "Entrar"]]
+       [:li.nav-item [:a.nav-link {:href "#"} "Item 1"]]
+       [:li.nav-item [:a.nav-link {:href "#"} "Item 2"]]
+       [:li.nav-item [:a.nav-link {:href "#"} "Item 3"]]
+       [:li.nav-item [:a.nav-link {:href "/home/login"} "Login"]]
        ]]]))
 
 (defn app-css []
@@ -69,7 +69,6 @@
     (include-js "/easyui/datagrid-bufferview.js")
     (include-js "/easyui/datagrid-scrollview.js")
     (include-js "/easyui/datagrid-filter.js")
-    (include-js "/easyui/locale/easyui-lang-es.js")
     (include-js "/RichText/src/jquery.richtext.min.js")
     (include-js "/js/main.js")))
 
@@ -95,4 +94,4 @@
 (defn error-404 [error return-url]
   [:div
    [:p [:h3 [:b "Error: "]] error]
-   [:p [:h3 [:a {:href return-url} "Clic aqui para " [:strong "Regresar"]]]]])
+   [:p [:h3 [:a {:href return-url} "Clic here to " [:strong "Return"]]]]])

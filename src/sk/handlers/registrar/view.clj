@@ -13,28 +13,28 @@
       (build-field {:id "firstname"
                     :name "firstname"
                     :class "easyui-textbox"
-                    :data-options "label:'Nombre:', labelPosition:'top', required:true,width:'100%'"})
+                    :data-options "label:'First Name:', labelPosition:'top', required:true,width:'100%'"})
       (build-field {:id "lastname"
                     :name "lastname"
                     :class "easyui-textbox"
-                    :data-options "label:'Apellidos:', labelPosition:'top', required:true,width:'100%'"})
+                    :data-options "label:'Last Name:', labelPosition:'top', required:true,width:'100%'"})
       (build-field {:id "email"
                     :name "email"
                     :class "easyui-textbox easyui-validatebox"
                     :validType "email"
-                    :data-options "label:'Correo Electronico:', labelPosition:'top', required:true,width:'100%'"})
+                    :data-options "label:'Email:', labelPosition:'top', required:true,width:'100%'"})
       (build-field {:id "password"
                     :name "password"
                     :class "easyui-passwordbox"
-                    :data-options "label:'Contraseña:', labelPosition:'top', required:true,width:'100%'"})
+                    :data-options "label:'Password:', labelPosition:'top', required:true,width:'100%'"})
       (build-field {:id "password1"
                     :name "password1"
                     :class "easyui-passwordbox"
                     :validType "confirmPass['#password']"
-                    :data-options "label:'Confirmar Contraseña:', labelPosition:'top', required:true,width:'100%'"}))
+                    :data-options "label:'Confirm Password:', labelPosition:'top', required:true,width:'100%'"}))
     (list
       (build-button {:href "javascript:void(0)"
-                     :text "Registrarse"
+                     :text "Register"
                      :class "easyui-linkbutton c6"
                      :id "submit"}))))
 
@@ -53,8 +53,8 @@
                         var dta = JSON.parse(data);
                         if(dta.hasOwnProperty('url')) {
                             $.messager.alert({
-                                title: 'Procesado!',
-                                msg: 'Usuario registrado correctamente!',
+                                title: 'Processed!',
+                                msg: 'User registered successfully!',
                                 fn: function() {
                                     window.location.href = dta.url;
                                 }
@@ -82,7 +82,7 @@
                             if(value == dta.email) {
                                 $.messager.alert({
                                     title: 'Error',
-                                    msg: 'Este usuario ya existe!',
+                                    msg: 'This user exists in the database!',
                                     fn: function() {
                                         window.location.href = '/registrar';
                                     }
@@ -100,7 +100,7 @@
                     var password = $(param[0]).passwordbox('getValue');
                     return value == password;
                 },
-                message: 'La contraseña confirmadora no es igual!'
+                message: 'The confirm password does not match the password!'
             }
         });
     });
@@ -119,11 +119,11 @@
                     :name "email"
                     :class "easyui-textbox"
                     :validType "email"
-                    :data-options "label:'Correo Electronico:', labelPosition:'top', required:true,width:'100%'"}))
+                    :data-options "label:'Email:', labelPosition:'top', required:true,width:'100%'"}))
     (build-button
       {:id "submit"
        :href "javascript:void(0)"
-       :text "Resetear Contraseña"
+       :text "Reset Password"
        :onclick "submitForm()"
        :class "easyui-linkbutton c6"})))
 
@@ -141,7 +141,7 @@
             if(dta.hasOwnProperty('url')) {
               $.messager.alert({
                 title: 'Información!',
-                msg: 'Revise su correo electronico donde vera instrucciones para resetear su contraseña!',
+                msg: 'Check your email for instructions to reset your password!',
                 fn: function() {
                   window.location.href = dta.url;
                 }
@@ -162,7 +162,7 @@
     function give_error() {
       $.messager.alert({
         title: 'Error',
-        msg: 'Este correo no existe en la base de datos, intente otra vez!',
+        msg: 'This email does not exist in the database, try again!',
         fn: function() {
           window.location.href = '/rpaswd';
         }
@@ -205,18 +205,18 @@
         {:id "password"
          :name "password"
          :class "easyui-passwordbox"
-         :data-options "label:'Contraseña:',labelPosition:'top',required:true,width:'100%'"})
+         :data-options "label:'Password:',labelPosition:'top',required:true,width:'100%'"})
       (build-field
         {:id "password1"
          :name "password1"
          :class "easyui-passwordbox"
          :validType "confirmPass['#password']"
-         :data-options "label:'Confirmar Contraseña:',labelPosition:'top',required:true,width:'100%'"}))
+         :data-options "label:'Confirm Password:',labelPosition:'top',required:true,width:'100%'"}))
     (list
       (build-button
         {:id "submit"
          :href "javascript:void(0)"
-         :text "Cambiar Contraseña"
+         :text "Reset Password"
          :class "easyui-linkbutton c6"}))))
 
 (defn reset-jwt-scripts []
@@ -229,7 +229,7 @@
             var password = $(param[0]).passwordbox('getValue');
             return value == password;
           },
-          message: 'La contraseña confirmadora no es igual.'
+          message: 'The confirm password does not match password!'
         }
       });
 
@@ -244,8 +244,8 @@
             try {
               if(dta.hasOwnProperty('url')) {
                 $.messager.alert({
-                  title: 'Processado!',
-                  msg: 'Su contraseña se ha cambiado!',
+                  title: 'Processed!',
+                  msg: 'Your password has been reset successfully!',
                   fn: function() {
                     window.location.href = dta.url;
                   }
