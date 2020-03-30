@@ -46,6 +46,15 @@
     {:value 11 :text "November"}
     {:value 12 :text "Dicember"}))
 
+(defn years [p n]
+  "Genera listado para dropdown dependiendo de p=anterioriores de este año, n=despues de este año,
+  ex: (years 5 4)"
+  (let [year   (parse-int (current_year))
+        pyears (for [n (range (parse-int p) 0 -1)] {:value (- year n) :text (- year n)})
+        nyears (for [n (range 0 (+ (parse-int n) 1))] {:value (+ year n) :text (+ year n)})
+        years  (concat pyears nyears)]
+    years))
+
 (defn imagen [table field idname value & extra-folder]
   (get-image table field idname value (first extra-folder)))
 
