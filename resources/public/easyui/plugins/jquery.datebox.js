@@ -1,5 +1,5 @@
 /**
- * EasyUI for jQuery 1.7.5
+ * EasyUI for jQuery 1.9.0
  * 
  * Copyright (c) 2009-2019 www.jeasyui.com. All rights reserved.
  *
@@ -53,7 +53,7 @@ $(_2).datebox("initValue",_4.value);
 function _5(_c){
 var _d=$(_c).datebox("options");
 var _e=$(_c).combo("panel");
-_e.unbind(".datebox").bind("click.datebox",function(e){
+_e._unbind(".datebox")._bind("click.datebox",function(e){
 if($(e.target).hasClass("datebox-button-a")){
 var _f=parseInt($(e.target).attr("datebox-button-index"));
 _d.buttons[_f].handler.call(e.target,_c);
@@ -197,19 +197,20 @@ var m=_36.getMonth()+1;
 var d=_36.getDate();
 return (m<10?("0"+m):m)+"/"+(d<10?("0"+d):d)+"/"+y;
 },parser:function(s){
+var _37=$(this).datebox("calendar").calendar("options");
 if(!s){
-return new Date();
+return new _37.Date();
 }
 var ss=s.split("/");
 var m=parseInt(ss[0],10);
 var d=parseInt(ss[1],10);
 var y=parseInt(ss[2],10);
 if(!isNaN(y)&&!isNaN(m)&&!isNaN(d)){
-return new Date(y,m-1,d);
+return new _37.Date(y,m-1,d);
 }else{
-return new Date();
+return new _37.Date();
 }
-},onSelect:function(_37){
+},onSelect:function(_38){
 }});
 })(jQuery);
 

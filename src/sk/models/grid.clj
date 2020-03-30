@@ -1,5 +1,8 @@
 (ns sk.models.grid
-  (:require [sk.models.crud :refer [db Query]]
+  (:require [cheshire.core :refer [generate-string]]
+            [sk.models.crud :refer [db 
+                                    Query
+                                    build-grid-columns]]
             [sk.models.util :refer [parse-int]]))
 
 (defn convert-search-columns [fields]
@@ -48,3 +51,36 @@
   "Creates the row object to return to the grids"
   {:total (count (Query db [(grid-total_sql table aliases join search order)]))
    :rows  (Query db [(grid-sql table aliases join search order offset)])})
+
+;; Start build grid
+(defn get-search-extra 
+  [search args]
+  (try
+    (let [search-extra (:search-extra (first args))]
+      (if-not (nil? search-extra)
+        (grid-search-extra search search-extra)))
+    (catch Exception e (.getMessage e))))
+
+(defn get-sort-extra 
+  [order args]
+  (try
+    (let [sort-extra (:sort-extra (first args))]
+      (if-not (nil? sort-extra)
+        (grid-sort-extra order sort-extra)))
+    (catch Exception e (.getMessage e))))
+
+(defn build-grid
+  "builds grid. Parameters: table,search-extra,sort-extra,join"
+  [params table & args]
+  (try
+    (let [aliases (build-grid-columns table)
+          join (:join args)
+          search nil
+          search (get-search-extra search args)
+          order (grid-sort (:sort params nil) (:order params nil))
+          order (get-sort-extra order args)
+          offset (grid-offset (parse-int (:rows params)) (parse-int (:page params)))
+          rows (grid-rows table aliases join search order offset)]
+      (generate-string rows))
+    (catch Exception e (.getMessge e))))
+;; End build-grid

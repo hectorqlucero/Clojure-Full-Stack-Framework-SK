@@ -1,5 +1,5 @@
 /**
- * EasyUI for jQuery 1.7.5
+ * EasyUI for jQuery 1.9.0
  * 
  * Copyright (c) 2009-2019 www.jeasyui.com. All rights reserved.
  *
@@ -26,7 +26,7 @@ var _9=_8.options;
 var _a=_8.radiobutton;
 var _b="_easyui_radiobutton_"+(++_1);
 var _c=_a.find(".radiobutton-value").attr("id",_b);
-_c.unbind(".radiobutton").bind("change.radiobutton",function(e){
+_c._unbind(".radiobutton")._bind("change.radiobutton",function(e){
 return false;
 });
 if(_9.label){
@@ -50,104 +50,131 @@ $(_8.label).remove();
 }
 $(_7).radiobutton("setValue",_9.value);
 _d(_7,_9.checked);
-_e(_7,_9.disabled);
+_e(_7,_9.readonly);
+_f(_7,_9.disabled);
 };
-function _f(_10){
-var _11=$.data(_10,"radiobutton");
-var _12=_11.options;
-var _13=_11.radiobutton;
-_13.unbind(".radiobutton").bind("click.radiobutton",function(){
-if(!_12.disabled){
-_d(_10,true);
+function _10(_11){
+var _12=$.data(_11,"radiobutton");
+var _13=_12.options;
+var _14=_12.radiobutton;
+_14._unbind(".radiobutton")._bind("click.radiobutton",function(){
+if(!_13.disabled&&!_13.readonly){
+_d(_11,true);
 }
 });
 };
-function _14(_15){
-var _16=$.data(_15,"radiobutton");
-var _17=_16.options;
-var _18=_16.radiobutton;
-_18._size(_17,_18.parent());
-if(_17.label&&_17.labelPosition){
-if(_17.labelPosition=="top"){
-_16.label._size({width:_17.labelWidth},_18);
+function _15(_16){
+var _17=$.data(_16,"radiobutton");
+var _18=_17.options;
+var _19=_17.radiobutton;
+_19._size(_18,_19.parent());
+if(_18.label&&_18.labelPosition){
+if(_18.labelPosition=="top"){
+_17.label._size({width:_18.labelWidth},_19);
 }else{
-_16.label._size({width:_17.labelWidth,height:_18.outerHeight()},_18);
-_16.label.css("lineHeight",_18.outerHeight()+"px");
+_17.label._size({width:_18.labelWidth,height:_19.outerHeight()},_19);
+_17.label.css("lineHeight",_19.outerHeight()+"px");
 }
 }
 };
-function _d(_19,_1a){
-if(_1a){
-var f=$(_19).closest("form");
-var _1b=$(_19).attr("radiobuttonName");
-f.find(".radiobutton-f[radiobuttonName=\""+_1b+"\"]").each(function(){
-if(this!=_19){
-_1c(this,false);
+function _d(_1a,_1b){
+if(_1b){
+var f=$(_1a).closest("form");
+var _1c=$(_1a).attr("radiobuttonName");
+f.find(".radiobutton-f[radiobuttonName=\""+_1c+"\"]").each(function(){
+if(this!=_1a){
+_1d(this,false);
 }
 });
-_1c(_19,true);
+_1d(_1a,true);
 }else{
-_1c(_19,false);
+_1d(_1a,false);
 }
-function _1c(b,c){
-var _1d=$(b).radiobutton("options");
-var _1e=$(b).data("radiobutton").radiobutton;
-_1e.find(".radiobutton-inner").css("display",c?"":"none");
-_1e.find(".radiobutton-value")._propAttr("checked",c);
-if(_1d.checked!=c){
-_1d.checked=c;
-_1d.onChange.call($(b)[0],c);
+function _1d(b,c){
+var _1e=$(b).data("radiobutton");
+var _1f=_1e.options;
+var _20=_1e.radiobutton;
+_20.find(".radiobutton-inner").css("display",c?"":"none");
+_20.find(".radiobutton-value")._propAttr("checked",c);
+if(c){
+_20.addClass("radiobutton-checked");
+$(_1e.label).addClass("textbox-label-checked");
+}else{
+_20.removeClass("radiobutton-checked");
+$(_1e.label).removeClass("textbox-label-checked");
+}
+if(_1f.checked!=c){
+_1f.checked=c;
+_1f.onChange.call($(b)[0],c);
 $(b).closest("form").trigger("_change",[$(b)[0]]);
 }
 };
 };
-function _e(_1f,_20){
-var _21=$.data(_1f,"radiobutton");
-var _22=_21.options;
-var _23=_21.radiobutton;
-var rv=_23.find(".radiobutton-value");
-_22.disabled=_20;
-if(_20){
-$(_1f).add(rv)._propAttr("disabled",true);
-_23.addClass("radiobutton-disabled");
+function _f(_21,_22){
+var _23=$.data(_21,"radiobutton");
+var _24=_23.options;
+var _25=_23.radiobutton;
+var rv=_25.find(".radiobutton-value");
+_24.disabled=_22;
+if(_22){
+$(_21).add(rv)._propAttr("disabled",true);
+_25.addClass("radiobutton-disabled");
+$(_23.label).addClass("textbox-label-disabled");
 }else{
-$(_1f).add(rv)._propAttr("disabled",false);
-_23.removeClass("radiobutton-disabled");
+$(_21).add(rv)._propAttr("disabled",false);
+_25.removeClass("radiobutton-disabled");
+$(_23.label).removeClass("textbox-label-disabled");
 }
 };
-$.fn.radiobutton=function(_24,_25){
-if(typeof _24=="string"){
-return $.fn.radiobutton.methods[_24](this,_25);
-}
-_24=_24||{};
-return this.each(function(){
-var _26=$.data(this,"radiobutton");
-if(_26){
-$.extend(_26.options,_24);
+function _e(_26,_27){
+var _28=$.data(_26,"radiobutton");
+var _29=_28.options;
+_29.readonly=_27==undefined?true:_27;
+if(_29.readonly){
+_28.radiobutton.addClass("radiobutton-readonly");
+$(_28.label).addClass("textbox-label-readonly");
 }else{
-_26=$.data(this,"radiobutton",{options:$.extend({},$.fn.radiobutton.defaults,$.fn.radiobutton.parseOptions(this),_24),radiobutton:_2(this)});
+_28.radiobutton.removeClass("radiobutton-readonly");
+$(_28.label).removeClass("textbox-label-readonly");
 }
-_26.options.originalChecked=_26.options.checked;
+};
+$.fn.radiobutton=function(_2a,_2b){
+if(typeof _2a=="string"){
+return $.fn.radiobutton.methods[_2a](this,_2b);
+}
+_2a=_2a||{};
+return this.each(function(){
+var _2c=$.data(this,"radiobutton");
+if(_2c){
+$.extend(_2c.options,_2a);
+}else{
+_2c=$.data(this,"radiobutton",{options:$.extend({},$.fn.radiobutton.defaults,$.fn.radiobutton.parseOptions(this),_2a),radiobutton:_2(this)});
+}
+_2c.options.originalChecked=_2c.options.checked;
 _6(this);
-_f(this);
-_14(this);
+_10(this);
+_15(this);
 });
 };
 $.fn.radiobutton.methods={options:function(jq){
-var _27=jq.data("radiobutton");
-return $.extend(_27.options,{value:_27.radiobutton.find(".radiobutton-value").val()});
-},setValue:function(jq,_28){
+var _2d=jq.data("radiobutton");
+return $.extend(_2d.options,{value:_2d.radiobutton.find(".radiobutton-value").val()});
+},setValue:function(jq,_2e){
 return jq.each(function(){
-$(this).val(_28);
-$.data(this,"radiobutton").radiobutton.find(".radiobutton-value").val(_28);
+$(this).val(_2e);
+$.data(this,"radiobutton").radiobutton.find(".radiobutton-value").val(_2e);
 });
 },enable:function(jq){
 return jq.each(function(){
-_e(this,false);
+_f(this,false);
 });
 },disable:function(jq){
 return jq.each(function(){
-_e(this,true);
+_f(this,true);
+});
+},readonly:function(jq,_2f){
+return jq.each(function(){
+_e(this,_2f);
 });
 },check:function(jq){
 return jq.each(function(){
@@ -163,15 +190,15 @@ _d(this,false);
 });
 },reset:function(jq){
 return jq.each(function(){
-var _29=$(this).radiobutton("options");
-_d(this,_29.originalChecked);
+var _30=$(this).radiobutton("options");
+_d(this,_30.originalChecked);
 });
 }};
-$.fn.radiobutton.parseOptions=function(_2a){
-var t=$(_2a);
-return $.extend({},$.parser.parseOptions(_2a,["label","labelPosition","labelAlign",{labelWidth:"number"}]),{value:(t.val()||undefined),checked:(t.attr("checked")?true:undefined),disabled:(t.attr("disabled")?true:undefined)});
+$.fn.radiobutton.parseOptions=function(_31){
+var t=$(_31);
+return $.extend({},$.parser.parseOptions(_31,["label","labelPosition","labelAlign",{labelWidth:"number"}]),{value:(t.val()||undefined),checked:(t.attr("checked")?true:undefined),disabled:(t.attr("disabled")?true:undefined),readonly:(t.attr("readonly")?true:undefined)});
 };
-$.fn.radiobutton.defaults={width:20,height:20,value:null,disabled:false,checked:false,label:null,labelWidth:"auto",labelPosition:"before",labelAlign:"left",onChange:function(_2b){
+$.fn.radiobutton.defaults={width:20,height:20,value:null,disabled:false,readonly:false,checked:false,label:null,labelWidth:"auto",labelPosition:"before",labelAlign:"left",onChange:function(_32){
 }};
 })(jQuery);
 

@@ -1,0 +1,14 @@
+{:db-protocol "mysql"
+ :db-name "//localhost:3306/sk?characterEncoding=UTF-8"
+ :db-user "root"
+ :db-pwd "xxxxxxxxxx"
+ :db-class "com.mysql.cj.jdbc.Driver"
+ :email-host "smtp.gmail.com"
+ :email-user "xxxxxxxxx@gmail.com"
+ :email-pwd "xxxxxxxxxx"
+ :port 3000
+ :tz "US/Pacific"
+ :site-name "xxxxxxxxx"
+ :base-url "http://0.0.0.0:3000/"
+ :uploads "./uploads/"
+ :path "/uploads/"}

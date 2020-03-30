@@ -1,9 +1,9 @@
 (ns sk.routes
   (:require [compojure.core :refer [defroutes GET POST]]
             [cheshire.core :refer [generate-string]]
-            [sk.table_ref :as table_ref]
-            [sk.routes.home :as home]
-            [sk.routes.registrar :as registrar]))
+            [sk.handlers.home.handler :as home]
+            [sk.handlers.registrar.handler :as registrar]
+            [sk.handlers.tref.handler :as table_ref]))
 
 (defroutes open-routes
   ;; Start table_ref
@@ -11,13 +11,16 @@
   (GET "/table_ref/validate_email/:email" [email] (generate-string (table_ref/get-users-email email)))
   (GET "/table_ref/months" [] (generate-string (table_ref/months)))
   (GET "/table_ref/years/:pyears/:nyears" [pyears nyears] (generate-string (table_ref/years pyears nyears)))
+  (GET "/table_ref/get_imagen/:id" [id] (table_ref/imagen "eventos" "imagen" "id" id "eventos/"))
   ;; End table_ref
+
   ;; Start home
   (GET "/" request [] (home/main request))
-  (GET "/login" request [] (home/login request))
-  (POST "/login" [username password] (home/login! username password))
-  (GET "/logoff" [] (home/logoff))
+  (GET "/home/login" request [] (home/login request))
+  (POST "/home/login" [username password] (home/login! username password))
+  (GET "/home/logoff" [] (home/logoff))
   ;; End home
+
   ;; Start registrar
   (GET "/registrar" request [] (registrar/registrar request))
   (POST "/registrar" request [] (registrar/registrar! request))

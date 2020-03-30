@@ -1,5 +1,5 @@
 /**
- * EasyUI for jQuery 1.7.5
+ * EasyUI for jQuery 1.9.0
  * 
  * Copyright (c) 2009-2019 www.jeasyui.com. All rights reserved.
  *
@@ -64,7 +64,7 @@ _9.unshift(_a.children[i]);
 }};
 $.parser={auto:true,emptyFn:function(){
 },onComplete:function(_b){
-},plugins:["draggable","droppable","resizable","pagination","tooltip","linkbutton","menu","sidemenu","menubutton","splitbutton","switchbutton","progressbar","radiobutton","checkbox","tree","textbox","passwordbox","maskedbox","filebox","combo","combobox","combotree","combogrid","combotreegrid","tagbox","numberbox","validatebox","searchbox","spinner","numberspinner","timespinner","datetimespinner","calendar","datebox","datetimebox","slider","layout","panel","datagrid","propertygrid","treegrid","datalist","tabs","accordion","window","dialog","form"],parse:function(_c){
+},plugins:["draggable","droppable","resizable","pagination","tooltip","linkbutton","menu","sidemenu","menubutton","splitbutton","switchbutton","progressbar","radiobutton","checkbox","tree","textbox","passwordbox","maskedbox","filebox","combo","combobox","combotree","combogrid","combotreegrid","tagbox","numberbox","validatebox","searchbox","spinner","numberspinner","timespinner","datetimespinner","calendar","datebox","datetimebox","timepicker","slider","layout","panel","datagrid","propertygrid","treegrid","datalist","tabs","accordion","window","dialog","form"],parse:function(_c){
 var aa=[];
 for(var i=0;i<$.parser.plugins.length;i++){
 var _d=$.parser.plugins[i];
@@ -198,6 +198,8 @@ $(this).scrollLeft(_1d);
 }
 };
 $.fn._propAttr=$.fn.prop||$.fn.attr;
+$.fn._bind=$.fn.on;
+$.fn._unbind=$.fn.off;
 $.fn._size=function(_1e,_1f){
 if(typeof _1e=="string"){
 if(_1e=="clear"){

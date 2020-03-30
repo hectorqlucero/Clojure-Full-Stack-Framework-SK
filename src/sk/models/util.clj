@@ -5,9 +5,7 @@
             [clj-time.coerce :as c]
             [clj-jwt.core :refer :all]
             [clojure.string :refer [join]]
-            [clojurewerkz.money.amounts :as ma]
-            [clojurewerkz.money.currencies :as mc]
-            [clojurewerkz.money.format :as mf]
+            [clojure.java.io :as io]
             [date-clj :as d]
             [noir.session :as session])
   (:import java.text.SimpleDateFormat
@@ -89,8 +87,8 @@
 
 (defn get-session-id []
   (try
-    (session/get :user_id)
-    (catch Exception e nil)))
+    (if (session/get :user_id) (session/get :user_id) 0)
+    (catch Exception e 0)))
 
 (defn current_date []
   "Get current date formatted MM/dd/YYYY"
@@ -225,11 +223,6 @@
   (let [matcher (re-matcher #"(\d\d\d)(?=\d)(?!\d*\.)" (apply str (reverse s)))]
     (apply str (reverse (.replaceAll matcher "$1,")))))
 
-(defn money-format [bd]
-  (if (number? bd)
-    (mf/format (ma/amount-of mc/USD bd))
-    (mf/format (ma/amount-of mc/USD 0))))
-
 (defn spl [n c p]
   "n=number,c=pad number,p=padding str"
   (loop [s (str n)]
@@ -293,40 +286,40 @@
 
 (defn format-date-internal [s]
   "Convert a MM/dd/yyyy format date to yyyy-MM-dd format using a string as a date
-    eg. 02/01/1997 -> 1997-02-01"
+   eg. 02/01/1997 -> 1997-02-01"
   (if (not-empty s)
     (try
       (do
         (.format
-         (SimpleDateFormat. "yyyy-MM-dd")
-         (.parse
-          (SimpleDateFormat. "MM/dd/yyyy") s)))
+          (SimpleDateFormat. "yyyy-MM-dd")
+          (.parse
+            (SimpleDateFormat. "MM/dd/yyyy") s)))
       (catch Exception e nil))
     nil))
 
 (defn format-date-external [s]
   "Convert a yyyy-MM-dd format date to MM/dd/yyyy format using a string as a date
-  eg. 1997-02-01 -> 02/01/1997"
+   eg. 1997-02-01 -> 02/01/1997"
   (if (not-empty s)
     (try
       (do
         (.format
-         (SimpleDateFormat. "MM/dd/yyyy")
-         (.parse
-          (SimpleDateFormat. "yyyy-MM-dd") s)))
+          (SimpleDateFormat. "MM/dd/yyyy")
+          (.parse
+            (SimpleDateFormat. "yyyy-MM-dd") s)))
       (catch Exception e nil))
     nil))
 
 (defn format-date-external-mx [s]
   "Convert a yyyy-MM-dd format date to dd/MM/yyyy format using a string as a date
-  eg. 1997-02-01 -> 01/02/1997"
+   eg. 1997-02-01 -> 01/02/1997"
   (if (not-empty s)
     (try
       (do
         (.format
-         (SimpleDateFormat. "dd/MM/yyyy")
-         (.parse
-          (SimpleDateFormat. "yyyy-MM-dd") s)))
+          (SimpleDateFormat. "dd/MM/yyyy")
+          (.parse
+            (SimpleDateFormat. "yyyy-MM-dd") s)))
       (catch Exception e nil))
     nil))
 
@@ -441,8 +434,8 @@
 
 (defn audit [username ip controller function args]
   (if (and
-       (not-empty controller)
-       (not-empty function))
+        (not-empty controller)
+        (not-empty function))
     (let [postvars {:username   username
                     :date       (today-internal)
                     :time       (today-time)
@@ -474,17 +467,17 @@
 
 (defn get-photo-val [table-name field-name id-name id-value]
   (if (or
-       (nil? table-name)
-       (nil? field-name)
-       (nil? id-name)
-       (nil? id-value))
+        (nil? table-name)
+        (nil? field-name)
+        (nil? id-name)
+        (nil? id-value))
     nil
     ((keyword field-name) (first (Query db (str "SELECT " field-name " FROM " table-name " WHERE " id-name " = " id-value))))))
 
 (defn build-photo-html [photo-val uuid]
   (if (or
-       (nil? photo-val)
-       (nil? uuid))
+        (nil? photo-val)
+        (nil? uuid))
     nil
     (str "<img src='" (:path config)  photo-val "?t=" uuid "' onError=\"this.src='/images/placeholder_profile.png'\" width='95' height='71'></img>")))
 
@@ -548,7 +541,7 @@
 
 (defn jmethods
   "Returns a sequence of all public java methods available on a given class,
-  including the methods inherited from parent(s)."
+   including the methods inherited from parent(s)."
   ([clazz]
    (jmethods clazz false))
   ([clazz include-deprecated?]
@@ -588,3 +581,260 @@
                              :categorias_id categorias_id
                              :status        status})]
         (Save db :carreras_categorias postvars ["id = ?" id])))))
+
+;; Start update-inventory
+(def recibido-sql
+  "SELECT
+   CAST(sum(num_recibido) as SIGNED) as total
+   FROM compras
+   WHERE
+   producto_id = ?")
+
+(def enviado-sql
+  "SELECT
+   CAST(sum(enviado_numero) as SIGNED) as total
+   FROM orders
+   WHERE
+   producto_id = ?")
+
+(def productos-row-sql
+  "SELECT
+   *
+   FROM productos
+   WHERE
+   id = ?")
+
+(defn get-productos-row [producto_id]
+  (first (Query db [productos-row-sql producto_id])))
+
+(defn get-inventory-inicio [producto_id]
+  (let [row (get-productos-row producto_id)
+        inv_inicio (or
+                     (parse-int
+                       (:inv_inicio row)) 0)]
+    inv_inicio))
+
+(defn get-inventory-recibido [producto_id]
+  (or
+    (parse-int
+      (:total
+        (first
+          (Query db [recibido-sql producto_id])))) 0))
+
+(defn get-inventory-enviado [producto_id]
+  (or
+    (parse-int
+      (:total
+        (first
+          (Query db [enviado-sql producto_id])))) 0))
+
+(defn update-inventory [producto_id]
+  (if-not (nil? producto_id)
+    (let [inv_inicio (get-inventory-inicio producto_id)
+          recibido (get-inventory-recibido producto_id)
+          enviado (get-inventory-enviado producto_id)
+          inv_en_mano (- (+ inv_inicio recibido) enviado)
+          postvars {:inv_recibido (str recibido)
+                    :inv_enviado (str enviado)
+                    :inv_en_mano (str inv_en_mano)}]
+      (Update db :productos postvars ["id =?" (str producto_id)]))))
+
+(defn update-all-inventory []
+  (let [rows (Query db "SELECT id FROM productos")]
+    (doseq [row rows]
+      (future (update-inventory (:id row))))))
+;; End update-inventory
+
+;; Start image stuff
+(defn build-img-html [img-val uuid path]
+  (if (or
+       (nil? img-val)
+       (nil? uuid))
+    nil
+    (str "<img src='" path  img-val "?t=" uuid "' onError=\"this.src='/images/placeholder_profile.png'\" width='95' height='71'></img>")))
+
+(defn get-img-val [table-name field-name id-name id-value]
+  (if (or
+       (nil? table-name)
+       (nil? field-name)
+       (nil? id-name)
+       (nil? id-value))
+    nil
+    ((keyword field-name) (first (Query db (str "SELECT " field-name " FROM " table-name " WHERE " id-name " = " id-value))))))
+
+(defn get-image [table-name field-name id-name id-value & extra-folder]
+  "Get an image from a table and specify extra folder 
+   ex. (get-image 'eventos' 'imagen' 'id' 6 "
+  (let [img-val     (get-img-val table-name field-name id-name id-value)
+        uuid        (str (UUID/randomUUID))
+        path        (str (:path config) (first extra-folder))
+        placeholder "<img src='/images/placeholder_profile.png' width='95' height='71'>"
+        image       (build-img-html img-val uuid path)]
+    (if (empty? img-val) placeholder image)))
+
+(defn upload-image [file id path]
+  "Uploads image and renames it to the id passed"
+  (let [tempfile   (:tempfile file)
+        size       (:size file)
+        type       (:content-type file)
+        extension  (peek (clojure.string/split type #"\/"))
+        extension  (if (= extension "jpeg") "jpg" "jpg")
+        filename   (:filename file)
+        image-name (str id "." extension)
+        result     (if-not (zero? size)
+                     (do (io/copy tempfile (io/file (str path image-name)))))]
+    image-name))
+;; End image stuff
+
+;; Start hiccup stuff
+(defn build-image-field []
+  (list
+    [:input {:id "imagen" :name "imagen" :type "hidden"}]
+    [:div {:style "margin-bottom:10px;width:100%;max-width:400px;"}
+     [:div {:style "width:99%;max-width:398px;display:flex;overflow:none;vertical-align:middle;"}
+     [:div {:style "float:left;margin-right:2px;"}
+      [:img#image1 {:width  "95"
+                    :height "71"
+                    :style  "margin-right:2px;cursor:pointer;"}]]
+     [:div {:style "float:right;margin-left:2px;vertical-align:middle;"}
+        [:input {:id           "file"
+                :name         "file"
+                :class        "easyui-filebox"
+                :style        "width:300px;"
+                :data-options "prompt:'Escoge imagen...',
+                              buttonText:'Escoge imagen...',
+                              onChange: function(value) {
+                                var f = $(this).next().find('input[type=file]')[0];
+                                if (f.files && f.files[0]) {
+                                  var reader = new FileReader();
+                                  reader.onload = function(e) {
+                                    $('#image1').attr('src', e.target.result);
+                                  }
+                                  reader.readAsDataURL(f.files[0]);
+                                }
+                              }"}]]]]))
+
+(defn build-image-field-script []
+  (str
+   "
+    $('#image1').click(function() {
+      var img = $('#image1');
+      if(img.width() < 500) {
+        img.animate({width: '500', height: '500'}, 1000);
+      } else {
+        img.animate({width: img.attr(\"width\"), height: img.attr(\"height\")}, 1000);
+      }
+    });
+    "))
+
+(defn build-table-field [label options & styler]
+  "label, data-options and styler as optional"
+  [:th {:data-options options :styler (first styler)} label])
+
+(defn build-toolbar [& extra]
+  [:div#toolbar
+   [:a {:href         "javascript:void(0)"
+        :class        "easyui-linkbutton"
+        :data-options "iconCls: 'icon-add',plain: true"
+        :onclick      "newItem()"} "Crear"]
+   [:a {:href         "javascript:void(0)"
+        :class        "easyui-linkbutton"
+        :data-options "iconCls: 'icon-edit',plain: true"
+        :onclick      "editItem({})"} "Editar"]
+   [:a {:href         "javascript:void(0)"
+        :class        "easyui-linkbutton"
+        :data-options "iconCls: 'icon-remove',plain: true"
+        :onclick      "deleteItem()"} "Remover"]
+   extra
+   [:div {:style "float: right"}]])
+
+(defn build-dialog-buttons []
+  [:div#dlg-buttons
+   [:a {:href         "javascript:void(0)"
+        :class        "easyui-linkbutton c6"
+        :style        "margin-right:5px;"
+        :data-options "iconCls: 'icon-ok'"
+        :onclick      "saveItem()"} "Postear"]
+   [:a {:href         "javascript:void(0)"
+        :class        "easyui-linkbutton"
+        :data-options "iconCls: 'icon-cancel'"
+        :onclick      "dialogClose()"} "Cancelar"]])
+
+(defn build-table [title url fields]
+  [:table.dg
+   {:style "width: 100%;height:500px;"
+    :title title
+    :data-options
+    (str
+     "
+     url: '" url "',
+     toolbar: '#toolbar',
+     queryParams: {'__anti-forgery-token':token},
+     pagination: false,
+     rownumbers: true,
+     nowrap: true,
+     autoRowHeight: false,
+     fitColumns: true,
+     autoSizeColumns: true,
+     singleSelect: true")}
+   [:thead
+    [:tr
+     fields]]])
+
+(defn build-field [options]
+  [:div {:style "margin-bottom:10px;"}
+   [:input options]])
+
+(defn build-text-editor
+  "ex. {:label 'My Label' :name 'fieldname' :placeholder 'myplaceholder' :class 'easyui-textbox'}"
+  [options]
+  [:div {:style "margin-bottom:10px;"}
+   [:label (:label options)]
+   [:textarea (dissoc options :label)]])
+
+(defn build-button [options]
+  [:div {:style "text-align:center;padding:5px 0"}
+   (if (list? options)
+     (do
+       (for [option options]
+         [:a option]))
+     [:a options])])
+
+(defn build-radio-buttons [label options]
+  "Builds radio button fields options has list of build-field options"
+  [:div.form-group.col-10
+   [:label [:span label]]
+   (for [option options]
+     [:div {:style "margin-bottom:5px;"} [:input option]])])
+
+(defn build-form [title token fields buttons & options]
+  [:div.easyui-panel {:style "width:100%;
+                              max-width:600px;
+                              padding:30px 60px;"
+                      :title title
+                      :data-options "style:{margin:'0 auto'}"}
+   [:form.fm (or 
+               (first options) 
+               {:method "post"
+                :enctype "multipart/form-data"
+                :data-options "novalidate:true"})
+    token
+    fields]
+   buttons
+   (if-not (nil? options) (first options))])
+
+(defn build-dialog [title fields & options]
+  [:div.dlg.easyui-dialog {:closed  "true"
+                           :buttons "#dlg-buttons"
+                           :style   "width:100%;padding:10px 20px;max-width:600px;"}
+   [:div#p.easyui-panel {:title title
+                         :style "width:100%;
+                                 max-width:600px;
+                                 height:auto;
+                                 max-height:98%;
+                                 padding:10px 20px"}
+    [:form.fm (or (first options) {:method "post"
+                                   :enctype "multipart/form-data"
+                                   :data-options "novalidate:true"}) 
+     fields]]])
+;; End hiccup stuff

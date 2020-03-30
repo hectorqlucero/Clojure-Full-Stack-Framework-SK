@@ -12,27 +12,27 @@ const confirmDelete = "Esta seguro que quiere remover este record? Esta accion n
 const maxImageHeight = 128;
 const maxImageWidth = 128;
 
-function menu() {
-    var menuIndex = parseInt(sessionStorage.getItem("calls-menu-index")) || 0;
-    $("#menu-accordion").accordion({
-        selected: menuIndex
-    });
-}
-//noinspection JSUnusedGlobalSymbols
-function openPanel() {
-    var selected = $("#menu-accordion").accordion("getSelected");
-    selected.find(".in-menu").each(function () {
-        $(this).linkbutton();
-        $(this).fadeIn(this, 100);
-    });
-    saveStateMenu(selected);
-}
-function saveStateMenu(option) {
-    if (option) {
-        var index = $("#menu-accordion").accordion("getPanelIndex", option);
-        sessionStorage.setItem("calls-menu-index", index);
-    }
-}
+//function menu() {
+//    var menuIndex = parseInt(sessionStorage.getItem("calls-menu-index")) || 0;
+//    $("#menu-accordion").accordion({
+//        selected: menuIndex
+//    });
+//}
+////noinspection JSUnusedGlobalSymbols
+//function openPanel() {
+//    var selected = $("#menu-accordion").accordion("getSelected");
+//    selected.find(".in-menu").each(function () {
+//        $(this).linkbutton();
+//        $(this).fadeIn(this, 100);
+//    });
+//    saveStateMenu(selected);
+//}
+//function saveStateMenu(option) {
+//    if (option) {
+//        var index = $("#menu-accordion").accordion("getPanelIndex", option);
+//        sessionStorage.setItem("calls-menu-index", index);
+//    }
+//}
 function parseTime(s) {
     var part = s.match(/(\d+):(\d+)(am|pm)?/i);
     var hh = parseInt(part[1], 10);
@@ -198,4 +198,8 @@ $(document).ready(function () {
             return false;
         });
     });
+
+  $(window).load(function() {
+    $('.loader').hide();
+  });
 });

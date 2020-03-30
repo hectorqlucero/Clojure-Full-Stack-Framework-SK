@@ -1,5 +1,5 @@
 /**
- * EasyUI for jQuery 1.7.5
+ * EasyUI for jQuery 1.9.0
  * 
  * Copyright (c) 2009-2019 www.jeasyui.com. All rights reserved.
  *
@@ -78,7 +78,7 @@
 		function bindEvents(target){
 			var opts = $(target).datebox('options');
 			var panel = $(target).combo('panel');
-			panel.unbind('.datebox').bind('click.datebox', function(e){
+			panel._unbind('.datebox')._bind('click.datebox', function(e){
 				if ($(e.target).hasClass('datebox-button-a')){
 					var index = parseInt($(e.target).attr('datebox-button-index'));
 					opts.buttons[index].handler.call(e.target, target);
@@ -271,15 +271,16 @@
 			return (m<10?('0'+m):m)+'/'+(d<10?('0'+d):d)+'/'+y;
 		},
 		parser:function(s){
-			if (!s) return new Date();
+			var copts = $(this).datebox('calendar').calendar('options');
+			if (!s) return new copts.Date();
 			var ss = s.split('/');
 			var m = parseInt(ss[0],10);
 			var d = parseInt(ss[1],10);
 			var y = parseInt(ss[2],10);
 			if (!isNaN(y) && !isNaN(m) && !isNaN(d)){
-				return new Date(y,m-1,d);
+				return new copts.Date(y,m-1,d);
 			} else {
-				return new Date();
+				return new copts.Date();
 			}
 		},
 		

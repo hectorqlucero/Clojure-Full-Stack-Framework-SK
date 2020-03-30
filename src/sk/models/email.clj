@@ -36,7 +36,7 @@
    :ssl  true})
 
 (def body
-  {:from    "hectorqlucero@gmail.com"
+  {:from    "marcopescador@lucero-systems.cf"
    :to      "hectorqlucero@gmail.com"
    :subject "Hi!"
    :body    [{:type    "text/html;charset=utf-8"

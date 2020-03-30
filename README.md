@@ -1,6 +1,6 @@
 # sk
 
-A Clojure library designed to create a skeleton web application
+A Clojure skeleton web application.
 
 
 ## Pre-requisites
@@ -9,22 +9,22 @@ A Clojure library designed to create a skeleton web application
 3. mySQL or MariaDB
 
 ## Usage
-1. Create a database "sk" in mySQL or MariaDB
+1. Create a database "xxxxxxxxxx" in mySQL or MariaDB.  Note: "xxxxxxxxxx" refers to what you will call your database, so replace with your database name created.
 2. Clone the repository
-3. Create a config file in: resources/private/config.clj
-  Example of resources/private/config.clj
+3. Copy resources/private/config_example to config.clj and change all of the "xxxxxxxxxx" to what applies to you setup
+  Example of resources/private/config_example.clj
   ```
   {:db-protocol    "mysql"
-  :db-name        "//localhost:3306/sk?characterEncoding=UTF-8"
+  :db-name        "//localhost:3306/xxxxxxxxxxx?characterEncoding=UTF-8"
   :db-user        "root"
-  :db-pwd         "xxxxxxxx"
+  :db-pwd         "xxxxxxxxxx"
   :db-class       "com.mysql.cj.jdbc.Driver"
   :email-host     "smtp.gmail.com"
-  :email-user     "user@gmail.com"
-  :email-password "xxxxxxxx"
+  :email-user     "xxxxxxxxxxx@gmail.com"
+  :email-password "xxxxxxxxxx"
   :port           3000
   :tz             "US/Pacific"
-  :site-name      "Ciclismo Mexicali"
+  :site-name      "xxxxxxxxxx"
   :base-url       "http://0.0.0.0:3000/"
   :uploads        "./uploads"
   :path           "/uploads/"}

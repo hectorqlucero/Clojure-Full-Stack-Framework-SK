@@ -1,5 +1,5 @@
 /**
- * EasyUI for jQuery 1.7.5
+ * EasyUI for jQuery 1.9.0
  * 
  * Copyright (c) 2009-2019 www.jeasyui.com. All rights reserved.
  *
@@ -54,7 +54,7 @@
 		);
 		
 		
-		$(target).bind('_resize', function(e,force){
+		$(target)._bind('_resize', function(e,force){
 			if ($(this).hasClass('easyui-fluid') || force){
 				setSize(target);
 			}
@@ -65,22 +65,22 @@
 	function bindEvents(target){
 		var opts = $.data(target, 'calendar').options;
 		var menu = $(target).find('.calendar-menu');
-		menu.find('.calendar-menu-year').unbind('.calendar').bind('keypress.calendar', function(e){
+		menu.find('.calendar-menu-year')._unbind('.calendar')._bind('keypress.calendar', function(e){
 			if (e.keyCode == 13){
 				setDate(true);
 			}
 		});
-		$(target).unbind('.calendar').bind('mouseover.calendar', function(e){
+		$(target)._unbind('.calendar')._bind('mouseover.calendar', function(e){
 			var t = toTarget(e.target);
 			if (t.hasClass('calendar-nav') || t.hasClass('calendar-text') || (t.hasClass('calendar-day') && !t.hasClass('calendar-disabled'))){
 				t.addClass('calendar-nav-hover');
 			}
-		}).bind('mouseout.calendar', function(e){
+		})._bind('mouseout.calendar', function(e){
 			var t = toTarget(e.target);
 			if (t.hasClass('calendar-nav') || t.hasClass('calendar-text') || (t.hasClass('calendar-day') && !t.hasClass('calendar-disabled'))){
 				t.removeClass('calendar-nav-hover');
 			}
-		}).bind('click.calendar', function(e){
+		})._bind('click.calendar', function(e){
 			var t = toTarget(e.target);
 			if (t.hasClass('calendar-menu-next') || t.hasClass('calendar-nextyear')){
 				showYear(1);
@@ -109,7 +109,7 @@
 				var y = parseInt(parts[0]);
 				var m = parseInt(parts[1]);
 				var d = parseInt(parts[2]);
-				opts.current = new Date(y, m-1, d);
+				opts.current = new opts.Date(y, m-1, d);
 				opts.onSelect.call(target, opts.current);
 				if (!oldValue || oldValue.getTime() != opts.current.getTime()){
 					opts.onChange.call(target, opts.current, oldValue);
@@ -200,7 +200,7 @@
 	function getWeeks(target, year, month){
 		var opts = $.data(target, 'calendar').options;
 		var dates = [];
-		var lastDay = new Date(year, month, 0).getDate();
+		var lastDay = new opts.Date(year, month, 0).getDate();
 		for(var i=1; i<=lastDay; i++) dates.push([year,month,i]);
 		
 		// group date by week
@@ -209,7 +209,7 @@
 		while(dates.length > 0){
 			var date = dates.shift();
 			week.push(date);
-			var day = new Date(date[0],date[1]-1,date[2]).getDay();
+			var day = new opts.Date(date[0],date[1]-1,date[2]).getDay();
 			if (memoDay == day){
 				day = 0;
 			} else if (day == (opts.firstDay==0 ? 7 : opts.firstDay) - 1){
@@ -226,14 +226,14 @@
 		if (firstWeek.length < 7){
 			while(firstWeek.length < 7){
 				var firstDate = firstWeek[0];
-				var date = new Date(firstDate[0],firstDate[1]-1,firstDate[2]-1)
+				var date = new opts.Date(firstDate[0],firstDate[1]-1,firstDate[2]-1)
 				firstWeek.unshift([date.getFullYear(), date.getMonth()+1, date.getDate()]);
 			}
 		} else {
 			var firstDate = firstWeek[0];
 			var week = [];
 			for(var i=1; i<=7; i++){
-				var date = new Date(firstDate[0], firstDate[1]-1, firstDate[2]-i);
+				var date = new opts.Date(firstDate[0], firstDate[1]-1, firstDate[2]-i);
 				week.unshift([date.getFullYear(), date.getMonth()+1, date.getDate()]);
 			}
 			weeks.unshift(week);
@@ -242,14 +242,14 @@
 		var lastWeek = weeks[weeks.length-1];
 		while(lastWeek.length < 7){
 			var lastDate = lastWeek[lastWeek.length-1];
-			var date = new Date(lastDate[0], lastDate[1]-1, lastDate[2]+1);
+			var date = new opts.Date(lastDate[0], lastDate[1]-1, lastDate[2]+1);
 			lastWeek.push([date.getFullYear(), date.getMonth()+1, date.getDate()]);
 		}
 		if (weeks.length < 6){
 			var lastDate = lastWeek[lastWeek.length-1];
 			var week = [];
 			for(var i=1; i<=7; i++){
-				var date = new Date(lastDate[0], lastDate[1]-1, lastDate[2]+i);
+				var date = new opts.Date(lastDate[0], lastDate[1]-1, lastDate[2]+i);
 				week.push([date.getFullYear(), date.getMonth()+1, date.getDate()]);
 			}
 			weeks.push(week);
@@ -267,7 +267,7 @@
 			opts.current = null;
 		}
 		
-		var now = new Date();
+		var now = new opts.Date();
 		var todayInfo = now.getFullYear()+','+(now.getMonth()+1)+','+now.getDate();
 		var currentInfo = opts.current ? (opts.current.getFullYear()+','+(opts.current.getMonth()+1)+','+opts.current.getDate()) : '';
 		// calulate the saturday and sunday index
@@ -303,13 +303,13 @@
 			else if (i == weeks.length - 1){cls = 'calendar-last';}
 			data.push('<tr class="' + cls + '">');
 			if (opts.showWeek){
-				var weekNumber = opts.getWeekNumber(new Date(week[0][0], parseInt(week[0][1])-1, week[0][2]));
+				var weekNumber = opts.getWeekNumber(new opts.Date(week[0][0], parseInt(week[0][1])-1, week[0][2]));
 				data.push('<td class="calendar-week">'+weekNumber+'</td>');
 			}
 			for(var j=0; j<week.length; j++){
 				var day = week[j];
 				var s = day[0]+','+day[1]+','+day[2];
-				var dvalue = new Date(day[0], parseInt(day[1])-1, day[2]);
+				var dvalue = new opts.Date(day[0], parseInt(day[1])-1, day[2]);
 				var d = opts.formatter.call(target, dvalue);
 				var css = opts.styler.call(target, dvalue);
 				var classValue = '';
@@ -388,7 +388,7 @@
 		moveTo: function(jq, date){
 			return jq.each(function(){
 				if (!date){
-					var now = new Date();
+					var now = new opts.Date();
 					$(this).calendar({
 						year: now.getFullYear(),
 						month: now.getMonth()+1,
@@ -420,6 +420,7 @@
 	};
 	
 	$.fn.calendar.defaults = {
+		Date: Date,
 		width:180,
 		height:180,
 		fit:false,
