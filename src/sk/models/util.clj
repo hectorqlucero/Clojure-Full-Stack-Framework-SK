@@ -754,11 +754,11 @@
         :class        "easyui-linkbutton c6"
         :style        "margin-right:5px;"
         :data-options "iconCls: 'icon-ok'"
-        :onclick      "saveItem()"} "Postear"]
+        :onclick      "saveItem()"} "Submit"]
    [:a {:href         "javascript:void(0)"
         :class        "easyui-linkbutton"
         :data-options "iconCls: 'icon-cancel'"
-        :onclick      "dialogClose()"} "Cancelar"]])
+        :onclick      "dialogClose()"} "Cancel"]])
 
 (defn build-table [title url fields]
   [:table.dg
