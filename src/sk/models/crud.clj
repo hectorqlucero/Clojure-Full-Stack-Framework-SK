@@ -309,8 +309,8 @@
           postvars (build-postvars table params)
           result (Save db (keyword table) postvars ["id = ?" id])]
       (if (seq result)
-        (generate-string {:success "Correctamente Processado!"})
-        (generate-string {:error "No se pudo processar!"})))
+        (generate-string {:success "Processed Successfully!"})
+        (generate-string {:error "Unable to process!"})))
     (catch Exception e (.getMessge e))))
 
 ;; Start upload form

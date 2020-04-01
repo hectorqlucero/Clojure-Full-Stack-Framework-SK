@@ -19,7 +19,7 @@
                  [org.clojure/data.codec "0.1.1"]
                  [mysql/mysql-connector-java "8.0.19"]
                  [ring/ring-core "1.8.0" :exclusions [ring/ring-codec commons-logging commons-codec]]]
-  :main sk.core
+  :main ^:skip-aot sk.core
   :aot [sk.core]
   :plugins [[lein-ancient "0.6.10"]
             [lein-pprint "1.1.2"]]

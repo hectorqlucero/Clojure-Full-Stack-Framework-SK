@@ -5,9 +5,7 @@
 
 (defn build-admin []
   (list
-    [:a.dropdown-item {:href "#"} "Item 1"]
-    [:a.dropdown-item {:href "#"} "Item 2"]
-    [:a.dropdown-item {:href "#"} "Item 3"]))
+    [:a.dropdown-item {:href "/admin/users"} "Users"]))
 
 (defn menus-private []
   (list
