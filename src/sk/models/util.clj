@@ -736,15 +736,15 @@
    [:a {:href         "javascript:void(0)"
         :class        "easyui-linkbutton"
         :data-options "iconCls: 'icon-add',plain: true"
-        :onclick      "newItem()"} "Crear"]
+        :onclick      "newItem()"} "New"]
    [:a {:href         "javascript:void(0)"
         :class        "easyui-linkbutton"
         :data-options "iconCls: 'icon-edit',plain: true"
-        :onclick      "editItem({})"} "Editar"]
+        :onclick      "editItem({})"} "Edit"]
    [:a {:href         "javascript:void(0)"
         :class        "easyui-linkbutton"
         :data-options "iconCls: 'icon-remove',plain: true"
-        :onclick      "deleteItem()"} "Remover"]
+        :onclick      "deleteItem()"} "Remove"]
    extra
    [:div {:style "float: right"}]])
 
@@ -816,8 +816,7 @@
    [:form.fm (or 
                (first options) 
                {:method "post"
-                :enctype "multipart/form-data"
-                :data-options "novalidate:true"})
+                :enctype "multipart/form-data"})
     token
     fields]
    buttons
@@ -834,7 +833,6 @@
                                  max-height:98%;
                                  padding:10px 20px"}
     [:form.fm (or (first options) {:method "post"
-                                   :enctype "multipart/form-data"
-                                   :data-options "novalidate:true"}) 
+                                   :enctype "multipart/form-data"}) 
      fields]]])
 ;; End hiccup stuff

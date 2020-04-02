@@ -71,7 +71,7 @@
    [:a {:href         "javascript:void(0)"
         :class        "easyui-linkbutton"
         :data-options "iconCls:'icon-back',plain:true"
-        :onclick      "returnItem('/grupos/list')"} "Regresar a Grupos"]))
+        :onclick      "returnItem('/grupos/list')"} "Return"]))
 
 (defn users-view [title]
   (list

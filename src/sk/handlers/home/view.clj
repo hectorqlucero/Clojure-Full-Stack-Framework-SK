@@ -13,19 +13,22 @@
       (build-field
         {:id "username"
          :name "username"
-         :class "easyui-textbox easyui-validatebox"
+         :class "easyui-textbox"
+         :prompt "Email here..."
+         :validType "email"
          :data-options "label:'Email:',labelPosition:'top',required:true,width:'100%'"})
       (build-field
         {:id "password"
          :name "password"
          :class "easyui-passwordbox"
+         :prompt "Password here..."
          :data-options "label:'Password:',labelPosition:'top',required:true,width:'100%'"})
       (build-button
         {:href "javascript:void(0)"
          :id "submit"
          :text "Log In"
          :class "easyui-linkbutton c6"
-         :onClick "submitForm(this)"})
+         :onClick "submitForm()"})
       )
     (list
       [:div {:style "margin-bottom:10px;"}

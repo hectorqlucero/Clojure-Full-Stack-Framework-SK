@@ -36,7 +36,7 @@
       (if (> ok 0)
         (error-404 error-text return-url)
         (application title ok js content)))
-    (catch Exception e (.getMessage))))
+    (catch Exception e (.getMessage e))))
 
 (defn registrar!
   "Post user data to the users table"
