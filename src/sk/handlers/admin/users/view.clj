@@ -53,6 +53,15 @@
        :data-options "label:'Email:',
                      labelPosition:'top',
                      width:'100%',required: false"})
+    (build-field
+      {:id "level"
+       :name "level"
+       :class "easyui-combobox"
+       :data-options "label:'User Level:',
+                     labelPosition:'top',
+                     url:'/table_ref/levels',
+                     method:'GET',
+                     required:true"})
     (list
       [:label "Active?"]
       [:div {:style "margin-bottom:5px;"}

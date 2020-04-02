@@ -46,6 +46,12 @@
     {:value 11 :text "November"}
     {:value 12 :text "Dicember"}))
 
+(defn level-options []
+  (list
+    {:value "U" :text "Users"}
+    {:value "A" :text "Administrator"}
+    {:value "S" :text "System"}))
+
 (defn years [p n]
   "Genera listado para dropdown dependiendo de p=anterioriores de este año, n=despues de este año,
   ex: (years 5 4)"
