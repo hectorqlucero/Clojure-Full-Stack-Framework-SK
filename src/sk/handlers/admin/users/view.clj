@@ -61,7 +61,8 @@
                      labelPosition:'top',
                      url:'/table_ref/levels',
                      method:'GET',
-                     required:true"})
+                     required:true,
+                     width:'100%'"})
     (list
       [:label "Active?"]
       [:div {:style "margin-bottom:5px;"}
