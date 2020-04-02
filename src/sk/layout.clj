@@ -46,13 +46,13 @@
 
 (defn app-css []
   (list
+    (include-css "/bootstrap/css/bootstrap.min.css")
+    (include-css "/bootstrap/css/lumen.min.css")
+    (include-css "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
     (include-css "/easyui/themes/metro-blue/easyui.css")
     (include-css "/easyui/themes/icon.css")
     (include-css "/easyui/themes/color.css")
     (include-css "/css/main.css")
-    (include-css "/bootstrap/css/bootstrap.min.css")
-    (include-css "/bootstrap/css/lumen.min.css")
-    (include-css "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
     (include-css "/RichText/src/richtext.min.css")))
 
 (defn app-js []

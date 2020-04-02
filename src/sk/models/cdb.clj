@@ -15,7 +15,7 @@
   cell varchar(45) DEFAULT NULL,
   phone varchar(45) DEFAULT NULL,fax varchar(45) DEFAULT NULL,
   email varchar(100) DEFAULT NULL,
-  level char(1) DEFAULT NULL COMMENT 'A=Administrador,U=Usuario,S=Sistema',
+  level char(1) DEFAULT NULL COMMENT 'A=Administrator,U=User,S=System',
   active char(1) DEFAULT NULL COMMENT 'T=Active,F=Not active'
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8")
 
