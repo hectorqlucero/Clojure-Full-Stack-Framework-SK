@@ -90,10 +90,8 @@ A Clojure skeleton web application.
       (Query! db "LOCK TABLES users WRITE;")
       (Insert-multi db :users users-rows))
 
-    (defn migrate []
-  "Migrate by the seat of my pants")
-
-   ```
+    (defn migrate [])
+    ```
 
 ## Running
 Go to project directory and type: Lein run
