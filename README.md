@@ -92,6 +92,7 @@ A Clojure skeleton web application.
 
     (defn migrate []
   "Migrate by the seat of my pants")
+
    ```
 
 ## Running
