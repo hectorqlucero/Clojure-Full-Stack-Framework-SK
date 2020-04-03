@@ -22,7 +22,7 @@
   []
   (try
     (let [id (get-session-id)
-          title (if (= id 1)
+          title (if (> id 0)
                   (str "<strong>User:</strong> " (:username (first (Query db [main-sql id]))))
                   "Click on the Login Menu to access site.")]
       title)
