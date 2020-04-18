@@ -66,12 +66,12 @@
     (list
       [:label "Active?"]
       [:div {:style "margin-bottom:5px;"}
-       [:input#status.easyui-radiobutton {:id "active_no"
+       [:input#active.easyui-radiobutton {:id "active_no"
                                           :name "active"
                                           :value "F"
                                           :data-options "label:'No', checked:true"}]]
       [:div {:tyle "margin-bottom:5px;"}
-       [:input#status.easyui-radiobutton {:id "active_yes"
+       [:input#active.easyui-radiobutton {:id "active_yes"
                                           :name "active"
                                           :value "T"
                                           :data-options "label:'Yes'"}]])))

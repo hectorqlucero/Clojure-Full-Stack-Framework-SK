@@ -258,9 +258,10 @@
     (let [td (get-table-describe table)]
       (into {}
             (map (fn [x]
-                   {(keyword (:field x))
-                    (process-field params (:field x) (:type x) (:key x))
-                    }) td)))
+                   (if ((keyword (:field x)) params)
+                     {(keyword (:field x))
+                      (process-field params (:field x) (:type x) (:key x))
+                      })) td)))
     (catch Exception e (.getMessage e))))
 
 (defn build-grid-field
