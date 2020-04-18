@@ -4,7 +4,6 @@
             [sk.models.util :refer [build-table
                                     build-dialog
                                     build-dialog-buttons
-                                    build-toolbar
                                     build-field
                                     build-radio-buttons]]))
 
@@ -77,13 +76,6 @@
          :value "T"
          :data-options "label:'Yes'"}))))
 
-(defn toolbar-extra []
-  (list
-   [:a {:href         "javascript:void(0)"
-        :class        "easyui-linkbutton"
-        :data-options "iconCls:'icon-back',plain:true"
-        :onclick      "returnItem('#')"} "Return"]))
-
 (defn users-view [title]
   (list
    (anti-forgery-field)
@@ -97,7 +89,17 @@
        [:th {:data-options "field:'dob',sortable:true,fixed:true,width:100"} "DOB"]
        [:th {:data-options "field:'level',sortable:true,fixed:true,width:100"} "Level"]
        [:th {:data-options "field:'active',sortable:true,fixed:false,width:100"} "Active?"]))
-   (build-toolbar (toolbar-extra))
+   (list ;Here we build a toolbar without the New button - we don't want to create users
+     [:div#toolbar
+      [:a {:href         "javascript:void(0)"
+           :class        "easyui-linkbutton"
+           :data-options "iconCls: 'icon-edit',plain: true"
+           :onclick      "editItem({})"} "Edit"]
+      [:a {:href         "javascript:void(0)"
+           :class        "easyui-linkbutton"
+           :data-options "iconCls: 'icon-remove',plain: true"
+           :onclick      "deleteItem()"} "Remove"]
+      [:div {:style "float: right"}]])
    (build-dialog title dialog-fields)
    (build-dialog-buttons)))
 
