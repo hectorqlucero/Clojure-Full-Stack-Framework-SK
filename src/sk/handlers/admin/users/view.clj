@@ -63,18 +63,19 @@
                      method:'GET',
                      required:true,
                      width:'100%'"})
-    (list
-      [:label "Active?"]
-      [:div {:style "margin-bottom:5px;"}
-       [:input#active.easyui-radiobutton {:id "active_no"
-                                          :name "active"
-                                          :value "F"
-                                          :data-options "label:'No', checked:true"}]]
-      [:div {:tyle "margin-bottom:5px;"}
-       [:input#active.easyui-radiobutton {:id "active_yes"
-                                          :name "active"
-                                          :value "T"
-                                          :data-options "label:'Yes'"}]])))
+    (build-radio-buttons
+      "Active?"
+      (list
+        {:id "active_no"
+         :name "active"
+         :class "easyui-radiobutton"
+         :value "F"
+         :data-options "label:'No', checked:true"}
+        {:id "active_yes"
+         :name "active"
+         :class "easyui-radiobutton"
+         :value "T"
+         :data-options "label:'Yes'"}))))
 
 (defn toolbar-extra []
   (list
