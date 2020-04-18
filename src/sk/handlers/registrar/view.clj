@@ -13,23 +13,48 @@
       (build-field {:id "firstname"
                     :name "firstname"
                     :class "easyui-textbox"
+                    :prompt "Enter first name"
                     :data-options "label:'First Name:', labelPosition:'top', required:true,width:'100%'"})
       (build-field {:id "lastname"
                     :name "lastname"
                     :class "easyui-textbox"
+                    :prompt "Enter last name"
                     :data-options "label:'Last Name:', labelPosition:'top', required:true,width:'100%'"})
       (build-field {:id "email"
                     :name "email"
                     :class "easyui-textbox easyui-validatebox"
+                    :prompt "Enter a valid email"
                     :validType "email"
                     :data-options "label:'Email:', labelPosition:'top', required:true,width:'100%'"})
+      (build-field {:id "dob"
+                    :name "dob"
+                    :class "easyui-datebox"
+                    :prompt "mm/dd/yyyy"
+                    :data-options "label:'Date of birth:', labelPosition:'top', width:'100%'"})
+      (build-field {:id "cell"
+                    :name "cell"
+                    :class "easyui-maskedbox"
+                    :mask "(999) 999-9999"
+                    :data-options "label:'Cell Phone:', labelPosition:'top', width:'100%'"})
+      (build-field {:id "phone"
+                    :name "phone"
+                    :class "easyui-maskedbox"
+                    :mask "(999) 999-9999"
+                    :data-options "label:'Phone:', labelPosition:'top', width:'100%'"})
+      (build-field {:id "fax"
+                    :name "fax"
+                    :class "easyui-maskedbox"
+                    :mask "(999) 999-9999"
+                    :data-options "label:'Fax:', labelPosition:'top', width:'100%'"})
       (build-field {:id "password"
                     :name "password"
                     :class "easyui-passwordbox"
+                    :prompt "Your prefered password here"
                     :data-options "label:'Password:', labelPosition:'top', required:true,width:'100%'"})
       (build-field {:id "password1"
                     :name "password1"
                     :class "easyui-passwordbox"
+                    :prompt "Validate your prefered password"
                     :validType "confirmPass['#password']"
                     :data-options "label:'Confirm Password:', labelPosition:'top', required:true,width:'100%'"}))
     (list
