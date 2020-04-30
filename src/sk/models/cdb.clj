@@ -11,7 +11,7 @@
   firstname varchar(45) DEFAULT NULL,
   username varchar(45) DEFAULT NULL,
   password TEXT DEFAULT NULL,
-  dob varchar(45) DEFAULT NULL,
+  dob date DEFAULT NULL,
   cell varchar(45) DEFAULT NULL,
   phone varchar(45) DEFAULT NULL,fax varchar(45) DEFAULT NULL,
   email varchar(100) DEFAULT NULL,
