@@ -270,6 +270,17 @@
     (let [field (:field d)
           field-type (:type d)]
       (cond
+        (= field-type "date") (str "DATE_FORMAT("field "," "'%m/%d/%Y') as " (str field "_formatted"))
+        (= field-type "time") (str "TIME_FORMAT("field "," "'%H:%i') as " (str field "_formatted"))
+        (= field-type "decimal(15,2)") (str "concat('$',format("field ",2)) as " (str field "_formatted"))))
+    (catch Exception e (.getMessage e))))
+
+(defn build-form-field
+  [d]
+  (try
+    (let [field (:field d)
+          field-type (:type d)]
+      (cond
         (= field-type "date") (str "DATE_FORMAT("field "," "'%m/%d/%Y') as " field)
         (= field-type "time") (str "TIME_FORMAT("field "," "'%H:%i') as " field)
         :else field))
@@ -282,11 +293,18 @@
     (catch Exception e (.getMessage e))))
 
 (defn build-grid-columns
-  "Builds grid columns ex. ['c1' 'c2'...]"
+  "Builds grid columns ex. ['c1', 'c2'...]"
   [table]
   (try
-    (vec
-      (map #(build-grid-field %) (get-table-describe table)))
+    (vec 
+      (flatten  
+        (map (fn [row]
+               (let [type (:type row)]
+                 (cond
+                   (= type "date") [(build-grid-field row) (:field row)]
+                   (= type "time") [(build-grid-field row) (:field row)]
+                   (= type "decimal(15,2)") [(build-grid-field row) (:field row)]
+                   :else (:field row)))) (get-table-describe table))))
     (catch Exception e (.getMessage e))))
 
 (defn build-form-row

@@ -72,9 +72,9 @@
     (include-js "/js/main.js")))
 
 (defn application [title ok js & content]
-  (html5 {:ng-app "Inventario" :lang "es"}
+  (html5 {:ng-app (:site-name config) :lang "en"}
          [:head
-          [:title title]
+          [:title (:site-name config)]
           [:meta {:charset "UTF-8"}]
           [:meta {:name "viewport"
                   :content "width=device-width, initial-scale=1"}]
@@ -85,7 +85,7 @@
             (= ok 0) (menus-public)
             (> ok 0) (menus-private))
           [:div#content.container-fluid.easyui-panel {:style "margin-top:75px;border:none;"
-                                              :data-options "closed:false"} 
+                                                      :data-options "closed:false"} 
            content]
           (app-js)
           js]))

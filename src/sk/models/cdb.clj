@@ -51,7 +51,8 @@
   (Query! db "DROP table IF EXISTS users")
   (Query! db users-sql)
   (Query! db "LOCK TABLES users WRITE;")
-  (Insert-multi db :users users-rows))
+  (Insert-multi db :users users-rows)
+  (Query! db "UNLOCK TABLES;"))
 
 (defn migrate []
   "Migrate by the seat of my pants")

@@ -86,7 +86,7 @@
        [:th {:data-options "field:'username',sortable:true,fixed:false,width:100"} "Username"]
        [:th {:data-options "field:'lastname',sortable:true,fixed:false,width:100"} "Last Name"]
        [:th {:data-options "field:'firstname',sortable:true,fixed:true,width:100"} "First Name"]
-       [:th {:data-options "field:'dob',sortable:true,fixed:true,width:100"} "DOB"]
+       [:th {:data-options "field:'dob_formatted',sortable:true,fixed:true,width:100"} "DOB"]
        [:th {:data-options "field:'level',sortable:true,fixed:true,width:100"} "Level"]
        [:th {:data-options "field:'active',sortable:true,fixed:false,width:100"} "Active?"]))
    (list ;Here we build a toolbar without the New button - we don't want to create users
