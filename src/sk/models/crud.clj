@@ -313,7 +313,7 @@
   (try
     (let [tid (get-table-key (get-table-describe table))
           head "SELECT "
-          body (apply str (interpose #"," (map #(build-grid-field %) (get-table-describe table))))
+          body (apply str (interpose #"," (map #(build-form-field %) (get-table-describe table))))
           foot (str " FROM " table " WHERE " tid " = ?")
           sql (str head body foot)
           row (Query db [sql id])]
