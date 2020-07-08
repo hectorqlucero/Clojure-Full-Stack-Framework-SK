@@ -56,7 +56,6 @@
         (reload/wrap-reload)
         (wrap-defaults (-> site-defaults
                            (assoc-in [:security :anti-forgery] true)
-                           (assoc-in [:session :store] (cookie-store {:key KEY}))
                            (assoc-in [:session :cookie-attrs] {:max-age 28800})
                            (assoc-in [:session :cookie-name] "LS"))))
     {:port (:port config)}))
