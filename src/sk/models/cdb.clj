@@ -1,5 +1,7 @@
 (ns sk.models.cdb
-  (:require [sk.models.crud :refer :all]
+  (:require [sk.models.crud :refer [db
+                                    Query!
+                                    Insert-multi]]
             [noir.util.crypt :as crypt]))
 
 
@@ -38,16 +40,18 @@
     :active "T"}])
 ;; End users table
 
-(defn create-database []
+(defn create-database
   "Create database tables and default admin users
    Note: First create the database on MySQL with any client"
+  []
   (Query! db users-sql)
   (Query! db "LOCK TABLES users WRITE;")
   (Insert-multi db :users users-rows)
   (Query! db "UNLOCK TABLES;"))
 
-(defn reset-database []
+(defn reset-database
   "Removes existing tables and re-creates them"
+  []
   (Query! db "DROP table IF EXISTS users")
   (Query! db users-sql)
   (Query! db "LOCK TABLES users WRITE;")

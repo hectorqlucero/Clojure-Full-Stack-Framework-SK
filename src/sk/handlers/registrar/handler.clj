@@ -1,6 +1,8 @@
 (ns sk.handlers.registrar.handler
   (:require [cheshire.core :refer [generate-string]]
-            [sk.layout :refer :all]
+            [clojure.string :as str]
+            [sk.layout :refer [application
+                               error-404]]
             [sk.handlers.registrar.view :refer [registrar-scripts
                                                 registrar-view
                                                 reset-password-scripts
@@ -9,13 +11,13 @@
                                                 reset-jwt-view]]
             [ring.util.anti-forgery :refer [anti-forgery-field]]
             [noir.util.crypt :as crypt]
-            [sk.models.crud :refer [db 
+            [sk.models.crud :refer [db
                                     config
                                     build-postvars
-                                    Query 
-                                    Save 
+                                    Query
+                                    Save
                                     Update]]
-            [sk.models.email :refer [host 
+            [sk.models.email :refer [host
                                      send-email]]
             [sk.models.util :refer [get-session-id
                                     get-reset-url
@@ -23,8 +25,8 @@
                                     create-token]]))
 
 ;; Start registrar
-(defn registrar 
-  [request]
+(defn registrar
+  [_]
   (try
     (let [title "Register Users"
           token (anti-forgery-field)
@@ -42,9 +44,9 @@
   "Post user data to the users table"
   [{params :params}]
   (try
-    (let [email (clojure.string/lower-case (or (:email params) "0"))
+    (let [email (str/lower-case (or (:email params) "0"))
           password (:password params)
-          params (assoc params 
+          params (assoc params
                         :level "u"
                         :active "t"
                         :password (crypt/encrypt password)
@@ -61,8 +63,8 @@
 ;; End registrar
 
 ;; Start reset-password
-(defn reset-password 
-  [request]
+(defn reset-password
+  [_]
   (try
     (let [title "Reset Password"
           token (anti-forgery-field)
@@ -76,7 +78,7 @@
         (application title ok js content)))
     (catch Exception e (.getMessage e))))
 
-(defn get-username-row 
+(defn get-username-row
   [username]
   (try
     (first (Query db ["SELECT * FROM users WHERE username = ?" username]))
@@ -105,7 +107,7 @@
       body)
     (catch Exception e (.getMessage e))))
 
-(defn reset-password! 
+(defn reset-password!
   [request]
   (try
     (let [params     (:params request)
@@ -120,7 +122,7 @@
     (catch Exception e (.getMessage e))))
 ;; End reset-password
 
-(defn reset-jwt 
+(defn reset-jwt
   [token]
   (try
     (let [title "Reset Password"
@@ -136,7 +138,7 @@
         (error-404 error-text return-url)))
     (catch Exception e (.getMessage e))))
 
-(defn reset-jwt! 
+(defn reset-jwt!
   [{params :params}]
   (try
     (let [username (or (:username params) "0")

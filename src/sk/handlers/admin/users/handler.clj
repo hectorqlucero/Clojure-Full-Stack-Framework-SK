@@ -3,9 +3,7 @@
                                     build-form-save
                                     build-form-delete]]
             [sk.models.grid :refer [build-grid]]
-            [sk.models.util :refer [get-session-id
-                                    user-email
-                                    user-level]]
+            [sk.models.util :refer [get-session-id]]
             [sk.layout :refer [application]]
             [sk.handlers.admin.users.view :refer [users-view users-scripts]]))
 

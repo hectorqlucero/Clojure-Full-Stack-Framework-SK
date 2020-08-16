@@ -1,9 +1,17 @@
 (ns sk.models.util
-  (:require [sk.models.crud :refer :all]
+  (:require [sk.models.crud :refer [config
+                                    db
+                                    Query
+                                    Save
+                                    Insert
+                                    Update]]
             [clj-time.core :as t]
             [clj-time.format :as f]
             [clj-time.coerce :as c]
-            [clj-jwt.core :refer :all]
+            [clj-jwt.core :refer [str->jwt
+                                  jwt
+                                  verify
+                                  to-str]]
             [clojure.string :refer [join]]
             [clojure.java.io :as io]
             [date-clj :as d]
@@ -59,23 +67,27 @@
   (str (get-base-url request) "/reset_password/" token))
 
 ;; Start jwt token
-(defn create-token [k]
+(defn create-token
   "Creates jwt token with 10 minutes expiration time"
+  [k]
   (let [data {:iss k
               :exp (t/plus (t/now) (t/minutes 10))
               :iat (t/now)}]
     (-> data jwt to-str)))
 
-(defn decode-token [t]
+(defn decode-token
   "Decodes jwt token"
+  [t]
   (-> t str->jwt :claims))
 
-(defn verify-token [t]
+(defn verify-token
   "Verifies that token is good"
+  [t]
   (-> t str->jwt verify))
 
-(defn check-token [t]
+(defn check-token
   "Checks if token verifes and it's not expired, returns id or nil"
+  [t]
   (let [token (decode-token t)
         exp (:exp token)
         cexp (c/to-epoch (t/now))
@@ -88,45 +100,54 @@
 (defn get-session-id []
   (try
     (if (session/get :user_id) (session/get :user_id) 0)
-    (catch Exception e 0)))
+    (catch Exception e (.getMessage e))))
 
-(defn current_date []
+(defn current_date
   "Get current date formatted MM/dd/YYYY"
+  []
   (f/unparse external-date-parser (t/now)))
 
-(defn current_date_long []
+(defn current_date_long
   "Get current date formatted Sat 11 12 2016"
+  []
   (f/unparse external-ld-parser (t/now)))
 
-(defn current_date_time []
+(defn current_date_time
   "Get current date formatted Sat 11 12 2016 at 18:20 PM"
+  []
   (f/unparse external-dt-parser (t/now)))
 
-(defn current_time []
+(defn current_time
   "Get simple date formatted time h:m:s a"
+  []
   (f/unparse external-time-parser (t/now)))
 
-(defn current_time_internal []
+(defn current_time_internal
   "Get current time formatted H:k:s"
+  []
   (f/unparse internal-time-parser (t/now)))
 
 (defn previous_year []
   (t/year (t/minus (t/now) (t/years 1))))
 
-(defn current_year []
+(defn current_year
   "GEt simple date formatted year"
+  []
   (t/year (t/from-time-zone (t/now) tz)))
 
-(defn current_month []
+(defn current_month
   "Get simple date formatted month :MM"
+  []
   (t/month (t/from-time-zone (t/now) tz)))
 
-(defn current_day []
+(defn current_day
   "Get Simple Date formatted :dd"
+  []
   (t/day (t/from-time-zone (t/now) tz)))
 
-(defn get_date_external [d]
+(defn get_date_external
   "Convert date instance to external MM/dd/YYYY"
+  [d]
   (f/unparse external-date-parser d))
 
 (defn to-utc [dt]
@@ -191,20 +212,23 @@
     (.setTime cal (.toDate date))
     (- (.get cal Calendar/WEEK_OF_YEAR) 1)))
 
-(defn get-weekday-long [n]
+(defn get-weekday-long
   "0=sunday....6=Saturday"
+  [n]
   (nth (d/names :week-days) n))
 
 (defn validate-email [email]
   (let [pattern #"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"]
     (and (string? (clojure.string/lower-case email)) (re-matches pattern (clojure.string/lower-case email)))))
 
-(defn merge-maps [k & m]
+(defn merge-maps
   "k = keyword ex. :id, m= list of maps.  ex. (merge-maps :id a b)"
+  [k & m]
   (map #(apply merge %) (vals (group-by k (apply concat m)))))
 
-(defn parse-int [s]
+(defn parse-int
   "Attempt to convert to integer or on error return nil or itself if it's already an integer"
+  [s]
   (try
     (Integer. s)
     (catch Exception _ (if (integer? s) s nil))))
@@ -214,38 +238,44 @@
   [coll elm]
   (some #(= elm %) coll))
 
-(defn contains-many? [m & ks]
+(defn contains-many?
   "Checks if multiple keys exist in map.  It can be a single key also"
+  [m & ks]
   (every? true? (map #(contains? m %) ks)))
 
-(defn commify [s]
+(defn commify
   "takes a string as a number and adds commas a separators"
+  [s]
   (let [matcher (re-matcher #"(\d\d\d)(?=\d)(?!\d*\.)" (apply str (reverse s)))]
     (apply str (reverse (.replaceAll matcher "$1,")))))
 
-(defn spl [n c p]
+(defn spl
   "n=number,c=pad number,p=padding str"
+  [n c p]
   (loop [s (str n)]
     (if (< (.length s) c)
       (recur (str p s))
       s)))
 
-(defn spr [n c p]
+(defn spr
   "n=number,c=zeropad number"
+  [n c p]
   (loop [s (str n)]
     (if (< (.length s) c)
       (recur (str s p))
       s)))
 
-(defn zpl [n c]
+(defn zpl
   "n=number,c=zeropad number"
+  [n c]
   (loop [s (str n)]
     (if (< (.length s) c)
       (recur (str "0" s))
       s)))
 
-(defn zpr [n c]
+(defn zpr
   "n=number,c=zeropad number"
+  [n c]
   (loop [s (str n)]
     (if (< (.length s) c)
       (recur (str s "0"))
@@ -255,17 +285,19 @@
 (def allowed-mimetypes-document ["application/pdf" "text/csv"]) ; MIME types allowed for 'file'
 (def max-filesize (* 1000 1000 7))                          ; 5MB max filesize allowed on uploads
 
-(defn verify-file [file file-type]
+(defn verify-file
   "Verify that a file matches MIME type, and doesn't exceed the max file size"
+  [file file-type]
   (and (in? (cond
               (= file-type "file")  allowed-mimetypes-document
               (= file-type "image") allowed-mimetypes-image) (:content-type file))
        (<= (:size file) max-filesize)
        (not (= 0 (:size file)))))
 
-(defn file-error [file file-type]
+(defn file-error
   "Returns an error to let the user know if their file was too large or the invalid type"
-  (if (not (= 0 (:size file)))
+  [file file-type]
+  (when (not (= 0 (:size file)))
     (cond
       (> (:size file) max-filesize) {:error (str "File not uploaded: Filesize maximum is: "
                                                  (/ max-filesize (* 1000 1000)) "MB")}
@@ -284,43 +316,43 @@
     (str (.format (java.text.SimpleDateFormat. "MM/dd/yyyy") d))
     nil))
 
-(defn format-date-internal [s]
+(defn format-date-internal
   "Convert a MM/dd/yyyy format date to yyyy-MM-dd format using a string as a date
    eg. 02/01/1997 -> 1997-02-01"
+  [s]
   (if (not-empty s)
     (try
-      (do
-        (.format
-          (SimpleDateFormat. "yyyy-MM-dd")
-          (.parse
-            (SimpleDateFormat. "MM/dd/yyyy") s)))
-      (catch Exception e nil))
+      (.format
+       (SimpleDateFormat. "yyyy-MM-dd")
+       (.parse
+        (SimpleDateFormat. "MM/dd/yyyy") s))
+      (catch Exception e (.getMessage e)))
     nil))
 
-(defn format-date-external [s]
+(defn format-date-external
   "Convert a yyyy-MM-dd format date to MM/dd/yyyy format using a string as a date
    eg. 1997-02-01 -> 02/01/1997"
+  [s]
   (if (not-empty s)
     (try
-      (do
-        (.format
-          (SimpleDateFormat. "MM/dd/yyyy")
-          (.parse
-            (SimpleDateFormat. "yyyy-MM-dd") s)))
-      (catch Exception e nil))
+      (.format
+       (SimpleDateFormat. "MM/dd/yyyy")
+       (.parse
+        (SimpleDateFormat. "yyyy-MM-dd") s))
+      (catch Exception e (.getMessage e)))
     nil))
 
-(defn format-date-external-mx [s]
+(defn format-date-external-mx
   "Convert a yyyy-MM-dd format date to dd/MM/yyyy format using a string as a date
    eg. 1997-02-01 -> 01/02/1997"
+  [s]
   (if (not-empty s)
     (try
-      (do
-        (.format
-          (SimpleDateFormat. "dd/MM/yyyy")
-          (.parse
-            (SimpleDateFormat. "yyyy-MM-dd") s)))
-      (catch Exception e nil))
+      (.format
+       (SimpleDateFormat. "dd/MM/yyyy")
+       (.parse
+        (SimpleDateFormat. "yyyy-MM-dd") s))
+      (catch Exception e (.getMessage e)))
     nil))
 
 (defn get_username [username]
@@ -328,62 +360,74 @@
         user_name (str (:firstname row) " " (:lastname row))]
     user_name))
 
-(defn get-active-flag [row]
+(defn get-active-flag
   "Extract the :active keyword from a row"
+  [row]
   (:active row))
 
-(defn t1 []
+(defn t1
   "Get a timezone aware date instance of now"
+  []
   (t/to-time-zone (t/now) tz))
 
-(defn t2 [d]
+(defn t2
   "Get a timezone aware date instance from a valid joda date ex. d = (t/date-time 2016 11 12 18 4"
+  [d]
   (t/to-time-zone d tz))
 
-(defn today-date []
+(defn today-date
   "Get today simple date formatted MM/dd/yyyy"
+  []
   (f/unparse external-date-parser (t/now)))
 
 (defn today-time []
   (str (t/hour (t1)) ":" (t/minute (t1))))
 
-(defn today-internal []
+(defn today-internal
   "internal today date formatted YYYY-MM-dd"
+  []
   (str (t/year (t1)) "-" (t/month (t1)) "-" (t/day (t1))))
 
-(defn today-month []
+(defn today-month
   "get month with timezone"
+  []
   (str (format "%02d" (t/month (t1)))))
 
-(defn today-day []
+(defn today-day
   "get month with timezone"
+  []
   (str (format "%02d" (t/day (t1)))))
 
-(defn today-year []
+(defn today-year
   "get month with timezone"
+  []
   (str (t/year (t1))))
 
 (defn get-month-desc [m]
   (nth (d/names :months :long) (- m 1)))
 
-(defn date-internal [month day year]
+(defn date-internal
   "Internal date formatted YYYY-MM-dd - input macc MM dd YYYY"
+  [month day year]
   (let [d (t/date-time year month day (t/hour (t/now)) (t/minute (t/now)))]
     (str (t/year (t2 d)) "-" (t/month (t2 d)) "-" (t/day (t2 d)))))
 
-(defn date-external [month day year]
+(defn date-external
   "Internal date formatted YYYY-MM-dd - input macc MM dd YYYY"
+  [month day year]
   (let [d (t/date-time year month day (t/hour (t/now)) (t/minute (t/now)))]
     (str (t/month (t2 d)) "/" (t/day (t2 d)) "/" (t/year (t2 d)))))
 
-(defn date-instance [d]
+(defn date-instance
   "get a date i.e MM/dd/YYY and return a date tiemzone aware instance"
+  [d]
   (let [v (clojure.string/split d #"/")
         d (t/date-time (parse-int (nth v 2)) (parse-int (nth v 0)) (parse-int (nth v 1)) (t/hour (t/now)) (t/minute (t/now)))]
     d))
 
-(defn add-days [d n]
+(defn add-days
   "Adds days to a date and returns date d = MM/dd/YYYY n = number of days"
+  [d n]
   (let [date (date-instance d)]
     (t/plus date (t/days n))))
 
@@ -396,12 +440,14 @@
 (defn get-year [d]
   (t/year d))
 
-(defn today-dow []
+(defn today-dow
   "Get today's day or week"
+  []
   (d/week-day (d/today)))
 
-(defn get-dosing-dow [d]
+(defn get-dosing-dow
   "Get day of week that matches dosing table. d=date instance"
+  [d]
   (try
     (let [month (get-month d)
           day   (get-day d)
@@ -409,7 +455,7 @@
           date  (d/date :month (- month 1) :day day :year year)
           dow   (d/week-day date)]
       (if (= dow 1) 7 (- dow 1)))
-    (catch Exception e nil)))
+    (catch Exception e (.getMessage e))))
 
 (defn process-record [table postvars id]
   (let [processed (Save db (keyword table) postvars ["id = ?" id])]
@@ -427,15 +473,16 @@
 (defn FLAGS []
   (first (Query db ["select * from flags where id=?" "setup"])))
 
-(defn IS_SYSTEM [user-id]
+(defn IS_SYSTEM
   "Check if a user-id is a system user"
+  [user-id]
   (let [row (Query db ["select role_id from user_role where user_id=? and role_id=1 limit 1" user-id])]
     (if (get-in (first row) [:role_id]) true false)))
 
 (defn audit [username ip controller function args]
-  (if (and
-        (not-empty controller)
-        (not-empty function))
+  (when (and
+         (not-empty controller)
+         (not-empty function))
     (let [postvars {:username   username
                     :date       (today-internal)
                     :time       (today-time)
@@ -467,17 +514,17 @@
 
 (defn get-photo-val [table-name field-name id-name id-value]
   (if (or
-        (nil? table-name)
-        (nil? field-name)
-        (nil? id-name)
-        (nil? id-value))
+       (nil? table-name)
+       (nil? field-name)
+       (nil? id-name)
+       (nil? id-value))
     nil
     ((keyword field-name) (first (Query db (str "SELECT " field-name " FROM " table-name " WHERE " id-name " = " id-value))))))
 
 (defn build-photo-html [photo-val uuid]
   (if (or
-        (nil? photo-val)
-        (nil? uuid))
+       (nil? photo-val)
+       (nil? uuid))
     nil
     (str "<img src='" (:path config)  photo-val "?t=" uuid "' onError=\"this.src='/images/placeholder_profile.png'\" width='95' height='71'></img>")))
 
@@ -523,10 +570,11 @@
         values {:id "C"
                 :numero_registro (str next-numero)}
         result (Update db :contador values ["id = ?" "C"])]
-    next-numero))
+    (when result next-numero)))
 
-(defn deep-merge [& maps]
+(defn deep-merge
   "Merge maps recursively"
+  [& maps]
   (apply merge-with deep-merge maps))
 
 (defn- deprecated? [method]
@@ -562,8 +610,9 @@
         speed (/ (/ (parse-int distance) 1000) hours)]
     (format "%.3f" speed)))
 
-(defn create-carreras-categorias []
+(defn create-carreras-categorias
   "This is to create carreras_categorias example"
+  []
   (doseq [item (Query db "SELECT * FROM categorias")]
     (doseq [sitem (Query db "SELECT * FROM carreras")]
       (let [carreras_id   (str (:id sitem))
@@ -610,26 +659,26 @@
 (defn get-inventory-inicio [producto_id]
   (let [row (get-productos-row producto_id)
         inv_inicio (or
-                     (parse-int
-                       (:inv_inicio row)) 0)]
+                    (parse-int
+                     (:inv_inicio row)) 0)]
     inv_inicio))
 
 (defn get-inventory-recibido [producto_id]
   (or
-    (parse-int
-      (:total
-        (first
-          (Query db [recibido-sql producto_id])))) 0))
+   (parse-int
+    (:total
+     (first
+      (Query db [recibido-sql producto_id])))) 0))
 
 (defn get-inventory-enviado [producto_id]
   (or
-    (parse-int
-      (:total
-        (first
-          (Query db [enviado-sql producto_id])))) 0))
+   (parse-int
+    (:total
+     (first
+      (Query db [enviado-sql producto_id])))) 0))
 
 (defn update-inventory [producto_id]
-  (if-not (nil? producto_id)
+  (when-not (nil? producto_id)
     (let [inv_inicio (get-inventory-inicio producto_id)
           recibido (get-inventory-recibido producto_id)
           enviado (get-inventory-enviado producto_id)
@@ -662,9 +711,10 @@
     nil
     ((keyword field-name) (first (Query db (str "SELECT " field-name " FROM " table-name " WHERE " id-name " = " id-value))))))
 
-(defn get-image [table-name field-name id-name id-value & extra-folder]
+(defn get-image
   "Get an image from a table and specify extra folder 
    ex. (get-image 'eventos' 'imagen' 'id' 6 "
+  [table-name field-name id-name id-value & extra-folder]
   (let [img-val     (get-img-val table-name field-name id-name id-value)
         uuid        (str (UUID/randomUUID))
         path        (str (:path config) (first extra-folder))
@@ -672,36 +722,36 @@
         image       (build-img-html img-val uuid path)]
     (if (empty? img-val) placeholder image)))
 
-(defn upload-image [file id path]
+(defn upload-image
   "Uploads image and renames it to the id passed"
+  [file id path]
   (let [tempfile   (:tempfile file)
         size       (:size file)
         type       (:content-type file)
         extension  (peek (clojure.string/split type #"\/"))
         extension  (if (= extension "jpeg") "jpg" "jpg")
-        filename   (:filename file)
         image-name (str id "." extension)
-        result     (if-not (zero? size)
-                     (do (io/copy tempfile (io/file (str path image-name)))))]
-    image-name))
+        result     (when-not (zero? size)
+                     (io/copy tempfile (io/file (str path image-name))))]
+    (when result image-name)))
 ;; End image stuff
 
 ;; Start hiccup stuff
 (defn build-image-field []
   (list
-    [:input {:id "imagen" :name "imagen" :type "hidden"}]
-    [:div {:style "margin-bottom:10px;width:100%;max-width:400px;"}
-     [:div {:style "width:99%;max-width:398px;display:flex;overflow:none;vertical-align:middle;"}
+   [:input {:id "imagen" :name "imagen" :type "hidden"}]
+   [:div {:style "margin-bottom:10px;width:100%;max-width:400px;"}
+    [:div {:style "width:99%;max-width:398px;display:flex;overflow:none;vertical-align:middle;"}
      [:div {:style "float:left;margin-right:2px;"}
       [:img#image1 {:width  "95"
                     :height "71"
                     :style  "margin-right:2px;cursor:pointer;"}]]
      [:div {:style "float:right;margin-left:2px;vertical-align:middle;"}
-        [:input {:id           "file"
-                :name         "file"
-                :class        "easyui-filebox"
-                :style        "width:300px;"
-                :data-options "prompt:'Escoge imagen...',
+      [:input {:id           "file"
+               :name         "file"
+               :class        "easyui-filebox"
+               :style        "width:300px;"
+               :data-options "prompt:'Escoge imagen...',
                               buttonText:'Escoge imagen...',
                               onChange: function(value) {
                                 var f = $(this).next().find('input[type=file]')[0];
@@ -727,8 +777,9 @@
     });
     "))
 
-(defn build-table-field [label options & styler]
+(defn build-table-field
   "label, data-options and styler as optional"
+  [label options & styler]
   [:th {:data-options options :styler (first styler)} label])
 
 (defn build-toolbar [& extra]
@@ -736,15 +787,15 @@
    [:a {:href         "javascript:void(0)"
         :class        "easyui-linkbutton"
         :data-options "iconCls: 'icon-add',plain: true"
-        :onclick      "newItem()"} "New"]
+        :onclick      "newItem()"} "Nuevo"]
    [:a {:href         "javascript:void(0)"
         :class        "easyui-linkbutton"
         :data-options "iconCls: 'icon-edit',plain: true"
-        :onclick      "editItem({})"} "Edit"]
+        :onclick      "editItem({})"} "Editar"]
    [:a {:href         "javascript:void(0)"
         :class        "easyui-linkbutton"
         :data-options "iconCls: 'icon-remove',plain: true"
-        :onclick      "deleteItem()"} "Remove"]
+        :onclick      "deleteItem()"} "Remover"]
    extra
    [:div {:style "float: right"}]])
 
@@ -754,11 +805,11 @@
         :class        "easyui-linkbutton c6"
         :style        "margin-right:5px;"
         :data-options "iconCls: 'icon-ok'"
-        :onclick      "saveItem()"} "Submit"]
+        :onclick      "saveItem()"} "Procesar"]
    [:a {:href         "javascript:void(0)"
         :class        "easyui-linkbutton"
         :data-options "iconCls: 'icon-cancel'"
-        :onclick      "dialogClose()"} "Cancel"]])
+        :onclick      "dialogClose()"} "Cancelar"]])
 
 (defn build-table [title url fields]
   [:table.dg
@@ -795,13 +846,13 @@
 (defn build-button [options]
   [:div {:style "text-align:center;padding:5px 0"}
    (if (list? options)
-     (do
-       (for [option options]
-         [:a option]))
+     (for [option options]
+       [:a option])
      [:a options])])
 
-(defn build-radio-buttons [label options]
+(defn build-radio-buttons
   "Builds radio button fields options has list of build-field options"
+  [label options]
   [:div.form-group.col-10
    [:label [:span label]]
    (for [option options]
@@ -813,14 +864,14 @@
                               padding:30px 60px;"
                       :title title
                       :data-options "style:{margin:'0 auto'}"}
-   [:form.fm (or 
-               (first options) 
-               {:method "post"
-                :enctype "multipart/form-data"})
+   [:form.fm (or
+              (first options)
+              {:method "post"
+               :enctype "multipart/form-data"})
     token
     fields]
    buttons
-   (if-not (nil? options) (first options))])
+   (when-not (nil? options) (first options))])
 
 (defn build-dialog [title fields & options]
   [:div.dlg.easyui-dialog {:closed  "true"
@@ -833,6 +884,7 @@
                                  max-height:98%;
                                  padding:10px 20px"}
     [:form.fm (or (first options) {:method "post"
-                                   :enctype "multipart/form-data"}) 
-     fields]]])
+                                   :enctype "multipart/form-data"})
+     fields
+     (build-dialog-buttons)]]])
 ;; End hiccup stuff

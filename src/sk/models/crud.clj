@@ -5,7 +5,7 @@
             [cheshire.core :refer [generate-string]])
   (:import java.text.SimpleDateFormat))
 
-(defn get-config 
+(defn get-config
   []
   (try
     (binding [*read-eval* false]
@@ -40,30 +40,30 @@
 
 (def KEY "897sdn9j98u98kjz")
 
-(defn aes-in 
+(defn aes-in
   "Encrypt a value MySQL"
   [value & alias]
   (try
     (str "AES_ENCRYPT('" value "','" SALT "')"
-         (if (seq alias)
+         (when (seq alias)
            (str " as " (first alias))))
     (catch Exception e (.getMessage e))))
 
-(defn aes-out 
+(defn aes-out
   "Decrypt a value MySQL"
   [value & alias]
   (try
     (str "AES_DECRYPT('" value "','" SALT "')"
-         (if (seq alias)
+         (when (seq alias)
            (str " as " (first alias))))
     (catch Exception e (.getMessage e))))
 
-(defn aes-sel 
+(defn aes-sel
   "Return field decrypted MySQL"
   [field & alias]
   (try
     (str "AES_DECRYPT(" field ",'" SALT "')"
-         (if (seq alias)
+         (when (seq alias)
            (str " as " (first alias))))
     (catch Exception e (.getMessage e))))
 
@@ -77,37 +77,37 @@
 
 (def n5_mask "_____")
 
-(defn cleanup_blanks 
+(defn cleanup_blanks
   [v]
   (try
     (when-not (clojure.string/blank? v) v)
     (catch Exception e (.getMessage e))))
 
-(defn cleanup_phones 
+(defn cleanup_phones
   [v]
   (try
     (when-not (= v phone_mask) v)
     (catch Exception e (.getMessage e))))
 
-(defn cleanup_phones_ext 
+(defn cleanup_phones_ext
   [v]
   (try
     (when-not (= v phone_mask_ext) v)
     (catch Exception e (.getMessage e))))
 
-(defn cleanup_dates 
+(defn cleanup_dates
   [v]
   (try
     (when-not (= v date_mask) v)
     (catch Exception e (.getMessage e))))
 
-(defn cleanup_n4 
+(defn cleanup_n4
   [v]
   (try
     (when-not (= v n4_mask) v)
     (catch Exception e (.getMessage e))))
 
-(defn cleanup_n5 
+(defn cleanup_n5
   [v]
   (try
     (when-not (= v n5_mask) v)
@@ -182,7 +182,7 @@
           result)))
     (catch Exception e (.getMessage e))))
 
-(defn crud-fix-id 
+(defn crud-fix-id
   [v]
   (try
     (if (clojure.string/blank? v) nil v)
@@ -203,21 +203,20 @@
   [s]
   (if (not-empty s)
     (try
-      (do
-        (.format
-          (SimpleDateFormat. "yyyy-MM-dd")
-          (.parse
-            (SimpleDateFormat. "MM/dd/yyyy") s)))
-      (catch Exception e nil))
+      (.format
+       (SimpleDateFormat. "yyyy-MM-dd")
+       (.parse
+        (SimpleDateFormat. "MM/dd/yyyy") s))
+      (catch Exception e (.getMessage e)))
     nil))
 
-(defn get-table-describe 
+(defn get-table-describe
   [table]
   (try
     (Query db (str "DESCRIBE " table))
     (catch Exception e (.getMessage e))))
 
-(defn get-table-columns 
+(defn get-table-columns
   [table]
   (try
     (map #(keyword (:field %)) (get-table-describe table))
@@ -228,20 +227,8 @@
     (map #(keyword (:type %)) (get-table-describe table))
     (catch Exception e (.getMessage e))))
 
-(defn get-table-columns 
-  [table]
-  (try
-    (map #(keyword (:field %)) (get-table-describe table))
-    (catch Exception e (.getMessage e))))
-
-(defn get-table-types 
-  [table]
-  (try
-    (map #(keyword (:type %)) (get-table-describe table))
-    (catch Exception e (.getMessage e))))
-
-(defn process-field 
-  [params field field-type field-key]
+(defn process-field
+  [params field field-type]
   (try
     (let [value (str ((keyword field) params))
           field-type (st/lower-case field-type)]
@@ -252,16 +239,16 @@
         :else value))
     (catch Exception e (.getMessage e))))
 
-(defn build-postvars [table params]
+(defn build-postvars
   "Build post vars for table and process by type"
+  [table params]
   (try
     (let [td (get-table-describe table)]
       (into {}
             (map (fn [x]
-                   (if ((keyword (:field x)) params)
+                   (when ((keyword (:field x)) params)
                      {(keyword (:field x))
-                      (process-field params (:field x) (:type x) (:key x))
-                      })) td)))
+                      (process-field params (:field x) (:type x))})) td)))
     (catch Exception e (.getMessage e))))
 
 (defn build-grid-field
@@ -270,9 +257,9 @@
     (let [field (:field d)
           field-type (:type d)]
       (cond
-        (= field-type "date") (str "DATE_FORMAT("field "," "'%m/%d/%Y') as " (str field "_formatted"))
-        (= field-type "time") (str "TIME_FORMAT("field "," "'%H:%i') as " (str field "_formatted"))
-        (= field-type "decimal(15,2)") (str "concat('$',format("field ",2)) as " (str field "_formatted"))))
+        (= field-type "date") (str "DATE_FORMAT(" field "," "'%m/%d/%Y') as " (str field "_formatted"))
+        (= field-type "time") (str "TIME_FORMAT(" field "," "'%H:%i') as " (str field "_formatted"))
+        (= field-type "decimal(15,2)") (str "concat('$',format(" field ",2)) as " (str field "_formatted"))))
     (catch Exception e (.getMessage e))))
 
 (defn build-form-field
@@ -281,8 +268,8 @@
     (let [field (:field d)
           field-type (:type d)]
       (cond
-        (= field-type "date") (str "DATE_FORMAT("field "," "'%m/%d/%Y') as " field)
-        (= field-type "time") (str "TIME_FORMAT("field "," "'%H:%i') as " field)
+        (= field-type "date") (str "DATE_FORMAT(" field "," "'%m/%d/%Y') as " field)
+        (= field-type "time") (str "TIME_FORMAT(" field "," "'%H:%i') as " field)
         :else field))
     (catch Exception e (.getMessage e))))
 
@@ -296,15 +283,15 @@
   "Builds grid columns ex. ['c1', 'c2'...]"
   [table]
   (try
-    (vec 
-      (flatten  
-        (map (fn [row]
-               (let [type (:type row)]
-                 (cond
-                   (= type "date") [(build-grid-field row) (:field row)]
-                   (= type "time") [(build-grid-field row) (:field row)]
-                   (= type "decimal(15,2)") [(build-grid-field row) (:field row)]
-                   :else (:field row)))) (get-table-describe table))))
+    (vec
+     (flatten
+      (map (fn [row]
+             (let [type (:type row)]
+               (cond
+                 (= type "date") [(build-grid-field row) (:field row)]
+                 (= type "time") [(build-grid-field row) (:field row)]
+                 (= type "decimal(15,2)") [(build-grid-field row) (:field row)]
+                 :else (:field row)))) (get-table-describe table))))
     (catch Exception e (.getMessage e))))
 
 (defn build-form-row
@@ -328,12 +315,12 @@
           postvars (build-postvars table params)
           result (Save db (keyword table) postvars ["id = ?" id])]
       (if (seq result)
-        (generate-string {:success "Processed Successfully!"})
-        (generate-string {:error "Unable to process!"})))
+        (generate-string {:success "Procesado con éxito!"})
+        (generate-string {:error "No se puede procesar!"})))
     (catch Exception e (.getMessge e))))
 
 ;; Start upload form
-(defn crud-upload-image 
+(defn crud-upload-image
   "Uploads image and renames it to the id passed"
   [file id path]
   (let [tempfile   (:tempfile file)
@@ -341,17 +328,15 @@
         type       (:content-type file)
         extension  (peek (clojure.string/split type #"\/"))
         extension  (if (= extension "jpeg") "jpg" "jpg")
-        filename   (:filename file)
-        image-name (str id "." extension)
-        result     (if-not (zero? size)
-                     (do (io/copy tempfile (io/file (str path image-name)))))]
+        image-name (str id "." extension)]
+    (when-not (zero? size)
+      (io/copy tempfile (io/file (str path image-name))))
     image-name))
 
 (defn get-id [id postvars table]
   (if (nil? id)
-    (do
-      (let [result (Save db (keyword table) postvars ["id = ?" id])]
-        (str (:generated_key (first result)))))
+    (let [result (Save db (keyword table) postvars ["id = ?" id])]
+      (str (:generated_key (first result))))
     id))
 
 (defn process-upload-form
@@ -366,8 +351,8 @@
           postvars (assoc postvars :imagen image-name :id the-id)
           result (Update db (keyword table) postvars ["id = ?" the-id])]
       (if (seq result)
-        (generate-string {:success "Processed Successfully!"})
-        (generate-string {:error "Unable to process!"})))
+        (generate-string {:success "Procesado con éxito!"})
+        (generate-string {:error "No se puede procesar!"})))
     (catch Exception e (.getMessage e))))
 ;; End upload form
 
@@ -388,6 +373,6 @@
                    (Delete db (keyword table) ["id = ?" id])
                    nil)]
       (if (seq result)
-        (generate-string {:success "Removed Successfully!"})
-        (generate-string {:error "Unable to remove!"})))
+        (generate-string {:success "Eliminado con éxito!"})
+        (generate-string {:error "Incapaz de eliminar!"})))
     (catch Exception e (.getMessage e))))
