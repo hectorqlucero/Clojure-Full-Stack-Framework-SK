@@ -19,6 +19,7 @@
 
 (defn users-grid
   [{params :params}]
+  
   (try
     (let [table "users"
           args {:sort-extra "lastname,firstname"}]
