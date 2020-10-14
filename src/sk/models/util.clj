@@ -745,6 +745,7 @@
      [:div {:style "float:left;margin-right:2px;"}
       [:img#image1 {:width  "95"
                     :height "71"
+                    :onError "this.src='/images/placeholder_profile.png'"
                     :style  "margin-right:2px;cursor:pointer;"}]]
      [:div {:style "float:right;margin-left:2px;vertical-align:middle;"}
       [:input {:id           "file"
@@ -763,10 +764,19 @@
                                   reader.readAsDataURL(f.files[0]);
                                 }
                               }"}]]]]))
-
 (defn build-image-field-script []
   (str
    "
+    $('.fm').form({
+      onLoadSuccess: function(){
+        let d = new Date();
+        let imgValue = $('#imagen').val();
+        let imgPath = " (:path config) ";
+        let imgSrc = imgPath + imgValue + '?' + d.getTime();
+        $('#image1').attr('src', imgSrc);
+      }
+    });
+    
     $('#image1').click(function() {
       var img = $('#image1');
       if(img.width() < 500) {
@@ -876,6 +886,7 @@
 (defn build-dialog [title fields & options]
   [:div.dlg.easyui-dialog {:closed  "true"
                            :buttons "#dlg-buttons"
+                           :onOpen  "console.log('im here...')"
                            :style   "width:100%;padding:10px 20px;max-width:600px;"}
    [:div#p.easyui-panel {:title title
                          :style "width:100%;
