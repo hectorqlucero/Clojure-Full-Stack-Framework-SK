@@ -71,6 +71,10 @@
         $('a#submit').click(function() {
             $('form.fm').form('submit', {
                 onSubmit: function() {
+                    if($(this).form('validate')) {
+                      $('a#submit').linkbutton('disable');
+                      $('a#submit').linkbutton({text: 'Processando!'});
+                    }
                     return $(this).form('enableValidation').form('validate');
                 },
                 success: function(data) {
@@ -158,6 +162,10 @@
     function submitForm() {
       $('.fm').form('submit', {
         onSubmit:function() {
+          if($(this).form('validate')) {
+            $('a#submit').linkbutton('disable');
+            $('a#submit').linkbutton({text: 'Processando!'});
+          }
           return $(this).form('enableValidation').form('validate');
         },
         success: function(data) {
@@ -262,6 +270,10 @@
         $('.fm').form('submit', {
           url: '/reset_password',
           onSubmit: function() {
+            if($(this).form('validate')) {
+              $('a#submit').linkbutton('disable');
+              $('a#submit').linkbutton({text: 'Processando!'});
+            }
             return $(this).form('enableValidation').form('validate');
           },
           success: function(data) {

@@ -764,6 +764,7 @@
                                   reader.readAsDataURL(f.files[0]);
                                 }
                               }"}]]]]))
+
 (defn build-image-field-script []
   (str
    "
