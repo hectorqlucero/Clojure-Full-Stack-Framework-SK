@@ -42,20 +42,20 @@
 
 (defn -main []
   (jetty/run-jetty
-   (-> (routes
-        public-routes
-        (wrap-exception-handling public-routes)
-        (wrap-login protected-routes)
-        (wrap-exception-handling protected-routes)
-        app-routes)
-       (handler/site)
-       (wrap-session)
-       (session/wrap-noir-session*)
-       (wrap-multipart-params)
-       (reload/wrap-reload)
-       (wrap-defaults (-> site-defaults
-                          (assoc-in [:security :anti-forgery] true)
-                          (assoc-in [:session :store] (cookie-store))
-                          (assoc-in [:session :cookie-attrs] {:max-age 28800})
-                          (assoc-in [:session :cookie-name] "LS"))))
-   {:port (:port config)}))
+    (-> (routes
+          public-routes
+          (wrap-exception-handling public-routes)
+          (wrap-login protected-routes)
+          (wrap-exception-handling protected-routes)
+          app-routes)
+        (handler/site)
+        (wrap-multipart-params)
+        (reload/wrap-reload)
+        (wrap-defaults (-> site-defaults
+                           (assoc-in [:security :anti-forgery] true)
+                           (assoc-in [:session :store] (cookie-store))
+                           (assoc-in [:session :cookie-attrs] {:max-age 28800})
+                           (assoc-in [:session :cookie-name] "LS")))
+        (wrap-session)
+        (session/wrap-noir-session*))
+    {:port (:port config)}))
