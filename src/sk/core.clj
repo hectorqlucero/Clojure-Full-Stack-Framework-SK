@@ -9,6 +9,7 @@
             [ring.middleware.multipart-params :refer [wrap-multipart-params]]
             [ring.middleware.reload :as reload]
             [ring.middleware.session :refer [wrap-session]]
+            [ring.middleware.session.cookie :refer [cookie-store]]
             [sk.models.crud :refer [config]]
             [sk.routes :refer [open-routes]]
             [sk.proutes :refer [proutes]])
@@ -54,6 +55,7 @@
        (reload/wrap-reload)
        (wrap-defaults (-> site-defaults
                           (assoc-in [:security :anti-forgery] true)
+                          (assoc-in [:session :store] (cookie-store))
                           (assoc-in [:session :cookie-attrs] {:max-age 28800})
                           (assoc-in [:session :cookie-name] "LS"))))
    {:port (:port config)}))
