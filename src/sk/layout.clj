@@ -25,7 +25,7 @@
       [:li.nav-item.dropdown
        [:a.nav-link.dropdown-toggle {:href "#"
                                      :id "navdrop"
-                                     :data-toggle "dropdown"} "Admin menu"]
+                                     :data-toggle "dropdown"} "Administrar"]
        [:div.dropdown-menu
         (build-admin)]]
       (when
