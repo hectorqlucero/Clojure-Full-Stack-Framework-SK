@@ -7,22 +7,22 @@
 
 (defn login-view [token]
   (build-form
-   (:site-name config)
+    "Conectar"
    token
    (list
     (build-field
      {:id "username"
       :name "username"
       :class "easyui-textbox"
-      :prompt "Email here..."
+      :prompt "Email aqui..."
       :validType "email"
       :data-options "label:'Email:',labelPosition:'top',required:true,width:'100%'"})
     (build-field
      {:id "password"
       :name "password"
       :class "easyui-passwordbox"
-      :prompt "Password here..."
-      :data-options "label:'Password:',labelPosition:'top',required:true,width:'100%'"})
+      :prompt "Contraseña aqui..."
+      :data-options "label:'Contraseña:',labelPosition:'top',required:true,width:'100%'"})
     (build-button
      {:href "javascript:void(0)"
       :id "submit"
@@ -43,7 +43,7 @@
             onSubmit:function() {
                 if($(this).form('validate')) {
                   $('a#submit').linkbutton('disable');
-                  $('a#submit').linkbutton({text: 'Procesando!'});
+                  $('a#submit').linkbutton({text: 'Processando!'});
                 }
                 return $(this).form('enableValidation').form('validate');
             },
@@ -57,7 +57,7 @@
                             title: 'Error: ',
                             msg: dta.error
                         });
-                        $('a#submit').linkbutton('disable');
+                        $('a#submit').linkbutton('enable');
                         $('a#submit').linkbutton({text: 'Acceder al sitio'});
                     }
                 } catch(e) {

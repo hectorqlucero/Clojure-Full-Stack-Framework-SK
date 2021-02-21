@@ -3,18 +3,25 @@
                                     build-form-save
                                     build-form-delete]]
             [sk.models.grid :refer [build-grid]]
-            [sk.models.util :refer [get-session-id]]
+            [sk.models.util :refer [get-session-id
+                                    user-level]]
             [sk.layout :refer [application]]
             [sk.handlers.admin.users.view :refer [users-view users-scripts]]))
 
 (defn users
   [_]
   (try
-    (let [title "Users Maintenance"
+    (let [title "Usuarios"
           ok (get-session-id)
           js (users-scripts)
-          content (users-view title)]
-      (application title ok js content))
+          content (users-view title)
+          level (user-level)]
+      (if
+        (or
+          (= (user-level) "A")
+          (= (user-level) "S"))
+        (application title ok js content)
+        (application title ok nil "Solo <strong>administradores</strong> pueden accesar esta opción!!!")))
     (catch Exception e (.getMessage e))))
 
 (defn users-grid

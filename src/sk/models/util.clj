@@ -835,7 +835,7 @@
      pagination: false,
      rownumbers: true,
      nowrap: true,
-     autoRowHeight: false,
+     autoRowHeight: true,
      fitColumns: true,
      autoSizeColumns: true,
      singleSelect: true")}

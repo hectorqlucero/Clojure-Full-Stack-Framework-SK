@@ -1,10 +1,11 @@
 (ns sk.layout
   (:require [hiccup.page :refer [html5 include-css include-js]]
-            [sk.models.crud :refer [config]]))
+            [sk.models.crud :refer [config]]
+            [sk.models.util :refer [user-level]]))
 
 (defn build-admin []
   (list
-   [:a.dropdown-item {:href "/admin/users"} "Users"]))
+    [:a.dropdown-item {:href "/admin/users"} "Usuarios"]))
 
 (defn menus-private []
   (list
@@ -16,16 +17,24 @@
      [:span.navbar-toggler-icon]]
     [:div#collapsibleNavbar.collapse.navbar-collapse
      [:ul.navbar-nav
-      [:li.nav-item [:a.nav-link {:href "#"} "Item 1"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Item 2"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Item 3"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu 1"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu 2"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu 3"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu 4"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu 5"]]
       [:li.nav-item.dropdown
        [:a.nav-link.dropdown-toggle {:href "#"
                                      :id "navdrop"
                                      :data-toggle "dropdown"} "Admin menu"]
        [:div.dropdown-menu
         (build-admin)]]
-      [:li.nav-item [:a.nav-link {:href "/home/logoff"} "Logoff"]]]]]))
+      (when
+        (or
+          (= (user-level) "A")
+          (= (user-level) "S"))
+        [:li.nav-item [:a.nav-link {:href "/admin/users"} "Usuarios"]])
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu 6"]]
+      [:li.nav-item [:a.nav-link {:href "/home/logoff"} "Salir"]]]]]))
 
 (defn menus-public []
   (list
@@ -37,10 +46,7 @@
      [:span.navbar-toggler-icon]]
     [:div#collapsibleNavbar.collapse.navbar-collapse
      [:ul.navbar-nav
-      [:li.nav-item [:a.nav-link {:href "#"} "Item 1"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Item 2"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Item 3"]]
-      [:li.nav-item [:a.nav-link {:href "/home/login"} "Login"]]]]]))
+      [:li.nav-item [:a.nav-link {:href "/home/login"} "Conectar"]]]]]))
 
 (defn app-css []
   (list
@@ -65,7 +71,7 @@
    (include-js "/easyui/datagrid-bufferview.js")
    (include-js "/easyui/datagrid-scrollview.js")
    (include-js "/easyui/datagrid-filter.js")
-   (include-js "/easyui/locale/easyui-lang-en.js")
+   (include-js "/easyui/locale/easyui-lang-es.js")
    (include-js "/RichText/src/jquery.richtext.min.js")
    (include-js "/js/main.js")))
 

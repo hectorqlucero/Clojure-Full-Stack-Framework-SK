@@ -93,6 +93,8 @@
                                 title: 'Error: ',
                                 msg: dta.error
                             });
+                            $('a#submit').linkbutton('enable');
+                            $('a#submit').linkbutton({text: 'Register'});
                         }
                     } catch(e) {
                         console.error('Invalid JSON');

@@ -1,10 +1,11 @@
 (ns sk.handlers.admin.users.view
   (:require [ring.util.anti-forgery :refer [anti-forgery-field]]
             [hiccup.page :refer [include-js]]
+            [sk.models.crud :refer [config]]
             [sk.models.util :refer [build-table
                                     build-dialog
                                     build-field
-                                    build--image-field
+                                    build-image-field
                                     build-image-field-script
                                     build-radio-buttons]]))
 
@@ -85,11 +86,15 @@
     title
     "/admin/users"
     (list
+     [:th {:data-options "field:'imagen',sortable:true,fixed:false,width:100"
+           :formatter "imagenShow"} "Foto"]
      [:th {:data-options "field:'username',sortable:true,fixed:false,width:100"} "Usuario"]
      [:th {:data-options "field:'lastname',sortable:true,fixed:false,width:100"} "Apellidos"]
      [:th {:data-options "field:'firstname',sortable:true,fixed:true,width:100"} "Nombre"]
-     [:th {:data-options "field:'level',sortable:true,fixed:true,width:100"} "Nivel"]
-     [:th {:data-options "field:'active',sortable:true,fixed:false,width:100"} "Activo?"]))
+     [:th {:data-options "field:'level',sortable:true,fixed:true,width:100"
+           :formatter "levelDesc"} "Nivel"]
+     [:th {:data-options "field:'active',sortable:true,fixed:false,width:100"
+           :formatter "statusDesc"} "Activo?"]))
    (list ;Here we build a toolbar without the New button - we don't want to create users
     [:div#toolbar
      [:a {:href         "javascript:void(0)"
