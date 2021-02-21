@@ -1,5 +1,5 @@
 {:db-protocol "mysql"
- :db-name "//localhost:3306/sk?characterEncoding=UTF-8"
+ :db-name "//localhost:3306/sk?characterEncoding=UTF-8&serverTimezone=America/Los_Angeles"
  :db-user "root"
  :db-pwd "xxxxxxxxxx"
  :db-class "com.mysql.cj.jdbc.Driver"
