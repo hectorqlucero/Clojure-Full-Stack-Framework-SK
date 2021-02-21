@@ -71,6 +71,10 @@
         $('a#submit').click(function() {
             $('form.fm').form('submit', {
                 onSubmit: function() {
+                    if($(this).form('validate')) {
+                      $('a#submit').linkbutton('disable');
+                      $('a#submit').linkbutton({text: 'Procesando!'});
+                    }
                     return $(this).form('enableValidation').form('validate');
                 },
                 success: function(data) {
@@ -89,6 +93,8 @@
                                 title: 'Error: ',
                                 msg: dta.error
                             });
+                            $('a#submit').linkbutton('enable');
+                            $('a#submit').linkbutton({text: 'Registrarse'});
                         }
                     } catch(e) {
                         console.error('Invalid JSON');

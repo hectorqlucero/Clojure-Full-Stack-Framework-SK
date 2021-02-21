@@ -78,7 +78,10 @@
           [:meta {:charset "UTF-8"}]
           [:meta {:name "viewport"
                   :content "width=device-width, initial-scale=1"}]
-          (app-css)]
+          (app-css)
+          [:link {:rel "shortcut icon"
+                  :type "image/x-icon"
+                  :href "data:image/x-icon;,"}]]
          [:body
           (cond
             (= ok -1) nil

@@ -4,11 +4,14 @@
             [sk.models.util :refer [build-table
                                     build-dialog
                                     build-field
+                                    build--image-field
+                                    build-image-field-script
                                     build-radio-buttons]]))
 
 (def dialog-fields
   (list
    [:input {:type "hidden" :id "id" :name "id"}]
+   (build-image-field)
    (build-field
     {:id           "username"
      :name         "username"
@@ -101,4 +104,50 @@
    (build-dialog title dialog-fields)))
 
 (defn users-scripts []
-  (include-js "/js/grid.js"))
+  (list
+  (include-js "/js/grid.js")
+  [:script
+   (build-image-field-script)
+  (str
+  "
+  function resizeImage(imgObject) {
+    var img = $('#'+imgObject.id);
+    if(img.width() < 500) {
+      img.animate({width: '500', height: '500'}, 1000);
+    } else {
+      img.animate({width: img.attr(\"width\"), height: img.attr(\"height\")}, 1000);
+    }
+  }
+
+  function imagenShow(val, row, index) {
+    if(row.imagen !== null) {
+      let d = new Date();
+      let imgValue = val;
+      let imgPath = " (:path config) ";
+      let imgSrc = imgPath + imgValue + '?' + d.getTime();
+      let imgTag = '<img id=img'+index+' src='+imgSrc+' width=95 height=71 onclick=resizeImage(this) />';
+      return imgTag;
+    } else {
+      return row.imagen;
+    }
+  }
+
+  function levelDesc(val, row, index) {
+    if(row.level == 'A') {
+      return 'Administrador';
+    } else if(row.level == 'U') {
+      return 'Usuario';
+    } else if(row.level == 'S') {
+      return 'Systema';
+    }
+  }
+
+  function statusDesc(val, row, index) {
+    if(row.active == 'T') {
+      return 'Si';
+    } else {
+      return 'No';
+    }
+  }
+  ")]
+  ))
