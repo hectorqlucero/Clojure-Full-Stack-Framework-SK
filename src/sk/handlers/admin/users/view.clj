@@ -86,9 +86,9 @@
     title
     "/admin/users"
     (list
+     [:th {:data-options "field:'username',sortable:true,fixed:false,width:100"} "Usuario [clic para seleccionar]"]
      [:th {:data-options "field:'imagen',sortable:true,fixed:false,width:100"
-           :formatter "imagenShow"} "Foto"]
-     [:th {:data-options "field:'username',sortable:true,fixed:false,width:100"} "Usuario"]
+           :formatter "imagenShow"} "Foto [clic foto +-]"]
      [:th {:data-options "field:'lastname',sortable:true,fixed:false,width:100"} "Apellidos"]
      [:th {:data-options "field:'firstname',sortable:true,fixed:true,width:100"} "Nombre"]
      [:th {:data-options "field:'level',sortable:true,fixed:true,width:100"
