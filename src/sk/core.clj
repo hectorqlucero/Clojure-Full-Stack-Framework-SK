@@ -56,6 +56,6 @@
                            (assoc-in [:session :store] (cookie-store))
                            (assoc-in [:session :cookie-attrs] {:max-age 28800})
                            (assoc-in [:session :cookie-name] "LS")))
-        (wrap-session)
-        (session/wrap-noir-session*))
+        (session/wrap-noir-session*)
+        (wrap-session))
     {:port (:port config)}))
