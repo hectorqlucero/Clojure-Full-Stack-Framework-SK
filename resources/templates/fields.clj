@@ -8,6 +8,18 @@
 ;; Hidden field
 [:input {:type "hidden" :id "id" :name "id"}]
 
+;; Numberbox field
+(build-field
+  {:id "lec_odometro"
+    :name "lec_odometro"
+    :class "easyui-numberbox"
+    :data-options "label:'Lectura Odometro:,
+                  labelPosition:'top',
+                  min:0,
+                  precision:0,
+                  required:true,
+                  width:'100%'"})
+
 ;; Regular textbox field
 (build-field
   {:id "firstname"
