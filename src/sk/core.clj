@@ -18,7 +18,7 @@
 (defn wrap-login [hdlr]
   (fn [req]
     (try
-      (if (nil? (session/get :user_id)) {:status 400 :body "Unable to process your request!"} (hdlr req))
+      (if (nil? (session/get :user_id)) (redirect "/home/login") (hdlr req))
       (catch Exception _
         {:status 400 :body "Unable to process your request!"}))))
 
