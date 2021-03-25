@@ -31,7 +31,7 @@
 
 (defroutes app-routes
   (route/resources "/")
-  (route/files "/uploads/" {:root (:uploads config)})
+  (route/files (:path config) {:root (:uploads config)})
   open-routes
   (wrap-login proutes)
   (route/not-found "Not Found"))
