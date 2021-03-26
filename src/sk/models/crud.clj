@@ -314,7 +314,8 @@
     (let [id (crud-fix-id (:id params))
           postvars (build-postvars table params)
           result (Save db (keyword table) postvars ["id = ?" id])]
-      (if (seq result)
+      (if (and (seq result)
+               (= (first (seq result)) 1))
         (generate-string {:success "Procesado con éxito!"})
         (generate-string {:error "No se puede procesar!"})))
     (catch Exception e (.getMessge e))))
@@ -322,13 +323,13 @@
 ;; Start upload form
 (defn crud-upload-image
   "Uploads image and renames it to the id passed"
-  [file id path]
+  [table file id path]
   (let [tempfile   (:tempfile file)
         size       (:size file)
         type       (:content-type file)
         extension  (peek (clojure.string/split type #"\/"))
         extension  (if (= extension "jpeg") "jpg" "jpg")
-        image-name (str id "." extension)]
+        image-name (str table "-" id "." extension)]
     (when-not (zero? size)
       (io/copy tempfile (io/file (str path image-name))))
     image-name))
@@ -347,10 +348,11 @@
           postvars (dissoc (build-postvars table params) :file)
           the-id (str (get-id id postvars table))
           path (str (:uploads config) folder "/")
-          image-name (crud-upload-image file the-id path)
+          image-name (crud-upload-image table file the-id path)
           postvars (assoc postvars :imagen image-name :id the-id)
           result (Update db (keyword table) postvars ["id = ?" the-id])]
-      (if (seq result)
+      (if (and (seq result)
+               (= (first (seq result)) 1))
         (generate-string {:success "Procesado con éxito!"})
         (generate-string {:error "No se puede procesar!"})))
     (catch Exception e (.getMessage e))))
