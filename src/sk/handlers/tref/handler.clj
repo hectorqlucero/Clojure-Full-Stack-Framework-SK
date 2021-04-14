@@ -22,7 +22,7 @@
 ;; Start get-users-email
 (def get-users-email-sql
   "SELECT
-  email
+  LOWER(email) as email
   FROM users
   WHERE email = ?")
 
