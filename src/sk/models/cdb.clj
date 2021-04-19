@@ -8,7 +8,7 @@
 ;; Start users table
 (def users-sql
   "CREATE TABLE users (
-  id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   lastname varchar(45) DEFAULT NULL,
   firstname varchar(45) DEFAULT NULL,
   username varchar(45) DEFAULT NULL,
@@ -19,7 +19,8 @@
   email varchar(100) DEFAULT NULL,
   level char(1) DEFAULT NULL COMMENT 'A=Administrator,U=User,S=System',
   active char(1) DEFAULT NULL COMMENT 'T=Active,F=Not active',
-  imagen varchar(200) DEFAULT NULL
+  imagen varchar(200) DEFAULT NULL,
+  UNIQUE KEY username (username)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8")
 
 (def users-rows
