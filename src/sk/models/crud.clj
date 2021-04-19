@@ -216,6 +216,14 @@
     (Query db (str "DESCRIBE " table))
     (catch Exception e (.getMessage e))))
 
+(defn get-table-describe-extra
+  [table]
+  (try
+    (let [trows (Query db (str "DESCRIBE " table))
+          rows (map #(assoc % :field (str table "." (:field %))) trows)]
+      rows)
+    (catch Exception e (.getMessage e))))
+
 (defn get-table-columns
   [table]
   (try
@@ -255,11 +263,12 @@
   [d]
   (try
     (let [field (:field d)
+          f_field (get (clojure.string/split field #"\.") 1)
           field-type (:type d)]
       (cond
-        (= field-type "date") (str "DATE_FORMAT(" field "," "'%m/%d/%Y') as " (str field "_formatted"))
-        (= field-type "time") (str "TIME_FORMAT(" field "," "'%H:%i') as " (str field "_formatted"))
-        (= field-type "decimal(15,2)") (str "concat('$',format(" field ",2)) as " (str field "_formatted"))))
+        (= field-type "date") (str "DATE_FORMAT(" field "," "'%m/%d/%Y') as " (str f_field "_formatted"))
+        (= field-type "time") (str "TIME_FORMAT(" field "," "'%H:%i') as " (str f_field "_formatted"))
+        (= field-type "decimal(15,2)") (str "concat('$',format(" field ",2)) as " (str f_field "_formatted"))))
     (catch Exception e (.getMessage e))))
 
 (defn build-form-field
@@ -291,7 +300,7 @@
                  (= type "date") [(build-grid-field row) (:field row)]
                  (= type "time") [(build-grid-field row) (:field row)]
                  (= type "decimal(15,2)") [(build-grid-field row) (:field row)]
-                 :else (:field row)))) (get-table-describe table))))
+                 :else (:field row)))) (get-table-describe-extra table))))
     (catch Exception e (.getMessage e))))
 
 (defn build-form-row
@@ -329,7 +338,7 @@
         type       (:content-type file)
         extension  (peek (clojure.string/split type #"\/"))
         extension  (if (= extension "jpeg") "jpg" "jpg")
-        image-name (str table "-" id "." extension)]
+        image-name (str table "_" id "." extension)]
     (when-not (zero? size)
       (io/copy tempfile (io/file (str path image-name))))
     image-name))
@@ -350,7 +359,7 @@
           path (str (:uploads config) folder "/")
           image-name (crud-upload-image table file the-id path)
           postvars (assoc postvars :imagen image-name :id the-id)
-          result (Update db (keyword table) postvars ["id = ?" the-id])]
+          result (Save db (keyword table) postvars ["id = ?" the-id])]
       (if (and (seq result)
                (= (first (seq result)) 1))
         (generate-string {:success "Procesado con éxito!"})
@@ -359,10 +368,10 @@
 ;; End upload form
 
 (defn build-form-save
-  [params table & path]
+  [params table & args]
   (try
     (if-not (nil? (:file params))
-      (process-upload-form params table (first path))
+      (process-upload-form params table (first (:path args)))
       (process-regular-form params table))
     (catch Exception e (.getMessage e))))
 
