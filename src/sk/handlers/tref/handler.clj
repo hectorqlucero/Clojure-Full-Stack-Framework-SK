@@ -1,6 +1,7 @@
 (ns sk.handlers.tref.handler
   (:require [sk.models.crud :refer [db Query]]
             [sk.models.util :refer [parse-int
+                                    zpl
                                     get-image
                                     current_year]]))
 
@@ -36,24 +37,24 @@
   "Returns months name ex: (months)"
   []
   (list
-   {:value 1 :text "January"}
-   {:value 2 :text "February"}
-   {:value 3 :text "March"}
-   {:value 4 :text "April"}
-   {:value 5 :text "May"}
-   {:value 6 :text "June"}
-   {:value 7 :text "July"}
-   {:value 8 :text "August"}
-   {:value 9 :text "September"}
-   {:value 10 :text "October"}
-   {:value 11 :text "November"}
-   {:value 12 :text "Dicember"}))
+   {:value 1 :text "Enero"}
+   {:value 2 :text "Febrero"}
+   {:value 3 :text "Marzo"}
+   {:value 4 :text "Abril"}
+   {:value 5 :text "Mayo"}
+   {:value 6 :text "Junio"}
+   {:value 7 :text "Julio"}
+   {:value 8 :text "Agosto"}
+   {:value 9 :text "Septiembre"}
+   {:value 10 :text "Octubre"}
+   {:value 11 :text "Noviembre"}
+   {:value 12 :text "Diciembre"}))
 
 (defn level-options []
   (list
-    {:value "U" :text "Users"}
-    {:value "A" :text "Administrator"}
-    {:value "S" :text "System"}))
+    {:value "U" :text "Usuarios"}
+    {:value "A" :text "Administrador"}
+    {:value "S" :text "Systema"}))
 
 (defn years
   "Genera listado para dropdown dependiendo de p=anterioriores de este año, n=despues de este año,
@@ -64,6 +65,22 @@
         nyears (for [n (range 0 (+ (parse-int n) 1))] {:value (+ year n) :text (+ year n)})
         years  (concat pyears nyears)]
     years))
+
+(defn build-time
+  "Builds tipical time dropdown"
+  []
+  (let [items (flatten
+                (for [x (range 5 21)]
+                  (list
+                    {:value (str (zpl x 2) ":00")
+                     :text (if (< x 12) 
+                             (str (zpl x 2) ":00 AM")
+                             (str (if (> x 12) (zpl (- x 12) 2) (zpl x 2)) ":00 PM"))}
+                    {:value (str (zpl x 2) ":30")
+                     :text (if (< x 12) 
+                             (str (zpl x 2) ":30 AM")
+                             (str (if (> x 12) (zpl (- x 12) 2) (zpl x 2)) ":30 PM"))})))]
+    items))
 
 (defn imagen [table field idname value & extra-folder]
   (get-image table field idname value (first extra-folder)))

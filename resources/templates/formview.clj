@@ -208,6 +208,7 @@
       $('#email').textbox({
         onChange: function(value) {
           var url = '/table_ref/validate_email/' + value;
+          var valor = value.toLowerCase();
           $.get(url, function(data) {
             try {
               var dta = JSON.parse(data);

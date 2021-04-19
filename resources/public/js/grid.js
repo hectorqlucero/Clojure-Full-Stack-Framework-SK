@@ -42,6 +42,9 @@ function saveItem() {
       '__anti-forgery-token': token
     },
     onSubmit: function() {
+      if($(this).form('validate')) {
+        $('a#submit').linkbutton('disable');
+      }
       return $(this).form("validate");
     },
     success: function(result) {
@@ -51,6 +54,7 @@ function saveItem() {
           title: 'Error',
           msg: json.error
         });
+        $('a#submit').linkbutton('enable');
       } else {
         $.messager.show({
           title: 'Exito',

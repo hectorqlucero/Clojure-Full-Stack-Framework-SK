@@ -11,6 +11,8 @@
   (GET "/table_ref/validate_email/:email" [email] (generate-string (table_ref/get-users-email email)))
   (GET "/table_ref/months" [] (generate-string (table_ref/months)))
   (GET "/table_ref/years/:pyears/:nyears" [pyears nyears] (generate-string (table_ref/years pyears nyears)))
+  (GET "/table_ref/get-item/:table/:field/:fname/:fval" [table field fname fval] (table_ref/get-item table field fname fval))
+  (GET "/table_ref/get-time" [] (generate-string (table_ref/build-time)))
   (GET "/table_ref/levels" [] (generate-string (table_ref/level-options)))
   ;; End table_ref
 
