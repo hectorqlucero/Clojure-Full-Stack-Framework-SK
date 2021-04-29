@@ -323,8 +323,7 @@
     (let [id (crud-fix-id (:id params))
           postvars (build-postvars table params)
           result (Save db (keyword table) postvars ["id = ?" id])]
-      (if (and (seq result)
-               (= (first (seq result)) 1))
+      (if (seq result) 
         (generate-string {:success "Procesado con éxito!"})
         (generate-string {:error "No se puede procesar!"})))
     (catch Exception e (.getMessge e))))
@@ -360,8 +359,7 @@
           image-name (crud-upload-image table file the-id path)
           postvars (assoc postvars :imagen image-name :id the-id)
           result (Save db (keyword table) postvars ["id = ?" the-id])]
-      (if (and (seq result)
-               (= (first (seq result)) 1))
+      (if (seq result) 
         (generate-string {:success "Procesado con éxito!"})
         (generate-string {:error "No se puede procesar!"})))
     (catch Exception e (.getMessage e))))
