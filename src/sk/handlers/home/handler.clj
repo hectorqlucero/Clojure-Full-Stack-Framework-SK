@@ -2,6 +2,7 @@
   (:require [cheshire.core :refer [generate-string]]
             [ring.util.anti-forgery :refer [anti-forgery-field]]
             [sk.models.crud :refer [db
+                                    config
                                     Query]]
             [sk.models.util :refer [get-session-id]]
             [sk.layout :refer [application]]
@@ -30,7 +31,7 @@
 (defn main
   [_]
   (try
-    (let [title "Bitacora"
+    (let [title (:site config)
           ok (get-session-id)
           content [:div [:span {:style "margin-left:20px;"} (get-main-title)]]]
       (application title ok nil content))
