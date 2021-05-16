@@ -786,6 +786,20 @@
         img.animate({width: img.attr(\"width\"), height: img.attr(\"height\")}, 1000);
       }
     });
+
+    function imagenShow(val, row, index) {
+      if(row.imagen !== null) {
+        let d = new Date();
+        let imgValue = val;
+        let imgError = 'this.src=\"/images/placeholder_profile.png\"';
+        let imgPath = " (:path config) ";
+        let imgSrc = imgPath + imgValue + '?' + d.getTime();
+        let imgTag = '<img id=img'+index+' src='+imgSrc+' onError='+imgError+' width=95 height=71 onclick=resizeImage(this) />';
+        return imgTag;
+      } else {
+        return row.imagen;
+      }
+    }
     "))
 
 (defn build-table-field
