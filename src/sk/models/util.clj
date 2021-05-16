@@ -787,6 +787,15 @@
       }
     });
 
+    function resizeImage(imgObject) {
+      var img = $('#'+imgObject.id);
+      if(img.width() < 500) {
+        img.animate({width: '500', height: '500'}, 1000);
+      } else {
+        img.animate({width: img.attr(\"width\"), height: img.attr(\"height\")}, 1000);
+      }
+    }
+
     function imagenShow(val, row, index) {
       if(row.imagen !== null) {
         let d = new Date();
