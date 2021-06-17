@@ -12,6 +12,7 @@
                  [clj-pdf "2.4.0" :exclusions [commons-codec]]
                  [ondrs/barcode "0.1.0"]
                  [pdfkit-clj "0.1.7" :exclusions [commons-logging commons-codec]]
+                 [jonase/eastwood "0.5.0" :exclusions [org.clojure/clojure]]
                  [cljfmt "0.7.0"]
                  [clj-jwt "0.1.1"]
                  [clj-time "0.15.2"]
