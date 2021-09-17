@@ -1,4 +1,5 @@
 var fm = $('.fm');
+var return_url = window.location.href;
 
 function saveItem() {
   fm.form("submit", {
@@ -18,9 +19,12 @@ function saveItem() {
         });
         $('a#submit').linkbutton('enable');
       } else {
-        $.messager.show({
+        $.messager.alert({
           title: 'Exito',
-          msg: json.success
+          msg: json.success,
+          fn: function() {
+            window.location.href = return_url;
+          }
         })
       }
     }

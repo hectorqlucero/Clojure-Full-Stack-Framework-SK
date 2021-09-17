@@ -1,9 +1,6 @@
 (ns sk.handlers.tref.handler
-  (:require [sk.models.crud :refer [db Query]]
-            [sk.models.util :refer [parse-int
-                                    zpl
-                                    get-image
-                                    current_year]]))
+  (:require [sk.models.crud :refer [Query db]]
+            [sk.models.util :refer [current_year get-image parse-int zpl]]))
 
 ;; Start get-users
 (def get-users-sql

@@ -1,9 +1,5 @@
 (ns sk.handlers.home.view
-  (:require
-   [sk.models.crud :refer [config]]
-   [sk.models.util :refer [build-form
-                           build-field
-                           build-button]]))
+  (:require [sk.models.util :refer [build-button build-field build-form]]))
 
 (defn login-view [token]
   (build-form

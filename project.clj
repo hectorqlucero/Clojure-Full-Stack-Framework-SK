@@ -12,7 +12,7 @@
                  [clj-pdf "2.5.8" :exclusions [commons-codec]]
                  [ondrs/barcode "0.1.0"]
                  [pdfkit-clj "0.1.7" :exclusions [commons-logging commons-codec]]
-                 [jonase/eastwood "0.9.7" :exclusions [org.clojure/clojure]]
+                 [jonase/eastwood "0.9.9" :exclusions [org.clojure/clojure]]
                  [cljfmt "0.8.0"]
                  [clj-jwt "0.1.1"]
                  [clj-time "0.15.2"]
@@ -27,7 +27,7 @@
             [lein-pprint "1.1.2"]]
   :uberjar-name "sk.jar"
   :target-path "target/%s"
-  :ring {:handler sk.core/app
+  :ring {:handler sk.core
          :auto-reload? true
          :auto-refresh? false}
   :resources-paths ["shared" "resources"]

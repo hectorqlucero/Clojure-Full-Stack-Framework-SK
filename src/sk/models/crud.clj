@@ -1,8 +1,8 @@
 (ns sk.models.crud
-  (:require [clojure.java.io :as io]
-            [clojure.string :as st]
+  (:require [cheshire.core :refer [generate-string]]
+            [clojure.java.io :as io]
             [clojure.java.jdbc :as j]
-            [cheshire.core :refer [generate-string]])
+            [clojure.string :as st])
   (:import java.text.SimpleDateFormat))
 
 (defn get-config
@@ -203,11 +203,10 @@
   [s]
   (if (not-empty s)
     (try
-      (do
       (.format
        (SimpleDateFormat. "yyyy-MM-dd")
        (.parse
-        (SimpleDateFormat. "MM/dd/yyyy") s)))
+        (SimpleDateFormat. "MM/dd/yyyy") s))
       (catch Exception e (.getMessage e)))
     nil))
 
@@ -324,7 +323,7 @@
     (let [id (crud-fix-id (:id params))
           postvars (build-postvars table params)
           result (Save db (keyword table) postvars ["id = ?" id])]
-      (if (seq result) 
+      (if (seq result)
         (generate-string {:success "Procesado con éxito!"})
         (generate-string {:error "No se puede procesar!"})))
     (catch Exception e (.getMessge e))))
@@ -360,7 +359,7 @@
           image-name (crud-upload-image table file the-id path)
           postvars (assoc postvars :imagen image-name :id the-id)
           result (Save db (keyword table) postvars ["id = ?" the-id])]
-      (if (seq result) 
+      (if (seq result)
         (generate-string {:success "Procesado con éxito!"})
         (generate-string {:error "No se puede procesar!"})))
     (catch Exception e (.getMessage e))))

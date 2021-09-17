@@ -1,21 +1,13 @@
 (ns sk.models.util
-  (:require [sk.models.crud :refer [config
-                                    db
-                                    Query
-                                    Save
-                                    Insert
-                                    Update]]
+  (:require [clj-jwt.core :refer [jwt str->jwt to-str verify]]
+            [clj-time.coerce :as c]
             [clj-time.core :as t]
             [clj-time.format :as f]
-            [clj-time.coerce :as c]
-            [clj-jwt.core :refer [str->jwt
-                                  jwt
-                                  verify
-                                  to-str]]
-            [clojure.string :refer [join]]
             [clojure.java.io :as io]
+            [clojure.string :refer [join]]
             [date-clj :as d]
-            [noir.session :as session])
+            [noir.session :as session]
+            [sk.models.crud :refer [Insert Query Save Update config db]])
   (:import java.text.SimpleDateFormat
            [java.util Calendar UUID]))
 

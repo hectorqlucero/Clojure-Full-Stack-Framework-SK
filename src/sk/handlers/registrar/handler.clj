@@ -1,28 +1,13 @@
 (ns sk.handlers.registrar.handler
   (:require [cheshire.core :refer [generate-string]]
             [clojure.string :as str]
-            [sk.layout :refer [application
-                               error-404]]
-            [sk.handlers.registrar.view :refer [registrar-scripts
-                                                registrar-view
-                                                reset-password-scripts
-                                                reset-password-view
-                                                reset-jwt-scripts
-                                                reset-jwt-view]]
-            [ring.util.anti-forgery :refer [anti-forgery-field]]
             [noir.util.crypt :as crypt]
-            [sk.models.crud :refer [db
-                                    config
-                                    build-postvars
-                                    Query
-                                    Save
-                                    Update]]
-            [sk.models.email :refer [host
-                                     send-email]]
-            [sk.models.util :refer [get-session-id
-                                    get-reset-url
-                                    check-token
-                                    create-token]]))
+            [ring.util.anti-forgery :refer [anti-forgery-field]]
+            [sk.handlers.registrar.view :refer [registrar-scripts registrar-view reset-jwt-scripts reset-jwt-view reset-password-scripts reset-password-view]]
+            [sk.layout :refer [application error-404]]
+            [sk.models.crud :refer [Query Save Update build-postvars config db]]
+            [sk.models.email :refer [host send-email]]
+            [sk.models.util :refer [check-token create-token get-reset-url get-session-id]]))
 
 ;; Start registrar
 (defn registrar

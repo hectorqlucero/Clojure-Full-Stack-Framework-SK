@@ -1,8 +1,5 @@
 (ns sk.handlers.registrar.view
-  (:require
-   [sk.models.util :refer [build-form
-                           build-field
-                           build-button]]))
+  (:require [sk.models.util :refer [build-button build-field build-form]]))
 
 ;; Start registrar
 (defn registrar-view [title token]

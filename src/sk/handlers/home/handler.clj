@@ -1,15 +1,13 @@
 (ns sk.handlers.home.handler
   (:require [cheshire.core :refer [generate-string]]
-            [ring.util.anti-forgery :refer [anti-forgery-field]]
-            [sk.models.crud :refer [db
-                                    config
-                                    Query]]
-            [sk.models.util :refer [get-session-id]]
-            [sk.layout :refer [application]]
-            [sk.handlers.home.view :refer [login-view login-script]]
+            [noir.response :refer [redirect]]
             [noir.session :as session]
             [noir.util.crypt :as crypt]
-            [noir.response :refer [redirect]]))
+            [ring.util.anti-forgery :refer [anti-forgery-field]]
+            [sk.handlers.home.view :refer [login-script login-view]]
+            [sk.layout :refer [application]]
+            [sk.models.crud :refer [Query config db]]
+            [sk.models.util :refer [get-session-id]]))
 
 ;; Start Main
 (def main-sql

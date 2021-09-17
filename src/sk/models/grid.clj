@@ -1,9 +1,7 @@
 (ns sk.models.grid
   (:require [cheshire.core :refer [generate-string]]
             [clojure.string :as str]
-            [sk.models.crud :refer [db
-                                    Query
-                                    build-grid-columns]]
+            [sk.models.crud :refer [Query build-grid-columns db]]
             [sk.models.util :refer [parse-int]]))
 
 (defn convert-search-columns [fields]
