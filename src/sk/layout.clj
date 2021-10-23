@@ -34,7 +34,7 @@
         (= (user-level) "S"))
         [:li.nav-item [:a.nav-link {:href "/admin/users"} "Usuarios"]])
       [:li.nav-item [:a.nav-link {:href "#"} "Menu 6"]]
-      [:li.nav-item [:a.nav-link {:href "/home/logoff"} (str "Salir: " (user-name))]]]]]))
+      [:li.nav-item [:a.nav-link {:href "/home/logoff"} (str "Salir [" (user-name) "]")]]]]]))
 
 (defn menus-public []
   (list
