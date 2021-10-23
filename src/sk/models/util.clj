@@ -504,6 +504,13 @@
                 (:username (first (Query db ["select username from users where id = ?" id]))))]
     email))
 
+(defn user-name []
+  (let [id (get-session-id)
+        username (if (nil? id)
+                   nil
+                   (:name (first (Query db ["select CONCAT(firstname,' ',lastname) as name from users where id = ?" id]))))]
+    username))
+
 (defn get-photo-val [table-name field-name id-name id-value]
   (if (or
        (nil? table-name)

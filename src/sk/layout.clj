@@ -1,11 +1,11 @@
 (ns sk.layout
   (:require [hiccup.page :refer [html5 include-css include-js]]
             [sk.models.crud :refer [config]]
-            [sk.models.util :refer [user-level]]))
+            [sk.models.util :refer [user-level user-name]]))
 
 (defn build-admin []
   (list
-    [:a.dropdown-item {:href "/admin/users"} "Usuarios"]))
+   [:a.dropdown-item {:href "/admin/users"} "Usuarios"]))
 
 (defn menus-private []
   (list
@@ -29,12 +29,12 @@
        [:div.dropdown-menu
         (build-admin)]]
       (when
-        (or
-          (= (user-level) "A")
-          (= (user-level) "S"))
+       (or
+        (= (user-level) "A")
+        (= (user-level) "S"))
         [:li.nav-item [:a.nav-link {:href "/admin/users"} "Usuarios"]])
       [:li.nav-item [:a.nav-link {:href "#"} "Menu 6"]]
-      [:li.nav-item [:a.nav-link {:href "/home/logoff"} "Salir"]]]]]))
+      [:li.nav-item [:a.nav-link {:href "/home/logoff"} (str "Salir: " (user-name))]]]]]))
 
 (defn menus-public []
   (list
