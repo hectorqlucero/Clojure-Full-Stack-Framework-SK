@@ -7,7 +7,7 @@
                  [compojure "1.6.2" :exclusions [commons-codec]]
                  [hiccup "1.0.5"]
                  [lib-noir "0.9.9"]
-                 [com.draines/postal "2.0.4"]
+                 [com.draines/postal "2.0.5"]
                  [cheshire "5.10.1"]
                  [clj-pdf "2.5.8" :exclusions [commons-codec]]
                  [ondrs/barcode "0.1.0"]
@@ -19,7 +19,7 @@
                  [date-clj "1.0.1"]
                  [org.clojure/java.jdbc "0.7.12"]
                  [org.clojure/data.codec "0.1.1"]
-                 [mysql/mysql-connector-java "8.0.26"]
+                 [mysql/mysql-connector-java "8.0.27"]
                  [ring/ring-core "1.9.4" :exclusions [ring/ring-codec commons-logging commons-codec]]]
   :main ^:skip-aot sk.core
   :aot [sk.core]
