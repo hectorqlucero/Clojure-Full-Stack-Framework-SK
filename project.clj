@@ -23,8 +23,8 @@
                  [ring/ring-core "1.9.4" :exclusions [ring/ring-codec commons-logging commons-codec]]]
   :main ^:skip-aot sk.core
   :aot [sk.core]
-  :plugins [[lein-ancient "0.6.10"]
-            [lein-pprint "1.1.2"]]
+  :plugins [[lein-ancient "0.7.0"]
+            [lein-pprint "1.3.2"]]
   :uberjar-name "sk.jar"
   :target-path "target/%s"
   :ring {:handler sk.core
