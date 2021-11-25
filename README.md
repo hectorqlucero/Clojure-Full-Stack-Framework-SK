@@ -34,7 +34,7 @@ A Clojure skeleton web application.
    src/sk/models/cdb.clj
 
    Example of /src/sk/models.cdb.clj
-   ~~~
+  ```
   (ns sk.models.cdb
     (:require [noir.util.crypt :as crypt]
               [sk.models.crud :refer [Insert-multi Query! db]]))
@@ -103,7 +103,7 @@ A Clojure skeleton web application.
 
   (comment
     (reset-database))
-    ~~~
+  ```
 
 ## Running
 Go to project directory and type: Lein run
