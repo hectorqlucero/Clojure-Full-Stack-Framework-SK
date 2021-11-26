@@ -3,22 +3,25 @@
 (defn create-path [path]
   (.mkdir (java.io.File. path)))
 
+;; Start grid-skeleton
 (def grid-comments
   (str
    "builds grid. Parameters: params table & args\n"
-   "args: {:join 'other-table' :search-extra \"name='pedro'\" :sort-extra 'name,lastname'}"))
+   "args: {:join 'other-table' :search-extra name='pedro' :sort-extra 'name,lastname'}"))
 
 (defn build-grid-handler [options]
   (let [folder (:folder options)
         titulo (:title options)
-        tabla (:table options)]
+        tabla (:table options)
+        root (:root options)
+        ns-root (subs (str (clojure.string/replace root #"/" ".") folder) 4)]
     (str
-     "(ns sk.handlers." folder ".handler\n"
+     "(ns " ns-root ".handler\n"
      "(:require [sk.models.crud :refer [build-form-row build-form-save build-form-delete]]\n"
      "[sk.models.grid :refer [build-grid]]\n"
      "[sk.layout :refer [application]]\n"
      "[sk.models.util :refer [get-session-id]]\n"
-     "[sk.handlers." folder ".view :refer [" folder "-view " folder "-scripts]]))\n\n"
+     "[" ns-root ".view :refer [" folder "-view " folder "-scripts]]))\n\n"
      "(defn " folder "[_]\n"
      "(let [title \"" titulo "\"\n"
      "ok (get-session-id)\n"
@@ -40,15 +43,20 @@
      "(build-form-delete params table)))")))
 
 (defn build-grid-model [options]
-  (let [folder (:folder options)]
+  (let [folder (:folder options)
+        root (:root options)
+        ns-root (subs (str (clojure.string/replace root #"/" ".") folder) 4)]
     (str
-     "(ns sk.handlers." folder ".model\n"
+     "(ns " ns-root ".model\n"
      "(:require [sk.models.crud :refer [Query db]]))\n")))
 
 (defn build-grid-view [options]
-  (let [folder (:folder options)]
+  (let [folder (:folder options)
+        root (:root options)
+        url (:link options)
+        ns-root (subs (str (clojure.string/replace root #"/" ".") folder) 4)]
     (str
-     "(ns sk.handlers." folder ".view\n"
+     "(ns " ns-root ".view\n"
      "(:require\n"
      "[hiccup.page :refer [include-js]]\n"
      "[ring.util.anti-forgery :refer [anti-forgery-field]]\n"
@@ -59,31 +67,112 @@
      "(build-field\n"
      "{:id \"id\"\n"
      ":name \"id\"\n"
-     ":type \"hidden\"})))\n\n"
+     ":type \"hidden\"})\n))\n\n"
      "(defn " folder "-view [title]\n"
      "(list\n"
      "(anti-forgery-field)\n"
      "(build-table\n"
      "title\n"
-     "/administrar/rodadas es un ejemplo remplanzar por el url correcto\n"
+     "\"" url "\"\n"
      "(list\n"
      "[:th {:data-options \"field:'titulo',sortable:true,fixed:true\"} \"Titulo\"]\n"
      "[:th {:data-options \"field:'nivel',sortable:true,fixed:true\"} \"Nivel\"]))\n"
      "(build-toolbar)\n"
-     "(build-dialog title (dialog-fields))\n"
-     "(build-dialog-buttons)))\n\n"
+     "(build-dialog title (dialog-fields))))\n\n"
      "(defn " folder "-scripts []\n"
      "(include-js \"/js/grid.js\"))")))
 
-(defn build-skeleton [options]
+(defn build-grid-skeleton [options]
   (let [folder (:folder options)
-        path (str "src/sk/handlers/" folder)]
+        root (:root options)
+        path (str root folder)]
     (create-path path)
     (spit (str path "/handler.clj") (build-grid-handler options))
     (spit (str path "/model.clj") (build-grid-model options))
     (spit (str path "/view.clj") (build-grid-view options))))
+;; End grid skeleton
+
+(defn build-skeleton-handler [options]
+  (let [folder (:folder options)
+        titulo (:title options)
+        tabla (:table options)
+        root (:root options)
+        ns-root (subs (str (clojure.string/replace root #"/" ".") folder) 4)]
+    (str
+     "(ns " ns-root ".handler\n"
+     "(:require \n"
+     "[sk.layout :refer [application]]\n"
+     "[sk.models.util :refer [get-session-id]]\n"
+     "[" ns-root ".view :refer [" folder "-view " folder "-scripts]]))\n\n"
+     "(defn " folder "[_]\n"
+     "(let [title \"" titulo "\"\n"
+     "ok (get-session-id)\n"
+     "js (" folder "-scripts)\n"
+     "content (" folder "-view title)]\n"
+     "(application title ok js content)))\n\n")))
+
+(defn build-skeleton-model [options]
+  (let [folder (:folder options)
+        tabla (:table options)
+        root (:root options)
+        ns-root (subs (str (clojure.string/replace root #"/" ".") folder) 4)]
+    (str
+     "(ns " ns-root ".model\n"
+     "(:require [sk.models.crud :refer [Query db]]))\n\n"
+     "(defn get-rows [table]\n"
+     "(Query db [\"select * from  " tabla \" "]))\n\n"
+     "(comment\n"
+     "(get-rows \"" tabla "\"))")))
+
+(defn build-skeleton-view [options]
+  (let [folder (:folder options)
+        titulo (:title options)
+        tabla (:table options)
+        root (:root options)
+        ns-root (subs (str (clojure.string/replace root #"/" ".") folder) 4)]
+    (str
+     "(ns " ns-root ".view\n"
+     "(:require "
+     "[" ns-root ".model :refer [get-rows]]\n"
+     "[hiccup.page :refer [include-js]]))\n\n"
+     "(def cnt (atom 0))\n\n"
+     "(defn my-body [row]\n"
+     "[:tr\n"
+     "[:td (swap! cnt inc)]\n"
+     "[:td (:id row)]])\n\n"
+     "(defn " folder "-view [title]\n"
+     "(let [rows (get-rows \"" tabla "\")\n"
+     "cnt (reset! cnt 0)]\n"
+     "[:div.container\n"
+     "[:center\n"
+     "[:h2 \"" titulo "\"]\n"
+     "[:table.table.table-striped.table-hover.table-bordered\n"
+     "[:thead.table-primary\n"
+     "[:tr\n"
+     "[:th \"#\"]\n"
+     "[:th \"ID\"]\n"
+     "]]\n"
+     "[:tbody (map my-body rows)]]]]))\n\n"
+     "(defn " folder "-scripts []\n"
+     "[:script nil])\n")))
+
+(defn build-skeleton [options]
+  (let [folder (:folder options)
+        root (:root options)
+        path (str root folder)]
+    (create-path path)
+    (spit (str path "/handler.clj") (build-skeleton-handler options))
+    (spit (str path "/model.clj") (build-skeleton-model options))
+    (spit (str path "/view.clj") (build-skeleton-view options))))
 
 (comment
-  (build-skeleton {:folder "contacts"
+  (build-grid-skeleton {:folder "contactos"
+                        :title "Contactos"
+                        :table "contactos"
+                        :link "/admin/contactos"
+                        :root "src/sk/handlers/admin/"})
+  (build-skeleton {:folder "contactos"
                    :title "Contactos"
-                   :table "contacts"}))
+                   :table "contactos"
+                   :link "/contactos"
+                   :root "src/sk/handlers/"}))
