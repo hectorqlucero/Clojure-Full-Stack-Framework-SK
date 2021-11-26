@@ -1,5 +1,4 @@
-(ns sk.models.builder
-  (:require [sk.models.util :refer [get-session-id]]))
+(ns sk.models.builder)
 
 (defn create-path [path]
   (.mkdir (java.io.File. path)))
@@ -85,7 +84,6 @@
     (spit (str path "/view.clj") (build-grid-view options))))
 
 (comment
-  (println grid-comments)
   (build-skeleton {:folder "contacts"
                    :title "Contactos"
                    :table "contacts"}))
