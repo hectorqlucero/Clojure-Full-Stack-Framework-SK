@@ -1,4 +1,5 @@
-(ns sk.models.builder)
+(ns sk.models.builder
+  (:require [sk.models.util :refer [user-level]]))
 
 (defn create-path [path]
   (.mkdir (java.io.File. path)))
@@ -9,25 +10,45 @@
    "builds grid. Parameters: params table & args\n"
    "args: {:join 'other-table' :search-extra name='pedro' :sort-extra 'name,lastname'}"))
 
+(def security-comments-1
+  "Solo <strong>los administradores </strong> pueden accessar esta opción!!!")
+
+(def security-comments-2
+  "Solo <strong>los administradores nivel sistema </strong> pueden accessar esta opción!!!")
+
+(defn process-security [security]
+  (cond
+    (= security 1) (str "(if\n"
+                        "(or\n"
+                        "(= (user-level) \"A\")\n"
+                        "(= (user-level) \"S\"))\n"
+                        "(application title ok js content)\n"
+                        "(application title ok nil \"" security-comments-1 "\"))")
+    (= security 2) (str "(if (= (user-level) \"S\")\n"
+                        "(application title ok js content)\n"
+                        "(application title ok nil \"" security-comments-2 "\"))")
+    (= security 3) (str "(application title ok js content)")))
+
 (defn build-grid-handler [options]
   (let [folder (:folder options)
         titulo (:title options)
         tabla (:table options)
         root (:root options)
+        security (:secure options)
         ns-root (subs (str (clojure.string/replace root #"/" ".") folder) 4)]
     (str
      "(ns " ns-root ".handler\n"
      "(:require [sk.models.crud :refer [build-form-row build-form-save build-form-delete]]\n"
      "[sk.models.grid :refer [build-grid]]\n"
      "[sk.layout :refer [application]]\n"
-     "[sk.models.util :refer [get-session-id]]\n"
+     "[sk.models.util :refer [get-session-id user-level]]\n"
      "[" ns-root ".view :refer [" folder "-view " folder "-scripts]]))\n\n"
      "(defn " folder "[_]\n"
      "(let [title \"" titulo "\"\n"
      "ok (get-session-id)\n"
      "js (" folder "-scripts)\n"
      "content (" folder "-view title)]\n"
-     "(application title ok js content)))\n\n"
+     (process-security security) "))\n\n"
      "(defn " folder "-grid [{params :params}]\n"
      \" grid-comments \"
      "\n(let [table \"" tabla "\"]\n"
@@ -84,6 +105,7 @@
      "(include-js \"/js/grid.js\"))")))
 
 (defn build-grid-skeleton [options]
+  "secure: 1=S/A, 2=S, 3=all"
   (let [folder (:folder options)
         root (:root options)
         path (str root folder)]
@@ -97,6 +119,7 @@
   (let [folder (:folder options)
         titulo (:title options)
         tabla (:table options)
+        security (:secure options)
         root (:root options)
         ns-root (subs (str (clojure.string/replace root #"/" ".") folder) 4)]
     (str
@@ -110,7 +133,7 @@
      "ok (get-session-id)\n"
      "js (" folder "-scripts)\n"
      "content (" folder "-view title)]\n"
-     "(application title ok js content)))\n\n")))
+     (process-security security) "))\n\n")))
 
 (defn build-skeleton-model [options]
   (let [folder (:folder options)
@@ -158,6 +181,7 @@
      "[:script nil])\n")))
 
 (defn build-skeleton [options]
+  "secure: 1=S/A, 2=S, 3=all"
   (let [folder (:folder options)
         root (:root options)
         path (str root folder)]
@@ -170,10 +194,12 @@
   (build-grid-skeleton {:folder "contactos"
                         :title "Contactos"
                         :table "contactos"
+                        :secure 1
                         :link "/admin/contactos"
                         :root "src/sk/handlers/admin/"})
   (build-skeleton {:folder "contactos"
                    :title "Contactos"
                    :table "contactos"
+                   :secure 3
                    :link "/contactos"
                    :root "src/sk/handlers/"}))
