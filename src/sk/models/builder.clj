@@ -144,8 +144,8 @@
     (str
      "(ns " ns-root ".model\n"
      "(:require [sk.models.crud :refer [Query db]]))\n\n"
-     "(defn get-rows [table]\n"
-     "(Query db [\"select * from  " tabla \" "]))\n\n"
+     "(defn get-rows [tabla]\n"
+     "(Query db [(str \"select * from \" tabla)]\n\n"
      "(comment\n"
      "(get-rows \"" tabla "\"))")))
 
