@@ -22,12 +22,16 @@
       [:li.nav-item [:a.nav-link {:href "#"} "Menu 3"]]
       [:li.nav-item [:a.nav-link {:href "#"} "Menu 4"]]
       [:li.nav-item [:a.nav-link {:href "#"} "Menu 5"]]
+      (when
+        (or
+          (= (user-level) "A")
+          (= (user-level) "S"))
       [:li.nav-item.dropdown
        [:a.nav-link.dropdown-toggle {:href "#"
                                      :id "navdrop"
                                      :data-toggle "dropdown"} "Administrar"]
        [:div.dropdown-menu
-        (build-admin)]]
+        (build-admin)]])
       (when
        (or
         (= (user-level) "A")

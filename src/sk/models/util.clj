@@ -199,11 +199,6 @@
 (defn next-week-of-year []
   (+ (t/week-number-of-year (t/now)) 1))
 
-(defn week-of-year-date [date]
-  (let [cal (Calendar/getInstance)]
-    (.setTime cal (.toDate date))
-    (- (.get cal Calendar/WEEK_OF_YEAR) 1)))
-
 (defn get-weekday-long
   "0=sunday....6=Saturday"
   [n]
@@ -222,7 +217,7 @@
   "Attempt to convert to integer or on error return nil or itself if it's already an integer"
   [s]
   (try
-    (Integer. s)
+    (Integer/parseInt s)
     (catch Exception _ (if (integer? s) s nil))))
 
 (defn in?
@@ -575,28 +570,6 @@
   "Merge maps recursively"
   [& maps]
   (apply merge-with deep-merge maps))
-
-(defn- deprecated? [method]
-  (.isAnnotationPresent method java.lang.Deprecated))
-
-(defn- method-description [method]
-  (join " "
-        [(.getName method)
-         (java.util.Arrays/toString (.getParameterTypes method))
-         "->"
-         (.getReturnType method)]))
-
-(defn jmethods
-  "Returns a sequence of all public java methods available on a given class,
-   including the methods inherited from parent(s)."
-  ([clazz]
-   (jmethods clazz false))
-  ([clazz include-deprecated?]
-   (->> (:methods (bean clazz))
-        (filter #(or include-deprecated?
-                     (not (deprecated? %))))
-        (sort-by #(.getName %))
-        (map method-description))))
 
 (defn create-categorias [rows]
   (map (fn [cid]

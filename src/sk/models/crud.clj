@@ -327,7 +327,7 @@
       (if (seq result)
         (generate-string {:success "Procesado con éxito!"})
         (generate-string {:error "No se puede procesar!"})))
-    (catch Exception e (.getMessge e))))
+    (catch Exception e (.getMessage e))))
 
 ;; Start upload form
 (defn crud-upload-image

@@ -1,8 +1,10 @@
 (ns sk.models.builder
-  (:require [sk.models.util :refer [user-level]]))
+  (:require [sk.models.util :refer [user-level]]
+            [clojure.string :as st]
+            [clojure.java.io :as io]))
 
 (defn create-path [path]
-  (.mkdir (java.io.File. path)))
+  (.mkdir (io/file path)))
 
 ;; Start grid-skeleton
 (def grid-comments
@@ -35,7 +37,7 @@
         tabla (:table options)
         root (:root options)
         security (:secure options)
-        ns-root (subs (str (clojure.string/replace root #"/" ".") folder) 4)]
+        ns-root (subs (str (st/replace root #"/" ".") folder) 4)]
     (str
      "(ns " ns-root ".handler\n"
      "(:require [sk.models.crud :refer [build-form-row build-form-save build-form-delete]]\n"
@@ -67,7 +69,7 @@
 (defn build-grid-model [options]
   (let [folder (:folder options)
         root (:root options)
-        ns-root (subs (str (clojure.string/replace root #"/" ".") folder) 4)]
+        ns-root (subs (str (st/replace root #"/" ".") folder) 4)]
     (str
      "(ns " ns-root ".model\n"
      "(:require [sk.models.crud :refer [Query db]]))\n")))
@@ -76,7 +78,7 @@
   (let [folder (:folder options)
         root (:root options)
         url (:link options)
-        ns-root (subs (str (clojure.string/replace root #"/" ".") folder) 4)]
+        ns-root (subs (str (st/replace root #"/" ".") folder) 4)]
     (str
      "(ns " ns-root ".view\n"
      "(:require\n"
@@ -105,8 +107,9 @@
      "(defn " folder "-scripts []\n"
      "(include-js \"/js/grid.js\"))")))
 
-(defn build-grid-skeleton [options]
+(defn build-grid-skeleton
   "secure: 1=S/A, 2=S, 3=all"
+  [options]
   (let [folder (:folder options)
         root (:root options)
         path (str root folder)]
@@ -122,7 +125,7 @@
         tabla (:table options)
         security (:secure options)
         root (:root options)
-        ns-root (subs (str (clojure.string/replace root #"/" ".") folder) 4)]
+        ns-root (subs (str (st/replace root #"/" ".") folder) 4)]
     (str
      "(ns " ns-root ".handler\n"
      "(:require \n"
@@ -140,7 +143,7 @@
   (let [folder (:folder options)
         tabla (:table options)
         root (:root options)
-        ns-root (subs (str (clojure.string/replace root #"/" ".") folder) 4)]
+        ns-root (subs (str (st/replace root #"/" ".") folder) 4)]
     (str
      "(ns " ns-root ".model\n"
      "(:require [sk.models.crud :refer [Query db]]))\n\n"
@@ -154,7 +157,7 @@
         titulo (:title options)
         tabla (:table options)
         root (:root options)
-        ns-root (subs (str (clojure.string/replace root #"/" ".") folder) 4)]
+        ns-root (subs (str (st/replace root #"/" ".") folder) 4)]
     (str
      "(ns " ns-root ".view\n"
      "(:require "
@@ -181,8 +184,9 @@
      "(defn " folder "-scripts []\n"
      "[:script nil])\n")))
 
-(defn build-skeleton [options]
+(defn build-skeleton
   "secure: 1=S/A, 2=S, 3=all"
+  [options]
   (let [folder (:folder options)
         root (:root options)
         path (str root folder)]

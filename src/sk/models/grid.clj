@@ -89,5 +89,5 @@
           offset (grid-offset (parse-int (:rows params)) (parse-int (:page params)))
           rows (grid-rows table aliases join search order offset)]
       (generate-string rows))
-    (catch Exception e (.getMessge e))))
+    (catch Exception e (.getMessage e))))
 ;; End build-grid
