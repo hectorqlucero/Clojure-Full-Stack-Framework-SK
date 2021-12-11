@@ -9,7 +9,7 @@
             [noir.session :as session]
             [sk.models.crud :refer [Insert Query Save Update config db]])
   (:import java.text.SimpleDateFormat
-           [java.util Calendar UUID]))
+           [java.util UUID]))
 
 ;;Example here: (t/from-time-zone (t/now) tz) -> gives me a joda datetime with correct timezone
 ;;(def halloween-2016 (t/date-time 2016 10 31 18 0 0))
@@ -540,7 +540,7 @@
   [s]
   (->> (clojure.string/split (str s) #"\b")
        (map clojure.string/capitalize)
-       (clojure.string/join)))
+       (join)))
 
 (defn get-month-name [month]
   (cond

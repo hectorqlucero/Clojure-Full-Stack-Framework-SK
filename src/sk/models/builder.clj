@@ -1,7 +1,6 @@
 (ns sk.models.builder
-  (:require [sk.models.util :refer [user-level]]
-            [clojure.string :as st]
-            [clojure.java.io :as io]))
+  (:require [clojure.java.io :as io]
+            [clojure.string :as st]))
 
 (defn create-path [path]
   (.mkdir (io/file path)))
@@ -122,7 +121,6 @@
 (defn build-skeleton-handler [options]
   (let [folder (:folder options)
         titulo (:title options)
-        tabla (:table options)
         security (:secure options)
         root (:root options)
         ns-root (subs (str (st/replace root #"/" ".") folder) 4)]
