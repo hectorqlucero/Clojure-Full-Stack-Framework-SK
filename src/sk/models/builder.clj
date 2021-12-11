@@ -67,11 +67,17 @@
 
 (defn build-grid-model [options]
   (let [folder (:folder options)
+        tabla (:table options)
         root (:root options)
         ns-root (subs (str (st/replace root #"/" ".") folder) 4)]
     (str
      "(ns " ns-root ".model\n"
-     "(:require [sk.models.crud :refer [Query db]]))\n")))
+     "(:require [sk.models.crud :refer [Query db]]))\n\n"
+     "(defn get-rows [tabla]\n"
+     "(Query db [(str \"select * from \" tabla)]))\n\n"
+     "(comment\n"
+     "(get-rows \"" tabla "\"))")))
+
 
 (defn build-grid-view [options]
   (let [folder (:folder options)
