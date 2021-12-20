@@ -16,14 +16,20 @@
                  [clj-jwt "0.1.1"]
                  [clj-time "0.15.2"]
                  [date-clj "1.0.1"]
+                 [migratus "1.3.5"]
                  [org.clojure/java.jdbc "0.7.12"]
                  [org.clojure/data.codec "0.1.1"]
                  [mysql/mysql-connector-java "8.0.27"]
+                 [migratus "1.3.5"]
                  [ring/ring-core "1.9.4" :exclusions [ring/ring-codec commons-logging commons-codec]]]
   :main ^:skip-aot sk.core
   :aot [sk.core]
   :plugins [[lein-ancient "0.7.0"]
-            [lein-pprint "1.3.2"]]
+            [lein-pprint "1.3.2"]
+            [migratus-lein "0.7.3"]]
+  :migratus {:store :database
+             :migration-dir "migrations"
+             :db ~(get (System/getenv) "DATABASE_URL")}
   :uberjar-name "sk.jar"
   :target-path "target/%s"
   :ring {:handler sk.core

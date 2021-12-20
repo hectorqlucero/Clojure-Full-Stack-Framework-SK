@@ -10,5 +10,5 @@
  :tz "US/Pacific"
  :site-name "Sitio"
  :base-url "http://0.0.0.0:3000/"
- :uploads "./uploads/"
+ :uploads "./uploads/sk/"
  :path "/uploads/"}
