@@ -108,7 +108,8 @@
      "[:th {:data-options \"field:'',sortable:true,fixed:true\"} \"\"]\n"
      "))\n"
      "(build-toolbar)\n"
-     "(build-dialog title (dialog-fields))))\n\n"
+     "(build-dialog title (dialog-fields))\n"
+     "(build-dialog-buttons)))\n\n"
      "(defn " folder "-scripts []\n"
      "(include-js \"/js/grid.js\"))")))
 

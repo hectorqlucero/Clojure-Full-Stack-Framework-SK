@@ -893,6 +893,5 @@
                                  padding:10px 20px"}
     [:form.fm (or (first options) {:method "post"
                                    :enctype "multipart/form-data"})
-     fields
-     (build-dialog-buttons)]]])
+     fields]]])
 ;; End hiccup stuff
