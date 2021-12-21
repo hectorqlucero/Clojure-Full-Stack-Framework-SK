@@ -202,14 +202,14 @@
 
 (comment
   (build-grid-skeleton {:folder "contactos"
-                        :title "contactos"
+                        :title "Contactos"
                         :table "contactos"
                         :args "{:sort-extra \"nombre,apell_paterno,apell_materno\"}"
                         :secure 1
                         :link "/admin/contactos"
                         :root "src/sk/handlers/admin/"})
   (build-skeleton {:folder "contactos"
-                   :title "contactos"
+                   :title "Contactos"
                    :table "contactos"
                    :secure 3
                    :link "/contactos"
