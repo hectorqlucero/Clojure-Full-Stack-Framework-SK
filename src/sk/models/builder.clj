@@ -51,7 +51,7 @@
      "content (" folder "-view title)]\n"
      (process-security security) "))\n\n"
      "(defn " folder "-grid\n"
-     \" grid-comments \"
+     "\"" grid-comments "\"\n"
      "[{params :params}]\n"
      "\n(let [table \"" tabla "\"]\n"
      "(build-grid params table)))\n\n"
