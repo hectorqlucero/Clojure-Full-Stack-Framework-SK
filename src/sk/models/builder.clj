@@ -5,17 +5,16 @@
 (defn create-path [path]
   (.mkdir (io/file path)))
 
-;; Start grid-skeleton
+;; start grid-skeleton
 (def grid-comments
   (str
-   "builds grid. Parameters: params table & args\n"
-   "args: {:join 'other-table' :search-extra name='pedro' :sort-extra 'name,lastname'}"))
+   "builds grid. parameters: params table & args args: {:join 'other-table' :search-extra name='pedro' :sort-extra 'name,lastname'}"))
 
 (def security-comments-1
-  "Solo <strong>los administradores </strong> pueden accessar esta opción!!!")
+  "solo <strong>los administradores </strong> pueden accessar esta opción!!!")
 
 (def security-comments-2
-  "Solo <strong>los administradores nivel sistema </strong> pueden accessar esta opción!!!")
+  "solo <strong>los administradores nivel sistema </strong> pueden accessar esta opción!!!")
 
 (defn process-security [security]
   (cond
@@ -34,6 +33,7 @@
   (let [folder (:folder options)
         titulo (:title options)
         tabla (:table options)
+        args (:args options)
         root (:root options)
         security (:secure options)
         ns-root (subs (str (st/replace root #"/" ".") folder) 4)]
@@ -53,8 +53,9 @@
      "(defn " folder "-grid\n"
      "\"" grid-comments "\"\n"
      "[{params :params}]\n"
-     "\n(let [table \"" tabla "\"]\n"
-     "(build-grid params table)))\n\n"
+     "(let [table \"" tabla "\"\n"
+     "args " args "]\n"
+     "(build-grid params table args)))\n\n"
      "(defn " folder "-form [id]\n"
      "(let [table \"" tabla "\"]\n"
      "(build-form-row table id)))\n\n"
@@ -77,7 +78,6 @@
      "(Query db [(str \"select * from \" tabla)]))\n\n"
      "(comment\n"
      "(get-rows \"" tabla "\"))")))
-
 
 (defn build-grid-view [options]
   (let [folder (:folder options)
@@ -114,7 +114,7 @@
      "(include-js \"/js/grid.js\"))")))
 
 (defn build-grid-skeleton
-  "secure: 1=S/A, 2=S, 3=all"
+  "secure: 1=s/a, 2=s, 3=all"
   [options]
   (let [folder (:folder options)
         root (:root options)
@@ -123,7 +123,7 @@
     (spit (str path "/handler.clj") (build-grid-handler options))
     (spit (str path "/model.clj") (build-grid-model options))
     (spit (str path "/view.clj") (build-grid-view options))))
-;; End grid skeleton
+;; end grid skeleton
 
 (defn build-skeleton-handler [options]
   (let [folder (:folder options)
@@ -183,14 +183,14 @@
      "[:thead.table-primary\n"
      "[:tr\n"
      "[:th \"#\"]\n"
-     "[:th \"ID\"]\n"
+     "[:th \"id\"]\n"
      "]]\n"
      "[:tbody (map my-body rows)]]]]))\n\n"
      "(defn " folder "-scripts []\n"
      "[:script nil])\n")))
 
 (defn build-skeleton
-  "secure: 1=S/A, 2=S, 3=all"
+  "secure: 1=s/a, 2=s, 3=all"
   [options]
   (let [folder (:folder options)
         root (:root options)
@@ -202,13 +202,14 @@
 
 (comment
   (build-grid-skeleton {:folder "contactos"
-                        :title "Contactos"
+                        :title "contactos"
                         :table "contactos"
+                        :args "{:sort-extra \"nombre,apell_paterno,apell_materno\"}"
                         :secure 1
                         :link "/admin/contactos"
                         :root "src/sk/handlers/admin/"})
   (build-skeleton {:folder "contactos"
-                   :title "Contactos"
+                   :title "contactos"
                    :table "contactos"
                    :secure 3
                    :link "/contactos"
