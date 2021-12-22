@@ -1,5 +1,6 @@
 (ns sk.layout
   (:require [hiccup.page :refer [html5 include-css include-js]]
+            [clj-time.core :as t]
             [sk.models.crud :refer [config]]
             [sk.models.util :refer [user-level user-name]]))
 
@@ -23,15 +24,15 @@
       [:li.nav-item [:a.nav-link {:href "#"} "Menu 4"]]
       [:li.nav-item [:a.nav-link {:href "#"} "Menu 5"]]
       (when
-        (or
-          (= (user-level) "A")
-          (= (user-level) "S"))
-      [:li.nav-item.dropdown
-       [:a.nav-link.dropdown-toggle {:href "#"
-                                     :id "navdrop"
-                                     :data-toggle "dropdown"} "Administrar"]
-       [:div.dropdown-menu
-        (build-admin)]])
+       (or
+        (= (user-level) "A")
+        (= (user-level) "S"))
+        [:li.nav-item.dropdown
+         [:a.nav-link.dropdown-toggle {:href "#"
+                                       :id "navdrop"
+                                       :data-toggle "dropdown"} "Administrar"]
+         [:div.dropdown-menu
+          (build-admin)]])
       (when
        (or
         (= (user-level) "A")
@@ -101,7 +102,9 @@
                                                       :data-options "closed:false"}
            content]
           (app-js)
-          js]))
+          js]
+         [:footer.fixed-bottom.text-center
+          [:span  "Copyright &copy" (t/year (t/now)) " Lucero Systems - All Rights Reserved"]]))
 
 (defn error-404 [error return-url]
   [:div
