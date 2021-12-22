@@ -10,7 +10,7 @@
 
 (defn menus-private []
   (list
-   [:nav.navbar.navbar-expand-sm.navbar-dark.bg-primary.fixed-top
+   [:nav.navbar.navbar-expand-sm.navbar-dark.bg-dark.fixed-top
     [:a.navbar-brand {:href "/"} (:site-name config)]
     [:button.navbar-toggler {:type "button"
                              :data-toggle "collapse"
@@ -43,7 +43,7 @@
 
 (defn menus-public []
   (list
-   [:nav.navbar.navbar-expand-sm.navbar-dark.bg-primary.fixed-top
+   [:nav.navbar.navbar-expand-sm.navbar-dark.bg-dark.fixed-top
     [:a.navbar-brand {:href "/"} (:site-name config)]
     [:button.navbar-toggler {:type "button"
                              :data-toggle "collapse"
@@ -52,6 +52,16 @@
     [:div#collapsibleNavbar.collapse.navbar-collapse
      [:ul.navbar-nav
       [:li.nav-item [:a.nav-link {:href "/home/login"} "Conectar"]]]]]))
+
+(defn menus-none []
+  (list
+   [:nav.navbar.navbar-expand-sm.navbar-dark.bg-dark.fixed-top
+    [:a.navbar-brand {:href "#"} (:site-name config)]
+    [:button.navbar-toggler {:type "button"
+                             :data-toggle "collapse"
+                             :data-target "#collapsibleNavbar"}
+     [:span.navbar-toggler-icon]]
+    [:div#collapsibleNavbar.collapse.navbar-collapse]]))
 
 (defn app-css []
   (list
@@ -93,17 +103,17 @@
           [:link {:rel "shortcut icon"
                   :type "image/x-icon"
                   :href "data:image/x-icon;,"}]]
-         [:body
+         [:body.bg-secondary
           (cond
-            (= ok -1) nil
+            (= ok -1) (menus-none)
             (= ok 0) (menus-public)
             (> ok 0) (menus-private))
-          [:div#content.container-fluid.easyui-panel {:style "margin-top:75px;border:none;"
-                                                      :data-options "closed:false"}
+          [:div#content.container-fluid.easyui-panel.bg-secondary {:style "margin-top:75px;border:none;"
+                                                                   :data-options "closed:false"}
            content]
           (app-js)
           js]
-         [:footer.fixed-bottom.text-center
+         [:footer.bg-secondary.text-center
           [:span  "Copyright &copy" (t/year (t/now)) " Lucero Systems - All Rights Reserved"]]))
 
 (defn error-404 [error return-url]
