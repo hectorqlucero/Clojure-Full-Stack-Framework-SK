@@ -20,7 +20,6 @@
                  [org.clojure/java.jdbc "0.7.12"]
                  [org.clojure/data.codec "0.1.1"]
                  [mysql/mysql-connector-java "8.0.27"]
-                 [migratus "1.3.5"]
                  [ring/ring-core "1.9.4" :exclusions [ring/ring-codec commons-logging commons-codec]]]
   :main ^:skip-aot sk.core
   :aot [sk.core]
