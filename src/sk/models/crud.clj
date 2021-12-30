@@ -39,7 +39,7 @@
 
 (def SALT "897sdn9j98u98kj")                                ; encryption salt for DB
 
-(def KEY (random/bytes 16))
+(defonce KEY (random/bytes 16))
 
 (defn aes-in
   "Encrypt a value MySQL"

@@ -103,17 +103,16 @@
           [:link {:rel "shortcut icon"
                   :type "image/x-icon"
                   :href "data:image/x-icon;,"}]]
-         [:body.bg-secondary
+         [:body {:style "width:100vw;height:93vh;"}
           (cond
             (= ok -1) (menus-none)
             (= ok 0) (menus-public)
             (> ok 0) (menus-private))
-          [:div#content.container-fluid.easyui-panel.bg-secondary {:style "margin-top:75px;border:none;"
-                                                                   :data-options "closed:false"}
-           content]
+          [:div.container-fluid {:style "margin-top:55px;width:100vw;height:92vh;"}
+           [:div.easyui-panel {:data-options "fit:true,border:false" :style "padding:3px;"} content]]
           (app-js)
           js]
-         [:footer.bg-secondary.text-center
+         [:footer.bg-secondary.text-center.fixed-bottom
           [:span  "Copyright &copy" (t/year (t/now)) " Lucero Systems - All Rights Reserved"]]))
 
 (defn error-404 [error return-url]

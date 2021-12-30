@@ -827,13 +827,8 @@
      url: '" url "',
      toolbar: '#toolbar',
      queryParams: {'__anti-forgery-token':token},
-     pagination: false,
      rownumbers: true,
-     nowrap: true,
-     resizeEdge: 5,
-     autoRowHeight: true,
      fitColumns: true,
-     autoSizeColumns: true,
      singleSelect: true")}
    [:thead
     [:tr
