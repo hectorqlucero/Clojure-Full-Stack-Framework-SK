@@ -1,6 +1,10 @@
 (ns sk.models.builder
   (:require [clojure.java.io :as io]
-            [clojure.string :as st]))
+            [clojure.string :as st]
+            [hiccup.core :refer [html]]
+            [sk.models.util :refer [capitalize-words]]
+            [sk.models.crud :refer
+             [Query db build-grid-columns get-table-describe]]))
 
 (defn create-path [path]
   (.mkdir (io/file path)))
@@ -79,10 +83,51 @@
      "(comment\n"
      "(get-rows \"" tabla "\"))")))
 
+(defn grid-col [field]
+  (let [field-name (second (st/split field #"\."))
+        col-name (capitalize-words field-name)]
+    (str "[:th {:data-options \"field:'" field-name "',sortable:true,width:100\"}\"" col-name "\"" "]\n")))
+
+(defn build-grid-field [col]
+  (let [field (:field col)
+        type (st/lower-case (:type col))]
+    (if (= type "text")
+      (str
+       "(build-field\n"
+       "{:id \"" field "\"\n"
+       " :name \"" field "\"\n"
+       " :class \"easyui-textbox\"\n"
+       " :prompt \"xxx\"\n"
+       " :data-options \"label:'xxx:',
+        labelPosition:'top',
+        required:true,
+        multiline:true,
+        height:120,
+        width:'100%'\"})\n")
+      (str
+       "(build-field\n"
+       "{:id \"" field "\"\n"
+       " :name \"" field "\"\n"
+       " :class \"easyui-textbox\"\n"
+       " :prompt \"xxx\"\n"
+       " :data-options \"label:'xxx:',
+        labelPosition:'top',
+        required:true,
+        width:'100%'\"})\n"))))
+
+(defn build-grid-fields [table]
+  (let [data (get-table-describe table)
+        cols (rest data)
+        cnt (count cols)]
+    (map build-grid-field cols)))
+
 (defn build-grid-view [options]
   (let [folder (:folder options)
         root (:root options)
         url (:link options)
+        table (:table options)
+        fields (build-grid-fields table)
+        cols (map grid-col (build-grid-columns table))
         ns-root (subs (str (st/replace root #"/" ".") folder) 4)]
     (str
      "(ns " ns-root ".view\n"
@@ -97,6 +142,7 @@
      "{:id \"id\"\n"
      ":name \"id\"\n"
      ":type \"hidden\"})\n"
+     (html fields)
      "))\n\n"
      "(defn " folder "-view [title]\n"
      "(list\n"
@@ -105,7 +151,7 @@
      "title\n"
      "\"" url "\"\n"
      "(list\n"
-     "[:th {:data-options \"field:'',sortable:true,fixed:true\"} \"\"]\n"
+     (html cols)
      "))\n"
      "(build-toolbar)\n"
      "(build-dialog title (dialog-fields))\n"
@@ -157,10 +203,17 @@
      "(comment\n"
      "(get-rows \"" tabla "\"))")))
 
+(defn grid-row [field]
+  (let [field-name (second (st/split field #"\."))
+        col-name (capitalize-words field-name)]
+    (str "[:td (:" field-name " row)]\n")))
+
 (defn build-skeleton-view [options]
   (let [folder (:folder options)
         titulo (:title options)
         tabla (:table options)
+        cols (map grid-col (build-grid-columns tabla))
+        rows (map grid-row (build-grid-columns tabla))
         root (:root options)
         ns-root (subs (str (st/replace root #"/" ".") folder) 4)]
     (str
@@ -168,27 +221,28 @@
      "(:require "
      "[" ns-root ".model :refer [get-rows]]\n"
      "[hiccup.page :refer [include-js]]))\n\n"
-     "(def cnt (atom 0))\n\n"
      "(defn my-body [row]\n"
      "[:tr\n"
-     "[:td (swap! cnt inc)]\n"
-     "[:td (:id row)]\n"
+     (html rows)
      "])\n\n"
      "(defn " folder "-view [title]\n"
      "(let [rows (get-rows \"" tabla "\")]\n"
-     "(reset! cnt 0)\n"
-     "[:div.container\n"
-     "[:center\n"
-     "[:h2 \"" titulo "\"]\n"
-     "[:table.table.table-striped.table-hover.table-bordered\n"
-     "[:thead.table-primary\n"
+     "[:table.dg {:data-options \"remoteSort:false,fit:true,rownumbers:true,fitColumns:true\" :title \"" titulo "\"}\n"
+     "[:thead\n"
      "[:tr\n"
-     "[:th \"#\"]\n"
-     "[:th \"id\"]\n"
+     (html  cols)
      "]]\n"
-     "[:tbody (map my-body rows)]]]]))\n\n"
+     "[:tbody (map my-body rows)]]))\n\n"
      "(defn " folder "-scripts []\n"
-     "[:script nil])\n")))
+     "[:script 
+     \"
+     var dg = $('.dg');
+     $(document).ready(function() {
+      dg.datagrid();
+      dg.datagrid('enableFilter');
+     });
+     \"
+     ])\n")))
 
 (defn build-skeleton
   "secure: 1=s/a, 2=s, 3=all"
@@ -200,12 +254,12 @@
     (spit (str path "/handler.clj") (build-skeleton-handler options))
     (spit (str path "/model.clj") (build-skeleton-model options))
     (spit (str path "/view.clj") (build-skeleton-view options))))
-
+(map grid-col (build-grid-columns "contactos"))
 (comment
   (build-grid-skeleton {:folder "contactos"
                         :title "Contactos"
                         :table "contactos"
-                        :args "{:sort-extra \"nombre,apell_paterno,apell_materno\"}"
+                        :args "{:sort-extra \"nombre,apel_paterno,apel_materno\"}"
                         :secure 1
                         :link "/admin/contactos"
                         :root "src/sk/handlers/admin/"})
