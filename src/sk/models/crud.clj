@@ -16,7 +16,7 @@
 (defonce db (get-in (get-config) [:provided :env :database-url]))
 (defonce config (get-in (get-config) [:provided :config]))
 (defonce SALT "897sdn9j98u98kj")                                ; encryption salt for DB
-(defonce KEY (random/bytes 16))
+(defonce KEY (byte-array 16))
 
 (defn aes-in
   "Encrypt a value MySQL"

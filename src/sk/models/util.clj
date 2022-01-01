@@ -819,8 +819,7 @@
 
 (defn build-table [title url fields]
   [:table.dg
-   {:style "width: 100%;height:500px;"
-    :title title
+   {:title title
     :data-options
     (str
      "
@@ -828,6 +827,7 @@
      toolbar: '#toolbar',
      queryParams: {'__anti-forgery-token':token},
      rownumbers: true,
+     fit: true,
      fitColumns: true,
      singleSelect: true")}
    [:thead
