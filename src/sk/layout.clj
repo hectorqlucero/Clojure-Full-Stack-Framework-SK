@@ -109,7 +109,7 @@
             (= ok 0) (menus-public)
             (> ok 0) (menus-private))
           [:div.container-fluid {:style "margin-top:55px;width:100vw;height:92vh;"}
-           [:div.easyui-panel {:data-options "fit:true,border:false" :style "padding:3px;"} content]]
+           [:div.easyui-panel {:data-options "fit:true,border:false" :style "padding:5px;"} content]]
           (app-js)
           js]
          [:footer.bg-secondary.text-center.fixed-bottom
