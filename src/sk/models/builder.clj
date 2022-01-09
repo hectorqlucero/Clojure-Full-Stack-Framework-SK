@@ -2,9 +2,9 @@
   (:require [clojure.java.io :as io]
             [clojure.string :as st]
             [hiccup.core :refer [html]]
-            [sk.models.util :refer [capitalize-words]]
             [sk.models.crud :refer
-             [Query db build-grid-columns get-table-describe]]))
+             [build-grid-columns get-table-describe]]
+            [sk.models.util :refer [capitalize-words]]))
 
 (defn create-path [path]
   (.mkdir (io/file path)))
@@ -117,8 +117,7 @@
 
 (defn build-grid-fields [table]
   (let [data (get-table-describe table)
-        cols (rest data)
-        cnt (count cols)]
+        cols (rest data)]
     (map build-grid-field cols)))
 
 (defn build-grid-view [options]
@@ -204,8 +203,7 @@
      "(get-rows \"" tabla "\"))")))
 
 (defn grid-row [field]
-  (let [field-name (second (st/split field #"\."))
-        col-name (capitalize-words field-name)]
+  (let [field-name (second (st/split field #"\."))]
     (str "[:td (:" field-name " row)]\n")))
 
 (defn build-skeleton-view [options]

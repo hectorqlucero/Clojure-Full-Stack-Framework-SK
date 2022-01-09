@@ -17,7 +17,7 @@
   (if (nil? order) (str " ORDER BY " extra) order))
 
 (defn grid-search-extra [search extra]
-  (if-not (string/blank? extra)
+  (when-not (string/blank? extra)
     (if (nil? search)
       (str " WHERE " extra)
       (str search " AND " extra))))
@@ -63,7 +63,7 @@
   [search args]
   (try
     (let [search-extra (:search-extra (first args))]
-      (if-not (nil? search-extra)
+      (when-not (nil? search-extra)
         (grid-search-extra search search-extra)))
     (catch Exception e (.getMessage e))))
 
@@ -71,7 +71,7 @@
   [order args]
   (try
     (let [sort-extra (:sort-extra (first args))]
-      (if-not (nil? sort-extra)
+      (when-not (nil? sort-extra)
         (grid-sort-extra order sort-extra)))
     (catch Exception e (.getMessage e))))
 
