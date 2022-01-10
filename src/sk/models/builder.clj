@@ -91,7 +91,8 @@
 (defn build-grid-field [col]
   (let [field (:field col)
         type (st/lower-case (:type col))]
-    (if (= type "text")
+    (cond
+      (= type "text")
       (str
        "(build-field\n"
        "{:id \"" field "\"\n"
@@ -104,6 +105,29 @@
         multiline:true,
         height:120,
         width:'100%'\"})\n")
+      (= type "date")
+      (str
+       "(build-field\n"
+       "{:id \"" field "\"\n"
+       " :name \"" field "\"\n"
+       " :class \"easyui-datebox\"\n"
+       " :prompt \"mm/dd/aaaa ex. 02/07/1957 es: Febreo 2 de 1957\"\n"
+       " :data-options \"label:'xxx:',
+        labelPosition:'top',
+        required:true,
+        width:'100%'\"})\n")
+      (= type "time")
+      (str
+       "(build-field\n"
+       "{:id \"" field "\"\n"
+       " :name \"" field "\"\n"
+       " :class \"easyui-combobox\"\n"
+       " :prompt \"Escojer la hora...\"\n"
+       " :data-options \"label:'xxx:',
+        labelPosition:'top',
+        required:true,
+        width:'100%'\"})\n")
+      :else
       (str
        "(build-field\n"
        "{:id \"" field "\"\n"
