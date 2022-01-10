@@ -125,7 +125,8 @@
        " :prompt \"Escojer la hora...\"\n"
        " :data-options \"label:'xxx:',
         labelPosition:'top',
-        required:true,
+        method:'GET',
+        url:'/table_ref/get-time',
         width:'100%'\"})\n")
       :else
       (str
