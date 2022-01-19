@@ -52,7 +52,7 @@
 (defn login!
   [username password]
   (try
-    (let [row (first (Query db ["SELECT * FROM users WHERE username = ?" username]))
+    (let [row (first (Query db ["SELECT * FROM users WHERE LOWER(username) = ?" username]))
           active (:active row)]
       (if (= active "T")
         (if (crypt/compare password (:password row))
