@@ -1,5 +1,6 @@
 (ns sk.handlers.home.handler
   (:require [cheshire.core :refer [generate-string]]
+            [clojure.string :as st]
             [noir.response :refer [redirect]]
             [noir.session :as session]
             [noir.util.crypt :as crypt]
@@ -52,7 +53,7 @@
 (defn login!
   [username password]
   (try
-    (let [row (first (Query db ["SELECT * FROM users WHERE LOWER(username) = ?" username]))
+    (let [row (first (Query db ["SELECT * FROM users WHERE LOWER(username) = ?" (st/lower-case username)]))
           active (:active row)]
       (if (= active "T")
         (if (crypt/compare password (:password row))
