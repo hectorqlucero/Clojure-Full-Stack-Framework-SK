@@ -5,7 +5,7 @@
             [noir.util.crypt :as crypt]
             [ring.util.anti-forgery :refer [anti-forgery-field]]
             [sk.handlers.home.view :refer [login-script login-view]]
-            [sk.layout :refer [application]]
+            [sk.layout :refer [application error-404]]
             [sk.models.crud :refer [Query config db]]
             [sk.models.util :refer [get-session-id]]))
 
@@ -68,5 +68,5 @@
   []
   (try
     (session/clear!)
-    (redirect "/")
+    (error-404 "Salida del sitio con exito!" "/")
     (catch Exception e (.getMessage e))))
