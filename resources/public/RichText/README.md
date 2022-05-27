@@ -8,12 +8,6 @@ WYSIWYG editor developed as jQuery plugin.
 - `src/jquery.richtext.min.js`
 - `src/richtext.min.css`
 
-## Demo
-
-To see the latest demo version, you might want to use the following URL:
-[Demo from htmlpreview.github.io](https://htmlpreview.github.io/?https://github.com/webfashionist/RichText/blob/master/examples/index.html)
-
-
 ## Initialize editor
 
 Simply call `.richText()` on your `jQuery('textarea')` or `jQuery('input')` field (other HTML tags are allowed as well, but not recommended).
@@ -154,15 +148,24 @@ $(element).richText({
             
   // privacy
   youtubeCookies: false,
+    
+  // preview
+  preview: false,
+
+  // placeholder
+  placeholder: '',
   
   // developer settings
   useSingleQuotes: false,
   height: 0,
   heightPercentage: 0,
+  adaptiveHeight: false,
   id: "",
   class: "",
   useParagraph: false,
-  maxlength: 0
+  maxlength: 0,
+  callback: undefined,
+  useTabForNext: false
 });
 ```
 
@@ -231,15 +234,30 @@ Custom dropdowns allow to customize in a restricted way the dropdowns in the edi
 
 - `youtubeCookies` (default: `(boolean) false`) :: If set to true, YouTube might set tracking cookies. By default (if the value is set to `false`), `youtube-nocookie.com` will be used to display YouTube videos.
 
+**Preview**
+
+- `preview` (default: `(boolean) false`) :: If set to true, the `contenteditable` property is set to `false` and the toolbar buttons are not loaded.
+
+**Placeholder**
+
+- `placeholder` (default: `(string) ''`) :: If a non-empty string is set, a placeholder will be shown if no text has been written in the `contenteditable` part of the editor. HTML code without text is considered empty and displays the placeholder.
+
+**Tabbing**
+
+- `useTabForNext` (default: `(boolean) false`) :: If set to true, you can tab to the next input element or RichText editor within the `contenteditable` part of the editor.
+
 **Developer settings**
 
 - `useSingleQuotes` (default: `(boolean) false`) :: Replaces all double quotes from HTML attributes to single quotes, if set to `(boolean) true`.
 - `height` (default: `(int) 0`) :: Sets a custom height for the editor frame and code view. The default value `0` uses the initial height set with CSS. To overwrite the height without using this setting (and without using inline CSS), use the CSS selectors `.richText .richText-editor` and `.richText .richText-initial` to change the height.
 - `heightPercentage` (default: `(int) 0`) :: Sets a custom percentage height based on the editor's parent element. This won't work if the `height` option is used as well.
+- `adaptiveHeight` (default: `(boolean) false`) :: If `true`, the height of the editor will be adapted based on the height of the content.
 - `id` (default: `(string) ""`) :: Sets a custom ID for the editor
 - `class` (default: `(string) ""`) :: Sets additional custom classes for the editor
 - `useParagraph` (default: `(boolean) false`) :: Uses paragraph tags instead of div containers (browser default) when pressing ENTER, if set to `true`.
 - `maxlength` (default: `(int) 0`) :: Defines a max length for the text (HTML length not considered!). The default value `0` doesn't define any limit
+- `callback` (default: `undefined`) :: Sets a callback if the editor has been loaded. The first and only parameter of the callback contains the jQuery element of the editor
+
 
 ## Undo RichText
 
@@ -248,6 +266,7 @@ There's now the possibility to undo the RichText editor to the state before `.ri
 For this to work, simply call `.unRichText()` on the initial textarea, on which `.richText()` has previously been called.
 
 It is possible to delay `unRichText()` by a given amount of milliseconds with the parameter: `{delay: 2000}`. 
+Additionally the `callback` option is available as well. 
 
 ## FAQ
 

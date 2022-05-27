@@ -111,7 +111,11 @@
        "{:id \"" field "\"\n"
        " :name \"" field "\"\n"
        " :class \"easyui-datebox\"\n"
+<<<<<<< HEAD
        " :prompt \"mm/dd/aaaa ej. 02/07/1957 es: Febrero 2 de 1957\"\n"
+=======
+       " :prompt \"mm/dd/aaaa ex. 02/07/1957 es: Febreo 2 de 1957\"\n"
+>>>>>>> 25fc532df38974c5531bf98fbf35341f3fc7d3fc
        " :data-options \"label:'xxx:',
         labelPosition:'top',
         required:true,

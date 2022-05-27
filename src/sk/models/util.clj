@@ -828,7 +828,11 @@
      toolbar: '#toolbar',
      queryParams: {'__anti-forgery-token':token},
      rownumbers: true,
+<<<<<<< HEAD
      fit:true,
+=======
+     fit: true,
+>>>>>>> 25fc532df38974c5531bf98fbf35341f3fc7d3fc
      fitColumns: true,
      singleSelect: true")}
    [:thead

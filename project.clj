@@ -1,6 +1,6 @@
 (defproject sk "0.1.0"
-  :description "Change me"
-  :url "http://example.com/FIXME"
+  :description "Skeleton"
+  :url "https://github.com/hectorqlucero/sk"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.11.1"]
@@ -27,7 +27,7 @@
             [lein-pprint "1.3.2"]]
   :uberjar-name "sk.jar"
   :target-path "target/%s"
-  :ring {:handler sk.core/app
+  :ring {:handler sk.core
          :auto-reload? true
          :auto-refresh? false}
   :resources-paths ["shared" "resources"]

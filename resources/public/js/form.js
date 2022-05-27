@@ -1,36 +1,32 @@
 var fm = $('.fm');
+var return_url = window.location.href;
 
-$(document).ready(function() {
-  $('a#submit').click(function() {
-    $('form.fm').form('submit', {
-      onSubmit: function() {
-        if($(this).form('validate')) {
-          $('a#submit').linkbutton('disable');
-        }
-        return $(this).form('validate');
-      },
-      success: function(data) {
-        try {
-          var dta = JSON.parse(data);
-          if(dta.hasOwnProperty('url')) {
-            $.messager.alert({
-              title:'Exito',
-              msg:'Procesado correctamente!',
-              fn: function() {
-                window.location.href = dta.url;
-              }
-            });
-          } else if(dta.hasOwnProperty('error')) {
-            $.messager.show({
-              title:'Error: ',
-              msg: dta.error
-            });
-            $('a#submit').linkbutton('enable');
-          }
-        } catch(e) {
-          console.error('Invalid JSON');
-        }
+function saveItem() {
+  fm.form("submit", {
+    url: window.location.href + '/save',
+    onSubmit: function() {
+      if($(this).form('validate')) {
+        $('a#submit').linkbutton('disable');
       }
-    });
-  });
+      return $(this).form("validate");
+    },
+    success: function(result) {
+      var json = JSON.parse(result);
+      if(json.error) {
+        $.messager.show({
+          title: 'Error',
+          msg: json.error
+        });
+        $('a#submit').linkbutton('enable');
+      } else {
+        $.messager.alert({
+          title: 'Exito',
+          msg: json.success,
+          fn: function() {
+            window.location.href = return_url;
+          }
+        })
+      }
+    }
+  })
 }

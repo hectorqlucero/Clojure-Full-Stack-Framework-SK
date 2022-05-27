@@ -14,6 +14,8 @@ function returnItem(url) {
 }
 
 function newItem() {
+  dg.datagrid('unselectAll');
+  $('#image1').attr('src','/images/placeholder_profile.png');
   dlg.dialog("open").dialog("center").dialog('setTitle', 'Nuevo Record');
   windowHeight = $(window).height() - ($(window).height() * 0.2);
   dlg.dialog('resize', {height: windowHeight}).dialog('center');
