@@ -1,13 +1,9 @@
 (ns sk.handlers.admin.users.view
-  (:require [ring.util.anti-forgery :refer [anti-forgery-field]]
-            [hiccup.page :refer [include-js]]
-            [sk.models.crud :refer [config]]
-            [sk.models.util :refer [build-table
-                                    build-dialog
-                                    build-field
-                                    build-image-field
-                                    build-image-field-script
-                                    build-radio-buttons]]))
+  (:require [hiccup.page :refer [include-js]]
+            [ring.util.anti-forgery :refer [anti-forgery-field]]
+            [sk.user :refer [config]]
+            [sk.models.util :refer
+             [build-dialog build-dialog-buttons build-field build-image-field build-image-field-script build-radio-buttons build-table]]))
 
 (def dialog-fields
   (list
@@ -106,15 +102,16 @@
           :data-options "iconCls: 'icon-remove',plain: true"
           :onclick      "deleteItem()"} "Remover"]
      [:div {:style "float: right"}]])
-   (build-dialog title dialog-fields)))
+   (build-dialog title dialog-fields)
+   (build-dialog-buttons)))
 
 (defn users-scripts []
   (list
-  (include-js "/js/grid.js")
-  [:script
-   (build-image-field-script)
-  (str
-  "
+   (include-js "/js/grid.js")
+   [:script
+    (build-image-field-script)
+    (str
+     "
   function resizeImage(imgObject) {
     var img = $('#'+imgObject.id);
     if(img.width() < 500) {
@@ -155,5 +152,4 @@
       return 'No';
     }
   }
-  ")]
-  ))
+  ")]))

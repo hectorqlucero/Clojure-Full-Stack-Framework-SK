@@ -1,9 +1,7 @@
 (ns sk.models.grid
   (:require [cheshire.core :refer [generate-string]]
-            [clojure.string :as str]
-            [sk.models.crud :refer [db
-                                    Query
-                                    build-grid-columns]]
+            [clojure.string :as string]
+            [sk.models.crud :refer [build-grid-columns db Query]]
             [sk.models.util :refer [parse-int]]))
 
 (defn convert-search-columns [fields]
@@ -19,7 +17,7 @@
   (if (nil? order) (str " ORDER BY " extra) order))
 
 (defn grid-search-extra [search extra]
-  (when-not (str/blank? extra)
+  (when-not (string/blank? extra)
     (if (nil? search)
       (str " WHERE " extra)
       (str search " AND " extra))))
@@ -27,13 +25,13 @@
 (defn grid-search
   "Creates search criteria for easyui grid (LIKE search) on all columns"
   [search fields]
-  (if (not (clojure.string/blank? search))
+  (if (not (string/blank? search))
     (str " WHERE LOWER(concat(" (apply str (interpose "," fields)) ")) like lower('%" search "%')") nil))
 
 (defn grid-add-search
   "Creates search criteria for easyui grid (LIKE search) on all columns"
   [search fields]
-  (if (not (clojure.string/blank? search))
+  (if (not (string/blank? search))
     (str " concat(" (apply str (interpose "," fields)) ") like lower('%" search "%')") nil))
 
 (defn grid-offset
@@ -64,7 +62,7 @@
 (defn get-search-extra
   [search args]
   (try
-    (let [search-extra (:search-extra args)]
+    (let [search-extra (:search-extra (first args))]
       (when-not (nil? search-extra)
         (grid-search-extra search search-extra)))
     (catch Exception e (.getMessage e))))
@@ -72,24 +70,23 @@
 (defn get-sort-extra
   [order args]
   (try
-    (let [sort-extra (:sort-extra args)]
+    (let [sort-extra (:sort-extra (first args))]
       (when-not (nil? sort-extra)
         (grid-sort-extra order sort-extra)))
     (catch Exception e (.getMessage e))))
 
 (defn build-grid
-  "builds grid. Parameters: table,search-extra,sort-extra,join"
+  "builds grid. Parameters: params, table Args: map with one or more, :sort-extra, :search-extra, :join, ex. {:sort-extra 'firstname,lastname'}"
   [params table & args]
   (try
-    (let [args (first args)
-          aliases (if-not (nil? (:aliases args)) (:aliases args) (build-grid-columns table))
-          join (:join args)
-          search (convert-search-columns (build-grid-columns table))
-          search (get-search-extra search args)
-          order (grid-sort (:sort params nil) (:order params nil))
-          order (get-sort-extra order args)
-          offset (grid-offset (parse-int (:rows params)) (parse-int (:page params)))
-          rows (grid-rows table aliases join search order offset)]
+    (let [aliases (build-grid-columns table)
+          join    (:join args)
+          search  nil
+          search  (get-search-extra search args)
+          order   (grid-sort (:sort params nil) (:order params nil))
+          order   (get-sort-extra order args)
+          offset  (grid-offset (parse-int (:rows params)) (parse-int (:page params)))
+          rows    (grid-rows table aliases join search order offset)]
       (generate-string rows))
     (catch Exception e (.getMessge e))))
 ;; End build-grid

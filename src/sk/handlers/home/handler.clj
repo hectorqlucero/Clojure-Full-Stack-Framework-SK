@@ -1,14 +1,14 @@
 (ns sk.handlers.home.handler
   (:require [cheshire.core :refer [generate-string]]
-            [ring.util.anti-forgery :refer [anti-forgery-field]]
-            [sk.models.crud :refer [db
-                                    Query]]
-            [sk.models.util :refer [get-session-id]]
-            [sk.layout :refer [application]]
-            [sk.handlers.home.view :refer [login-view login-script]]
+            [noir.response :refer [redirect]]
             [noir.session :as session]
             [noir.util.crypt :as crypt]
-            [noir.response :refer [redirect]]))
+            [ring.util.anti-forgery :refer [anti-forgery-field]]
+            [sk.handlers.home.view :refer [login-script login-view]]
+            [sk.layout :refer [application error-404]]
+            [sk.models.crud :refer [Query db]]
+            [sk.user :refer [config]]
+            [sk.models.util :refer [get-session-id]]))
 
 ;; Start Main
 (def main-sql
@@ -30,12 +30,11 @@
 (defn main
   [_]
   (try
-    (let [title "Bitacora"
+    (let [title (:site config)
           ok (get-session-id)
-          content [:div [:span {:style "margin-left:20px;"} (get-main-title)]]]
+          content (get-main-title)]
       (application title ok nil content))
     (catch Exception e (.getMessage e))))
-;; End Main
 
 ;; Start Login
 (defn login
@@ -69,5 +68,5 @@
   []
   (try
     (session/clear!)
-    (redirect "/")
+    (error-404 "Salida del sitio con exito!" "/")
     (catch Exception e (.getMessage e))))

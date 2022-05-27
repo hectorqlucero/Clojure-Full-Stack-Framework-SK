@@ -1,23 +1,16 @@
 (ns sk.models.util
-  (:require [sk.models.crud :refer [config
-                                    db
-                                    Query
-                                    Save
-                                    Insert
-                                    Update]]
+  (:require [clj-jwt.core :refer [jwt str->jwt to-str verify]]
+            [clj-time.coerce :as c]
             [clj-time.core :as t]
             [clj-time.format :as f]
-            [clj-time.coerce :as c]
-            [clj-jwt.core :refer [str->jwt
-                                  jwt
-                                  verify
-                                  to-str]]
-            [clojure.string :refer [join]]
             [clojure.java.io :as io]
+            [clojure.string :refer [join]]
             [date-clj :as d]
-            [noir.session :as session])
+            [noir.session :as session]
+            [sk.user :refer [config]]
+            [sk.models.crud :refer [Insert Query Save Update db]])
   (:import java.text.SimpleDateFormat
-           [java.util Calendar UUID]))
+           [java.util UUID]))
 
 ;;Example here: (t/from-time-zone (t/now) tz) -> gives me a joda datetime with correct timezone
 ;;(def halloween-2016 (t/date-time 2016 10 31 18 0 0))
@@ -61,7 +54,7 @@
 (def external-time-parser (f/formatter tz "hh:mm:ss a" "H:k:s"))
 
 (defn get-base-url [request]
-  (str (subs (str (:scheme request)) 1) "://" (:server-name request) ":" (:server-port request)))
+  (str "https://" (:server-name request)))
 
 (defn get-reset-url [request token]
   (str (get-base-url request) "/reset_password/" token))
@@ -207,11 +200,6 @@
 (defn next-week-of-year []
   (+ (t/week-number-of-year (t/now)) 1))
 
-(defn week-of-year-date [date]
-  (let [cal (Calendar/getInstance)]
-    (.setTime cal (.toDate date))
-    (- (.get cal Calendar/WEEK_OF_YEAR) 1)))
-
 (defn get-weekday-long
   "0=sunday....6=Saturday"
   [n]
@@ -230,7 +218,7 @@
   "Attempt to convert to integer or on error return nil or itself if it's already an integer"
   [s]
   (try
-    (Integer. s)
+    (Integer/parseInt s)
     (catch Exception _ (if (integer? s) s nil))))
 
 (defn in?
@@ -512,6 +500,13 @@
                 (:username (first (Query db ["select username from users where id = ?" id]))))]
     email))
 
+(defn user-name []
+  (let [id (get-session-id)
+        username (if (nil? id)
+                   nil
+                   (:name (first (Query db ["select CONCAT(firstname,' ',lastname) as name from users where id = ?" id]))))]
+    username))
+
 (defn get-photo-val [table-name field-name id-name id-value]
   (if (or
        (nil? table-name)
@@ -546,7 +541,7 @@
   [s]
   (->> (clojure.string/split (str s) #"\b")
        (map clojure.string/capitalize)
-       (clojure.string/join)))
+       (join)))
 
 (defn get-month-name [month]
   (cond
@@ -576,28 +571,6 @@
   "Merge maps recursively"
   [& maps]
   (apply merge-with deep-merge maps))
-
-(defn- deprecated? [method]
-  (.isAnnotationPresent method java.lang.Deprecated))
-
-(defn- method-description [method]
-  (join " "
-        [(.getName method)
-         (java.util.Arrays/toString (.getParameterTypes method))
-         "->"
-         (.getReturnType method)]))
-
-(defn jmethods
-  "Returns a sequence of all public java methods available on a given class,
-   including the methods inherited from parent(s)."
-  ([clazz]
-   (jmethods clazz false))
-  ([clazz include-deprecated?]
-   (->> (:methods (bean clazz))
-        (filter #(or include-deprecated?
-                     (not (deprecated? %))))
-        (sort-by #(.getName %))
-        (map method-description))))
 
 (defn create-categorias [rows]
   (map (fn [cid]
@@ -786,6 +759,29 @@
         img.animate({width: img.attr(\"width\"), height: img.attr(\"height\")}, 1000);
       }
     });
+
+    function resizeImage(imgObject) {
+      var img = $('#'+imgObject.id);
+      if(img.width() < 500) {
+        img.animate({width: '500', height: '500'}, 1000);
+      } else {
+        img.animate({width: img.attr(\"width\"), height: img.attr(\"height\")}, 1000);
+      }
+    }
+
+    function imagenShow(val, row, index) {
+      if(row.imagen !== null) {
+        let d = new Date();
+        let imgValue = val;
+        let imgError = 'this.src=\"/images/placeholder_profile.png\"';
+        let imgPath = " (:path config) ";
+        let imgSrc = imgPath + imgValue + '?' + d.getTime();
+        let imgTag = '<img id=img'+index+' src='+imgSrc+' onError='+imgError+' width=95 height=71 onclick=resizeImage(this) />';
+        return imgTag;
+      } else {
+        return row.imagen;
+      }
+    }
     "))
 
 (defn build-table-field
@@ -824,20 +820,16 @@
 
 (defn build-table [title url fields]
   [:table.dg
-   {:style "width: 100%;height:500px;"
-    :title title
+   {:title title
     :data-options
     (str
      "
      url: '" url "',
      toolbar: '#toolbar',
      queryParams: {'__anti-forgery-token':token},
-     pagination: false,
      rownumbers: true,
-     nowrap: true,
-     autoRowHeight: true,
+     fit:true,
      fitColumns: true,
-     autoSizeColumns: true,
      singleSelect: true")}
    [:thead
     [:tr
@@ -897,6 +889,5 @@
                                  padding:10px 20px"}
     [:form.fm (or (first options) {:method "post"
                                    :enctype "multipart/form-data"})
-     fields
-     (build-dialog-buttons)]]])
+     fields]]])
 ;; End hiccup stuff

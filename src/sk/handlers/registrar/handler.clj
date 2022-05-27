@@ -1,28 +1,14 @@
 (ns sk.handlers.registrar.handler
   (:require [cheshire.core :refer [generate-string]]
             [clojure.string :as str]
-            [sk.layout :refer [application
-                               error-404]]
-            [sk.handlers.registrar.view :refer [registrar-scripts
-                                                registrar-view
-                                                reset-password-scripts
-                                                reset-password-view
-                                                reset-jwt-scripts
-                                                reset-jwt-view]]
-            [ring.util.anti-forgery :refer [anti-forgery-field]]
             [noir.util.crypt :as crypt]
-            [sk.models.crud :refer [db
-                                    config
-                                    build-postvars
-                                    Query
-                                    Save
-                                    Update]]
-            [sk.models.email :refer [host
-                                     send-email]]
-            [sk.models.util :refer [get-session-id
-                                    get-reset-url
-                                    check-token
-                                    create-token]]))
+            [ring.util.anti-forgery :refer [anti-forgery-field]]
+            [sk.handlers.registrar.view :refer [registrar-scripts registrar-view reset-jwt-scripts reset-jwt-view reset-password-scripts reset-password-view]]
+            [sk.layout :refer [application error-404]]
+            [sk.models.crud :refer [Query Save Update build-postvars db]]
+            [sk.user :refer [config]]
+            [sk.models.email :refer [host send-email]]
+            [sk.models.util :refer [check-token create-token get-reset-url get-session-id]]))
 
 ;; Start registrar
 (defn registrar
@@ -116,7 +102,7 @@
           url        (get-reset-url request token)
           row        (get-username-row username)
           email-body (email-body row url)]
-      (if (future (send-email host email-body))
+      (if (send-email host email-body)
         (generate-string {:url "/"})
         (generate-string {:error "Incapaz de resetear su contraseña!"})))
     (catch Exception e (.getMessage e))))
@@ -150,4 +136,3 @@
         (generate-string {:error "Incapaz de resetear su contraseña!"})))
     (catch Exception e (.getMessage e))))
 ;; End reset-password
-

@@ -1,59 +1,103 @@
 (ns sk.layout
   (:require [hiccup.page :refer [html5 include-css include-js]]
-            [sk.models.crud :refer [config]]
-            [sk.models.util :refer [user-level]]))
+            [clj-time.core :as t]
+            [sk.user :refer [config]]
+            [sk.models.util :refer [user-level user-name]]))
 
 (defn build-admin []
   (list
-    [:a.dropdown-item {:href "/admin/users"} "Usuarios"]))
+   [:a.dropdown-item {:href "#"} "Sub1 User"]
+   [:a.dropdown-item {:href "#"} "Sub2 User"]
+   (when (or
+          (= (user-level) "A")
+          (= (user-level) "S"))
+     (list
+      [:a.dropdown-item {:href "#"} "Admin1"]
+      [:a.dropdown-item {:href "#"} "Admin2"]
+      [:a.dropdown-item {:href "#"} "Admin3"]
+      [:a.dropdown-item {:href "#"} "Admin4"]
+      [:a.dropdown-item {:href "#"} "Admin5"]
+      [:a.dropdown-item {:href "#"} "Admin6"]))
+   (when (= (user-level) "S")
+     [:a.dropdown-item {:href "#"} "Sistema"])))
 
 (defn menus-private []
   (list
-   [:nav.navbar.navbar-expand-sm.navbar-dark.bg-primary.fixed-top
-    [:a.navbar-brand {:href "/"} (:site-name config)]
+   [:nav.navbar.navbar-expand-md.navbar-dark.bg-dark.fixed-top
+    [:a.navbar-brand {:href "/"}
+     [:img.rounded-circle {:src "/images/logo.png"
+                           :alt (:site-name config)
+                           :style "width:40px;"}]]
     [:button.navbar-toggler {:type "button"
                              :data-toggle "collapse"
                              :data-target "#collapsibleNavbar"}
      [:span.navbar-toggler-icon]]
     [:div#collapsibleNavbar.collapse.navbar-collapse
      [:ul.navbar-nav
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu 1"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu 2"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu 3"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu 4"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu 5"]]
-      [:li.nav-item.dropdown
-       [:a.nav-link.dropdown-toggle {:href "#"
-                                     :id "navdrop"
-                                     :data-toggle "dropdown"} "Administrar"]
-       [:div.dropdown-menu
-        (build-admin)]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu1"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu2"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu3"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu4"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu5"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu6"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu7"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu8"]]
       (when
-        (or
-          (= (user-level) "A")
-          (= (user-level) "S"))
-        [:li.nav-item [:a.nav-link {:href "/admin/users"} "Usuarios"]])
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu 6"]]
-      [:li.nav-item [:a.nav-link {:href "/home/logoff"} "Salir"]]]]]))
+       (or
+        (= (user-level) "U")
+        (= (user-level) "A")
+        (= (user-level) "S"))
+        [:li.nav-item.dropdown
+         [:a.nav-link.dropdown-toggle {:href "#"
+                                       :id "navdrop"
+                                       :data-toggle "dropdown"} "Administrar"]
+         [:div.dropdown-menu
+          (build-admin)]])
+      [:li.nav-item [:a.nav-link {:href "/home/logoff"} (str "Salir [" (user-name) "]")]]]]]))
 
 (defn menus-public []
   (list
-   [:nav.navbar.navbar-expand-sm.navbar-dark.bg-primary.fixed-top
-    [:a.navbar-brand {:href "/"} (:site-name config)]
+   [:nav.navbar.navbar-expand-md.navbar-dark.bg-dark.fixed-top
+    [:a.navbar-brand {:href "/"}
+     [:img.rounded-circle {:src "/images/logo.png"
+                           :alt (:site-name config)
+                           :style "width:40px;"}]]
     [:button.navbar-toggler {:type "button"
                              :data-toggle "collapse"
                              :data-target "#collapsibleNavbar"}
      [:span.navbar-toggler-icon]]
     [:div#collapsibleNavbar.collapse.navbar-collapse
      [:ul.navbar-nav
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu1"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu2"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu3"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu4"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu5"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu6"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu6"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Menu7"]]
       [:li.nav-item [:a.nav-link {:href "/home/login"} "Conectar"]]]]]))
+
+(defn menus-none []
+  (list
+   [:nav.navbar.navbar-expand-md.navbar-dark.bg-dark.fixed-top
+    [:a.navbar-brand {:href "/"}
+     [:img.rounded-circle {:src "/images/logo.png"
+                           :alt (:site-name config)
+                           :style "width:40px;"}]]
+    [:button.navbar-toggler {:type "button"
+                             :data-toggle "collapse"
+                             :data-target "#collapsibleNavbar"}
+     [:span.navbar-toggler-icon]]
+    [:div#collapsibleNavbar.collapse.navbar-collapse]]))
 
 (defn app-css []
   (list
    (include-css "/bootstrap/css/bootstrap.min.css")
    (include-css "/bootstrap/css/lumen.min.css")
    (include-css "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
-   (include-css "/easyui/themes/metro-blue/easyui.css")
+   (include-css "/bxslider/dist/jquery.bxslider.min.css")
+   (include-css "/easyui/themes/gray/easyui.css")
    (include-css "/easyui/themes/icon.css")
    (include-css "/easyui/themes/color.css")
    (include-css "/css/main.css")
@@ -63,6 +107,7 @@
   (list
    (include-js "/easyui/jquery.min.js")
    (include-js "/popper/popper.min.js")
+   (include-js "/bxslider/dist/jquery.bxslider.min.js")
    (include-js "/bootstrap/js/bootstrap.min.js")
    (include-js "/easyui/jquery.easyui.min.js")
    (include-js "/easyui/jquery.edatagrid.js")
@@ -76,7 +121,7 @@
    (include-js "/js/main.js")))
 
 (defn application [title ok js & content]
-  (html5 {:ng-app (:site-name config) :lang "en"}
+  (html5 {:ng-app (:site-name config) :lang "es"}
          [:head
           [:title (if title
                     title
@@ -88,18 +133,38 @@
           [:link {:rel "shortcut icon"
                   :type "image/x-icon"
                   :href "data:image/x-icon;,"}]]
-         [:body
-          (cond
-            (= ok -1) nil
-            (= ok 0) (menus-public)
-            (> ok 0) (menus-private))
-          [:div#content.container-fluid.easyui-panel {:style "margin-top:75px;border:none;"
-                                                      :data-options "closed:false"}
-           content]
+         [:body {:style "width:100vw;height:98vh;border:1px solid #000;"}
+          [:div.container {:style "height:88vh;margin-top:75px;"}
+           (cond
+             (= ok -1) (menus-none)
+             (= ok 0) (menus-public)
+             (> ok 0) (menus-private))
+           [:div.easyui-panel {:data-options "fit:true,border:false" :style "padding-left:14px;"} content]]
           (app-js)
-          js]))
+          js]
+         [:footer.bg-secondary.text-center.fixed-bottom
+          [:span  "Copyright &copy" (t/year (t/now)) " Lucero Systems - All Rights Reserved"]]))
 
-(defn error-404 [error return-url]
-  [:div
-   [:p [:h3 [:b "Error: "]] error]
-   [:p [:h3 [:a {:href return-url} "Clic here to " [:strong "Return"]]]]])
+(defn error-404 [content return-url]
+  (html5 {:ng-app (:site-name config) :lang "es"}
+         [:head
+          [:title "Mesaje"]
+          [:meta {:charset "UTF-8"}]
+          [:meta {:name "viewport"
+                  :content "width=device-width, initial-scale=1"}]
+          (app-css)
+          [:link {:rel "shortcut iconcompojure"
+                  :type "image/x-icon"
+                  :href "data:image/x-icon;,"}]]
+         [:body {:style "width:100vw;height:98vh;border:1px solid #000;"}
+          [:div.container {:style "height:88vh;margin-top:75px;"}
+           (menus-none)
+           [:div.easyui-panel {:data-options "fit:true,border:false" :style "padding-left:14px;"}
+            [:div
+             [:p [:h3 [:b "Mensaje: "]] content]
+             [:p [:h3 [:a {:href return-url} "Clic aqui para " [:strong "Continuar"]]]]]]]
+
+          (app-js)
+          nil]
+         [:footer.bg-secondary.text-center.fixed-bottom
+          [:span  "Copyright &copy" (t/year (t/now)) " Lucero Systems - All Rights Reserved"]]))

@@ -1,24 +1,16 @@
 (ns sk.models.crud
-  (:require [clojure.java.io :as io]
-            [clojure.string :as st]
+  (:require [cheshire.core :refer [generate-string]]
+            [clojure.java.io :as io]
             [clojure.java.jdbc :as j]
-            [cheshire.core :refer [generate-string]])
+            [clojure.string :as st]
+            [sk.user :as user])
   (:import java.text.SimpleDateFormat))
 
-(defn get-config
-  []
-  (try
-    (binding [*read-eval* false]
-      (read-string (str (slurp (io/resource "private/config.clj")))))
-    (catch Exception e (.getMessage e))))
-
-(def config (get-config))
-
-(def db {:classname                       (:db-class config)
-         :subprotocol                     (:db-protocol config)
-         :subname                         (:db-name config)
-         :user                            (:db-user config)
-         :password                        (:db-pwd config)
+(def db {:classname                       (:db-class user/config)
+         :subprotocol                     (:db-protocol user/config)
+         :subname                         (:db-name user/config)
+         :user                            (:db-user user/config)
+         :password                        (:db-pwd user/config)
          :useSSL                          false
          :useTimezone                     true
          :useLegacyDatetimeCode           false
@@ -36,9 +28,8 @@
          :enableQueryTimeouts             false
          :zeroDateTimeBehavior            "CONVERT_TO_NULL"}) ; Database connection
 
-(def SALT "897sdn9j98u98kj")                                ; encryption salt for DB
-
-(def KEY "897sdn9j98u98kjz")
+(def SALT "897sdn9j98u98kj")                                ; encryption salt for DB                            ; encryption salt for DB
+(def KEY (byte-array 16))
 
 (defn aes-in
   "Encrypt a value MySQL"
@@ -241,7 +232,7 @@
     (let [value (str ((keyword field) params))
           field-type (st/lower-case field-type)]
       (cond
-        (st/includes? field-type "varchar") (crud-capitalize-words value)
+        (st/includes? field-type "varchar") value
         (st/includes? field-type "char") (st/upper-case value)
         (st/includes? field-type "date") (crud-format-date-internal value)
         :else value))
@@ -323,11 +314,10 @@
     (let [id (crud-fix-id (:id params))
           postvars (build-postvars table params)
           result (Save db (keyword table) postvars ["id = ?" id])]
-      (if (and (seq result)
-               (= (first (seq result)) 1))
+      (if (seq result)
         (generate-string {:success "Procesado con éxito!"})
         (generate-string {:error "No se puede procesar!"})))
-    (catch Exception e (.getMessge e))))
+    (catch Exception e (.getMessage e))))
 
 ;; Start upload form
 (defn crud-upload-image
@@ -356,12 +346,11 @@
           file (:file params)
           postvars (dissoc (build-postvars table params) :file)
           the-id (str (get-id id postvars table))
-          path (str (:uploads config) folder "/")
+          path (str (:uploads user/config) folder "/")
           image-name (crud-upload-image table file the-id path)
           postvars (assoc postvars :imagen image-name :id the-id)
           result (Save db (keyword table) postvars ["id = ?" the-id])]
-      (if (and (seq result)
-               (= (first (seq result)) 1))
+      (if (seq result)
         (generate-string {:success "Procesado con éxito!"})
         (generate-string {:error "No se puede procesar!"})))
     (catch Exception e (.getMessage e))))
@@ -387,3 +376,6 @@
         (generate-string {:success "Eliminado con éxito!"})
         (generate-string {:error "Incapaz de eliminar!"})))
     (catch Exception e (.getMessage e))))
+
+(comment
+  (:port user/config))
