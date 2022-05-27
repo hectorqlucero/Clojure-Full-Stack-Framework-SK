@@ -1,7 +1,8 @@
 (ns sk.handlers.admin.users.handler
   (:require [sk.handlers.admin.users.view :refer [users-scripts users-view]]
             [sk.layout :refer [application]]
-            [sk.models.crud :refer [build-form-delete build-form-row build-form-save]]
+            [sk.models.crud :refer [build-form-delete build-form-row
+                                    build-form-save]]
             [sk.models.grid :refer [build-grid]]
             [sk.models.util :refer [get-session-id user-level]]))
 

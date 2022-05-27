@@ -1,5 +1,5 @@
 (ns sk.proutes
-  (:require [compojure.core :refer [GET POST defroutes]]
+  (:require [compojure.core :refer [defroutes GET POST]]
             [sk.handlers.admin.users.handler :as users]))
 
 (defroutes proutes

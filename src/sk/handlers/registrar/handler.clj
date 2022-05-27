@@ -3,12 +3,15 @@
             [clojure.string :as str]
             [noir.util.crypt :as crypt]
             [ring.util.anti-forgery :refer [anti-forgery-field]]
-            [sk.handlers.registrar.view :refer [registrar-scripts registrar-view reset-jwt-scripts reset-jwt-view reset-password-scripts reset-password-view]]
+            [sk.handlers.registrar.view :refer [registrar-scripts
+                                                registrar-view reset-jwt-scripts
+                                                reset-jwt-view reset-password-scripts reset-password-view]]
             [sk.layout :refer [application error-404]]
-            [sk.models.crud :refer [Query Save Update build-postvars db]]
-            [sk.user :refer [config]]
+            [sk.models.crud :refer [build-postvars db Query Save Update]]
             [sk.models.email :refer [host send-email]]
-            [sk.models.util :refer [check-token create-token get-reset-url get-session-id]]))
+            [sk.models.util :refer [check-token create-token get-reset-url
+                                    get-session-id]]
+            [sk.user :refer [config]]))
 
 ;; Start registrar
 (defn registrar

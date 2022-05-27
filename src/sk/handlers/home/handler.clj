@@ -1,15 +1,15 @@
 (ns sk.handlers.home.handler
   (:require [cheshire.core :refer [generate-string]]
+            [clojure.string :as st]
             [noir.response :refer [redirect]]
             [noir.session :as session]
             [noir.util.crypt :as crypt]
-            [clojure.string :as st]
             [ring.util.anti-forgery :refer [anti-forgery-field]]
             [sk.handlers.home.view :refer [login-script login-view]]
             [sk.layout :refer [application error-404]]
-            [sk.models.crud :refer [Query db]]
-            [sk.user :refer [config]]
-            [sk.models.util :refer [get-session-id]]))
+            [sk.models.crud :refer [db Query]]
+            [sk.models.util :refer [get-session-id]]
+            [sk.user :refer [config]]))
 
 ;; Start Main
 (def main-sql

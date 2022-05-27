@@ -1,5 +1,5 @@
 (ns sk.handlers.tref.handler
-  (:require [sk.models.crud :refer [Query db]]
+  (:require [sk.models.crud :refer [db Query]]
             [sk.models.util :refer [current_year get-image parse-int zpl]]))
 
 ;; Start get-users
@@ -49,9 +49,9 @@
 
 (defn level-options []
   (list
-    {:value "U" :text "Usuarios"}
-    {:value "A" :text "Administrador"}
-    {:value "S" :text "Systema"}))
+   {:value "U" :text "Usuarios"}
+   {:value "A" :text "Administrador"}
+   {:value "S" :text "Systema"}))
 
 (defn years
   "Genera listado para dropdown dependiendo de p=anterioriores de este año, n=despues de este año,
@@ -67,22 +67,22 @@
   "Builds tipical time dropdown"
   []
   (let [items (flatten
-                (for [x (range 5 21)]
-                  (list
-                    {:value (str (zpl x 2) ":00")
-                     :text (if (< x 12) 
-                             (str (zpl x 2) ":00 AM")
-                             (str (if (> x 12) (zpl (- x 12) 2) (zpl x 2)) ":00 PM"))}
-                    {:value (str (zpl x 2) ":30")
-                     :text (if (< x 12) 
-                             (str (zpl x 2) ":30 AM")
-                             (str (if (> x 12) (zpl (- x 12) 2) (zpl x 2)) ":30 PM"))})))]
+               (for [x (range 5 21)]
+                 (list
+                  {:value (str (zpl x 2) ":00")
+                   :text (if (< x 12)
+                           (str (zpl x 2) ":00 AM")
+                           (str (if (> x 12) (zpl (- x 12) 2) (zpl x 2)) ":00 PM"))}
+                  {:value (str (zpl x 2) ":30")
+                   :text (if (< x 12)
+                           (str (zpl x 2) ":30 AM")
+                           (str (if (> x 12) (zpl (- x 12) 2) (zpl x 2)) ":30 PM"))})))]
     items))
 
 (defn imagen [table field idname value & extra-folder]
   (get-image table field idname value (first extra-folder)))
 
-(defn get-item 
+(defn get-item
   "Generic get field value from table"
   [table field idname idvalue]
   (let [sql (str "SELECT " field " FROM " table " WHERE " idname "='" idvalue "'")

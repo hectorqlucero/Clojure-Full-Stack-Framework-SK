@@ -1,8 +1,8 @@
 (ns sk.layout
-  (:require [hiccup.page :refer [html5 include-css include-js]]
-            [clj-time.core :as t]
-            [sk.user :refer [config]]
-            [sk.models.util :refer [user-level user-name]]))
+  (:require [clj-time.core :as t]
+            [hiccup.page :refer [html5 include-css include-js]]
+            [sk.models.util :refer [user-level user-name]]
+            [sk.user :refer [config]]))
 
 (defn build-admin []
   (list

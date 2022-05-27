@@ -7,8 +7,8 @@
             [clojure.string :refer [join]]
             [date-clj :as d]
             [noir.session :as session]
-            [sk.user :refer [config]]
-            [sk.models.crud :refer [Insert Query Save Update db]])
+            [sk.models.crud :refer [db Insert Query Save Update]]
+            [sk.user :refer [config]])
   (:import java.text.SimpleDateFormat
            [java.util UUID]))
 

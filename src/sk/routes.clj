@@ -1,6 +1,6 @@
 (ns sk.routes
   (:require [cheshire.core :refer [generate-string]]
-            [compojure.core :refer [GET POST defroutes]]
+            [compojure.core :refer [defroutes GET POST]]
             [sk.handlers.home.handler :as home]
             [sk.handlers.registrar.handler :as registrar]
             [sk.handlers.tref.handler :as table_ref]))
