@@ -1,6 +1,6 @@
 (ns sk.models.email
   (:require [postal.core :refer [send-message]]
-            [sk.user :refer [config]]))
+            [sk.user :as user]))
 
 ;;(send-message {:host "email-host"
 ;;               :user "email-user"
@@ -30,9 +30,9 @@
 ;; :ssl  true}
 
 (def host
-  {:host (:email-host config)
-   :user (:email-user config)
-   :pass (:email-pwd config)
+  {:host (:email-host user/config)
+   :user (:email-user user/config)
+   :pass (:email-pwd user/config)
    :ssl  true})
 
 (def body

@@ -14,6 +14,10 @@
   (GET "/table_ref/get-item/:table/:field/:fname/:fval" [table field fname fval] (table_ref/get-item table field fname fval))
   (GET "/table_ref/get-time" [] (generate-string (table_ref/build-time)))
   (GET "/table_ref/levels" [] (generate-string (table_ref/level-options)))
+  (GET "/table_ref/get-titulo/:id" [id] (table_ref/get-titulo id))
+  (GET "/table_ref/get-titulos" [] (generate-string (table_ref/get-titulos)))
+  (GET "/table_ref/get-paises" [] (generate-string (table_ref/get-pais)))
+  (GET "/table_ref/get-pais/:id" [id] (table_ref/get-pais-id id))
   ;; End table_ref
 
   ;; Start home

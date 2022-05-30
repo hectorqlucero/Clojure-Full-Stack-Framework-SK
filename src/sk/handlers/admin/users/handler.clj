@@ -14,9 +14,11 @@
           js (users-scripts)
           content (users-view title)]
       (if
-       (= (user-level) "S")
+       (or
+        (= (user-level) "A")
+        (= (user-level) "S"))
         (application title ok js content)
-        (application title ok nil "Solo <strong>sistema</strong> puede accesar esta opción!!!")))
+        (application title ok nil "Solo <strong>administradores</strong> pueden accesar esta opción!!!")))
     (catch Exception e (.getMessage e))))
 
 (defn users-grid

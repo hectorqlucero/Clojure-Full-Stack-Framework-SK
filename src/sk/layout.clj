@@ -6,20 +6,20 @@
 
 (defn build-admin []
   (list
-   [:a.dropdown-item {:href "#"} "Sub1 User"]
-   [:a.dropdown-item {:href "#"} "Sub2 User"]
+   [:a.dropdown-item {:href "#"} "menu1"]
+   [:a.dropdown-item {:href "#"} "menu2"]
    (when (or
           (= (user-level) "A")
           (= (user-level) "S"))
      (list
-      [:a.dropdown-item {:href "#"} "Admin1"]
-      [:a.dropdown-item {:href "#"} "Admin2"]
-      [:a.dropdown-item {:href "#"} "Admin3"]
-      [:a.dropdown-item {:href "#"} "Admin4"]
-      [:a.dropdown-item {:href "#"} "Admin5"]
-      [:a.dropdown-item {:href "#"} "Admin6"]))
+      [:a.dropdown-item {:href "#"} "admin1"]
+      [:a.dropdown-item {:href "#"} "admin2"]
+      [:a.dropdown-item {:href "#"} "admin3"]
+      [:a.dropdown-item {:href "#"} "admin4"]
+      [:a.dropdown-item {:href "#"} "admin5"]
+      [:a.dropdown-item {:href "#"} "admin6"]))
    (when (= (user-level) "S")
-     [:a.dropdown-item {:href "#"} "Sistema"])))
+     [:a.dropdown-item {:href "/admin/users"} "Usuarios"])))
 
 (defn menus-private []
   (list
@@ -34,14 +34,14 @@
      [:span.navbar-toggler-icon]]
     [:div#collapsibleNavbar.collapse.navbar-collapse
      [:ul.navbar-nav
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu1"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu2"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu3"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu4"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu5"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu6"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu7"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu8"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "menu1"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "menu2"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "menu3"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "menu4"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "menu5"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "menu6"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "menu6"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "menu6"]]
       (when
        (or
         (= (user-level) "U")
@@ -68,14 +68,14 @@
      [:span.navbar-toggler-icon]]
     [:div#collapsibleNavbar.collapse.navbar-collapse
      [:ul.navbar-nav
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu1"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu2"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu3"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu4"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu5"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu6"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu6"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Menu7"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "menu1"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "menu2"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "menu3"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "menu4"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "menu5"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "menu6"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "menu7"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "menu8"]]
       [:li.nav-item [:a.nav-link {:href "/home/login"} "Conectar"]]]]]))
 
 (defn menus-none []

@@ -9,7 +9,7 @@
             [sk.layout :refer [application error-404]]
             [sk.models.crud :refer [db Query]]
             [sk.models.util :refer [get-session-id]]
-            [sk.user :refer [config]]))
+            [sk.user :as user]))
 
 ;; Start Main
 (def main-sql
@@ -31,11 +31,12 @@
 (defn main
   [_]
   (try
-    (let [title (:site config)
+    (let [title (:site user/config)
           ok (get-session-id)
           content (get-main-title)]
       (application title ok nil content))
     (catch Exception e (.getMessage e))))
+;; End main
 
 ;; Start Login
 (defn login

@@ -11,7 +11,7 @@
             [sk.models.email :refer [host send-email]]
             [sk.models.util :refer [check-token create-token get-reset-url
                                     get-session-id]]
-            [sk.user :refer [config]]))
+            [sk.user :as user]))
 
 ;; Start registrar
 (defn registrar
@@ -88,7 +88,7 @@
                             "Si usted no intento cambiar su contraseña o no desea cambiarla, simplemente ignore este mensage.</br></br></br>"
                             "Sinceramente,</br></br>"
                             "La Administración")
-          body         {:from    (:email-user config)
+          body         {:from    (:email-user user/config)
                         :to      email
                         :subject subject
                         :body    [{:type    "text/html;charset=utf-8"
@@ -105,7 +105,7 @@
           url        (get-reset-url request token)
           row        (get-username-row username)
           email-body (email-body row url)]
-      (if (send-email host email-body)
+      (if (future (send-email host email-body))
         (generate-string {:url "/"})
         (generate-string {:error "Incapaz de resetear su contraseña!"})))
     (catch Exception e (.getMessage e))))
@@ -139,3 +139,4 @@
         (generate-string {:error "Incapaz de resetear su contraseña!"})))
     (catch Exception e (.getMessage e))))
 ;; End reset-password
+

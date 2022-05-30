@@ -1,10 +1,10 @@
 (ns sk.handlers.admin.users.view
   (:require [hiccup.page :refer [include-js]]
             [ring.util.anti-forgery :refer [anti-forgery-field]]
-            [sk.models.util :refer
-             [build-dialog build-dialog-buttons build-field build-image-field
-              build-image-field-script build-radio-buttons build-table]]
-            [sk.user :refer [config]]))
+            [sk.models.util :refer [build-dialog build-dialog-buttons
+                                    build-field build-image-field
+                                    build-image-field-script build-radio-buttons build-table]]
+            [sk.user :as user]))
 
 (def dialog-fields
   (list
@@ -127,7 +127,7 @@
       let d = new Date();
       let imgValue = val;
       let imgError = 'this.src=\"/images/placeholder_profile.png\"';
-      let imgPath = " (:path config) ";
+      let imgPath = " (:path user/config) ";
       let imgSrc = imgPath + imgValue + '?' + d.getTime();
       let imgTag = '<img id=img'+index+' src='+imgSrc+' onError='+imgError+' width=95 height=71 onclick=resizeImage(this) />';
       return imgTag;
