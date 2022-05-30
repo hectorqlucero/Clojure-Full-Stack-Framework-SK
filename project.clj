@@ -25,7 +25,7 @@
   :aot [sk.core]
   :plugins [[lein-ancient "0.7.0"]
             [lein-pprint "1.3.2"]]
-  :uberjar-name "pd.jar"
+  :uberjar-name "sk.jar"
   :target-path "target/%s"
   :ring {:handler sk.core
          :auto-reload? true
