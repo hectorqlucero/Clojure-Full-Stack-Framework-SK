@@ -3,14 +3,14 @@
             [clojure.java.io :as io]
             [clojure.java.jdbc :as j]
             [clojure.string :as st]
-            [sk.user :as user])
+            [sk.migrations :refer [config]])
   (:import java.text.SimpleDateFormat))
 
-(def db {:classname                       (:db-class user/config)
-         :subprotocol                     (:db-protocol user/config)
-         :subname                         (:db-name user/config)
-         :user                            (:db-user user/config)
-         :password                        (:db-pwd user/config)
+(def db {:classname                       (:db-class config)
+         :subprotocol                     (:db-protocol config)
+         :subname                         (:db-name config)
+         :user                            (:db-user config)
+         :password                        (:db-pwd config)
          :useSSL                          false
          :useTimezone                     true
          :useLegacyDatetimeCode           false
@@ -346,7 +346,7 @@
           file (:file params)
           postvars (dissoc (build-postvars table params) :file)
           the-id (str (get-id id postvars table))
-          path (str (:uploads user/config) folder "/")
+          path (str (:uploads config) folder "/")
           image-name (crud-upload-image table file the-id path)
           postvars (assoc postvars :imagen image-name :id the-id)
           result (Save db (keyword table) postvars ["id = ?" the-id])]
@@ -378,4 +378,4 @@
     (catch Exception e (.getMessage e))))
 
 (comment
-  (:port user/config))
+  (:port config))

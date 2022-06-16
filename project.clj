@@ -31,6 +31,6 @@
          :auto-reload? true
          :auto-refresh? false}
   :resources-paths ["shared" "resources"]
-  :aliases {"migrate" ["run" "-m" "sk.user/migrate"]
-            "rollback" ["run" "-m" "sk.user/rollback"]}
+  :aliases {"migrate" ["run" "-m" "sk.migrations/migrate"]
+            "rollback" ["run" "-m" "sk.migrations/rollback"]}
   :profiles {:uberjar {:aot :all}})

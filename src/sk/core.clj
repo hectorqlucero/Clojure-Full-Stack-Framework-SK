@@ -12,7 +12,7 @@
             [sk.models.crud :refer [KEY]]
             [sk.proutes :refer [proutes]]
             [sk.routes :refer [open-routes]]
-            [sk.user :as user])
+            [sk.migrations :refer [config]])
   (:gen-class))
 
 (defn wrap-login [hdlr]
@@ -31,7 +31,7 @@
 
 (defroutes app-routes
   (route/resources "/")
-  (route/files (:path user/config) {:root (:uploads user/config)})
+  (route/files (:path config) {:root (:uploads config)})
   open-routes
   (wrap-login proutes)
   (route/not-found "Not Found"))
@@ -49,7 +49,7 @@
                           (assoc-in [:session :store] (cookie-store {:key KEY}))
                           (assoc-in [:session :cookie-attrs] {:max-age 28800})
                           (assoc-in [:session :cookie-name] "LS"))))
-   {:port (:port user/config)}))
+   {:port (:port config)}))
 
 (comment
-  (:port user/config))
+  (:port config))
