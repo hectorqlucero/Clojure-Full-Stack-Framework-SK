@@ -1,11 +1,9 @@
 (ns sk.models.builder
   (:require [clojure.java.io :as io]
             [clojure.string :as st]
-            [clojure.string :as st]
             [hiccup.core :refer [html]]
             [sk.models.crud :refer
-             [build-grid-columns get-table-describe]]
-            [sk.models.util :refer [capitalize-words]]))
+             [build-grid-columns get-table-describe]]))
 
 (defn create-path [path]
   (.mkdir (io/file path)))
