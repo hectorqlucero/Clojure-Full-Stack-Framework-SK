@@ -201,10 +201,17 @@
 (defn build-pdf-headers [row]
   (str "[:paragraph {:align :left} \"" (st/upper-case (:field row)) "\"]\n"))
 
+(defn build-contactos-csv-headers [row]
+  (str (vec (map #(str (st/upper-case (:field %)) " ") row))))
+
+(defn build-contactos-csv-template [row]
+  (apply str (map #(str "(str $" (:field %) ") ") row)))
+
 (defn build-skeleton-handler [options]
   (let [folder (:folder options)
         titulo (:title options)
         table (:table options)
+        filename (str table ".csv")
         data (get-table-describe table)
         security (:secure options)
         root (:root options)
@@ -212,6 +219,8 @@
     (str
      "(ns " ns-root ".handler\n"
      "(:require \n"
+     "[clojure.data.csv :as csv]\n"
+     "[clojure.java.io :as java-io]\n"
      "[ring.util.io :refer [piped-input-stream]]\n"
      "[hiccup.core :refer [html]]\n"
      "[pdfkit-clj.core :refer [as-stream gen-pdf]]\n"
@@ -240,7 +249,7 @@
      ":headers {\"Content-Type\" \"application/pdf\"\n"
      "\"Content-Disposition\" \"attachment;filename='" folder ".pdf'\"}\n"
      ":body (as-stream (gen-pdf content))}\n"
-     "(application title ok nil \"Solo miembros pueden accessar esta opción!!!\"))"
+     "(application title ok js \"Solo miembros pueden accessar esta opción!!!\"))"
      "))\n\n"
      "(def " table "-pdf-template\n"
      "(template\n"
@@ -302,7 +311,27 @@
      ":headers {\"Content-Type\" \"application/pdf\"\n"
      "\"Content-Disposition\" \"attachment;filename='" table "'\"}\n"
      ":body (generate-report title)}\n"
-     "(application title ok js content))))")))
+     "(application title ok js content))))\n\n"
+     "(def " table "-csv-headers\n"
+     (build-contactos-csv-headers (rest data)) ")\n\n"
+     "(def " table "-csv-template\n"
+     "(template\n"
+     "[" (build-contactos-csv-template (rest data)) "]))\n\n"
+     "(defn build-csv [filename]\n"
+     "(let [rows (get-rows \"" table "\")]\n"
+     "(with-open [writer (java-io/writer filename)]\n"
+     "(csv/write-csv writer (cons (vec contactos-csv-headers) (contactos-csv-template rows))))))\n\n"
+     "(defn " table "-csv [_]\n"
+     "(build-csv \"" filename "\")\n"
+     "(let [filename \"" filename "\"\n"
+     "my-file (slurp filename)]\n"
+     "(java-io/delete-file filename)\n"
+     "{:status 200\n"
+     ":headers {\"Content-Type\" \"text/csv\"\n"
+     "\"Content-Disposition\" \"attachment;filename=" filename "\"}\n"
+     ":body my-file}"
+     "))"
+     )))
 
 (defn build-skeleton-model [options]
   (let [folder (:folder options)
@@ -323,7 +352,6 @@
 
 (defn build-skeleton-view [options]
   (let [folder (:folder options)
-        titulo (:title options)
         tabla (:table options)
         cols (map grid-col (build-grid-columns tabla))
         rows (map grid-row (build-grid-columns tabla))
@@ -333,14 +361,14 @@
      "(ns " ns-root ".view\n"
      "(:require "
      "[" ns-root ".model :refer [get-rows]]\n"
-     "[hiccup.page :refer [include-js]]))\n\n"
+     "))\n\n"
      "(defn my-body [row]\n"
      "[:tr\n"
      (html rows)
      "])\n\n"
      "(defn " folder "-view [title]\n"
      "(let [rows (get-rows \"" tabla "\")]\n"
-     "[:table.dg {:data-options \"remoteSort:false,fit:true,rownumbers:true,fitColumns:true\" :title \"" titulo "\"}\n"
+     "[:table.dg {:data-options \"remoteSort:false,fit:true,rownumbers:true,fitColumns:true\" :title title}\n"
      "[:thead\n"
      "[:tr\n"
      (html  cols)
