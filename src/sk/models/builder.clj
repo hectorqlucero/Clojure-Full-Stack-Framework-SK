@@ -236,7 +236,7 @@
      "content (" folder "-view title)]\n"
      (process-security security) "))\n\n"
      "(defn " folder "-reporte [_]\n"
-     "(let [title \" " titulo "\"\n"
+     "(let [title \"" titulo "\"\n"
      "ok (get-session-id)\n"
      "js nil\n"
      "content (html (" folder "-view title))]\n"
