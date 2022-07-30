@@ -201,10 +201,10 @@
 (defn build-pdf-headers [row]
   (str "[:paragraph {:align :left} \"" (st/upper-case (:field row)) "\"]\n"))
 
-(defn build-contactos-csv-headers [row]
+(defn build-csv-headers [row]
   (str (vec (map #(str (st/upper-case (:field %)) " ") row))))
 
-(defn build-contactos-csv-template [row]
+(defn build-csv-template [row]
   (apply str (map #(str "(str $" (:field %) ") ") row)))
 
 (defn build-skeleton-handler [options]
@@ -269,7 +269,7 @@
      ":size 10\n"
      ":border true\n"
      ":header (generate-report-header)}]\n"
-     "(contactos-pdf-template rows))))\n\n"
+     "(" table "-pdf-template rows))))\n\n"
      "(defn generate-report-header-options [title]\n"
      "{:title title\n"
      ":header {:x 20\n"
@@ -313,14 +313,14 @@
      ":body (generate-report title)}\n"
      "(application title ok js content))))\n\n"
      "(def " table "-csv-headers\n"
-     (build-contactos-csv-headers (rest data)) ")\n\n"
+     (build-csv-headers (rest data)) ")\n\n"
      "(def " table "-csv-template\n"
      "(template\n"
-     "[" (build-contactos-csv-template (rest data)) "]))\n\n"
+     "[" (build-csv-template (rest data)) "]))\n\n"
      "(defn build-csv [filename]\n"
      "(let [rows (get-rows \"" table "\")]\n"
      "(with-open [writer (java-io/writer filename)]\n"
-     "(csv/write-csv writer (cons (vec contactos-csv-headers) (contactos-csv-template rows))))))\n\n"
+     "(csv/write-csv writer (cons (vec " table "-csv-headers) (" table "-csv-template rows))))))\n\n"
      "(defn " table "-csv [_]\n"
      "(build-csv \"" filename "\")\n"
      "(let [filename \"" filename "\"\n"
