@@ -1,6 +1,6 @@
-# PD
+# SK
 
-An application that caters to pets
+An application skeleton that creates a skeleton for a full stack webpage
 
 
 ## Pre-requisites
