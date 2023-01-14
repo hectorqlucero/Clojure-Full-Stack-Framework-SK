@@ -11,7 +11,7 @@
             [sk.models.email :refer [host send-email]]
             [sk.models.util :refer [check-token create-token get-reset-url
                                     get-session-id]]
-            [sk.user :as user]))
+            [sk.migrations :refer [config]]))
 
 ;; Start registrar
 (defn registrar
@@ -88,7 +88,7 @@
                             "Si usted no intento cambiar su contraseña o no desea cambiarla, simplemente ignore este mensage.</br></br></br>"
                             "Sinceramente,</br></br>"
                             "La Administración")
-          body         {:from    (:email-user user/config)
+          body         {:from    (:email-user config)
                         :to      email
                         :subject subject
                         :body    [{:type    "text/html;charset=utf-8"

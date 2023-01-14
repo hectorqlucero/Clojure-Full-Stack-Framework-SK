@@ -1,9 +1,10 @@
 (defproject sk "0.1.0"
-  :description "Pet-Daleando"
-  :url "https://github.com/hectorqlucero/pd"
+  :description "Sitio"
+  :url "https://github.com/hectorqlucero/sk"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.11.0"]
+                 [org.clojure/data.csv "1.0.1"]
                  [compojure "1.6.2" :exclusions [commons-codec]]
                  [hiccup "1.0.5"]
                  [lib-noir "0.9.9"]
@@ -31,6 +32,6 @@
          :auto-reload? true
          :auto-refresh? false}
   :resources-paths ["shared" "resources"]
-  :aliases {"migrate" ["run" "-m" "sk.user/migrate"]
-            "rollback" ["run" "-m" "sk.user/rollback"]}
+  :aliases {"migrate" ["run" "-m" "sk.migrations/migrate"]
+            "rollback" ["run" "-m" "sk.migrations/rollback"]}
   :profiles {:uberjar {:aot :all}})
