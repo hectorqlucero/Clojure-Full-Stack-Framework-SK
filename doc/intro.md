@@ -10,3 +10,6 @@
   1. Handler
   2. Model
   3. View
+
+## Getting Started
+You will need an editor that can be configured to work nicely with clojure. I use **neovim**, but I also recommend **code**.
