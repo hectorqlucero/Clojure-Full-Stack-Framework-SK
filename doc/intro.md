@@ -1,3 +1,12 @@
 # Introduction to sk
 
-TODO: write [great documentation](http://jacobian.org/writing/what-to-write/)
+## What is sk?
+- Template to generate a full stack webpage:
+  1. Clojure as language.
+  2. MySQL as database.
+  3. Bootstrap for styling.
+  4. Easyui for the views.
+- Builder to build:
+  1. Handler
+  2. Model
+  3. View
