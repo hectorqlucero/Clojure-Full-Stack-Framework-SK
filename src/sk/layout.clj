@@ -97,7 +97,7 @@
    (include-css "/bootstrap/css/lumen.min.css")
    (include-css "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
    (include-css "/bxslider/dist/jquery.bxslider.min.css")
-   (include-css "/easyui/themes/gray/easyui.css")
+   (include-css "/easyui/themes/material-teal/easyui.css")
    (include-css "/easyui/themes/icon.css")
    (include-css "/easyui/themes/color.css")
    (include-css "/css/main.css")
