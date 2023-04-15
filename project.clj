@@ -21,7 +21,7 @@
                  [org.clojure/data.codec "0.1.1"]
                  [mysql/mysql-connector-java "8.0.32"]
                  [ragtime "0.8.1"]
-                 [ring/ring-core "1.9.6"]]
+                 [ring/ring-core "1.10.0"]]
   :main ^:skip-aot sk.core
   :aot [sk.core]
   :plugins [[lein-ancient "0.7.0"]
