@@ -3,14 +3,7 @@
             [sk.models.crud :refer [db Insert-multi Query!]]))
 
 (def menus-rows
-  [{:id 1
-    :type "O"
-    :admin "F"
-    :secure 0
-    :root "src/sk/handlers/"
-    :link "/home/login"
-    :description "Conectar"}
-   {:id 2
+  [{:id 2
     :type "P"
     :admin "T"
     :secure 2

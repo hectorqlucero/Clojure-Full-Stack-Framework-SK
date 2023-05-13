@@ -60,7 +60,8 @@
      [:span.navbar-toggler-icon]]
     [:div#collapsibleNavbar.collapse.navbar-collapse
      [:ul.navbar-nav
-      (or (build-public-menus) nil)]]]))
+      (or (build-public-menus) nil)
+      [:li.nav-item [:a.nav-link {:href "/home/login"} "Conectar"]]]]]))
 
 (defn menus-none []
   (list
