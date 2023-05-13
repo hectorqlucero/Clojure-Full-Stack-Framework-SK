@@ -10,7 +10,7 @@
                  [lib-noir "0.9.9"]
                  [com.draines/postal "2.0.5"]
                  [cheshire "5.11.0"]
-                 [clj-pdf "2.6.2"]
+                 [clj-pdf "2.6.3"]
                  [ondrs/barcode "0.1.0"]
                  [pdfkit-clj "0.1.7"]
                  [cljfmt "0.9.2"]
@@ -19,7 +19,7 @@
                  [date-clj "1.0.1"]
                  [org.clojure/java.jdbc "0.7.12"]
                  [org.clojure/data.codec "0.1.1"]
-                 [mysql/mysql-connector-java "8.0.32"]
+                 [mysql/mysql-connector-java "8.0.33"]
                  [ragtime "0.8.1"]
                  [ring/ring-core "1.10.0"]]
   :main ^:skip-aot sk.core
