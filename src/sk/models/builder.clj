@@ -3,7 +3,7 @@
             [clojure.string :as st]
             [hiccup.core :refer [html]]
             [sk.models.crud :refer
-             [build-grid-columns get-table-describe]]))
+             [build-grid-columns get-table-describe Save db]]))
 
 (defn create-path [path]
   (.mkdir (io/file path)))
@@ -187,11 +187,26 @@
   [options]
   (let [folder (:folder options)
         root (:root options)
-        path (str root folder)]
+        path (str root folder)
+        menu-id nil
+        menu-type "P"
+        menu-admin "T"
+        menu-secure (:secure options)
+        menu-root root
+        menu-link (:link options)
+        menu-desc (:title options)
+        mrow {:id menu-id
+              :type menu-type
+              :admin menu-admin
+              :secure menu-secure
+              :root menu-root
+              :link menu-link
+              :description menu-desc}]
     (create-path path)
     (spit (str path "/handler.clj") (build-grid-handler options))
     (spit (str path "/model.clj") (build-grid-model options))
-    (spit (str path "/view.clj") (build-grid-view options))))
+    (spit (str path "/view.clj") (build-grid-view options))
+    (Save db "menus" mrow ["id = ?" menu-id])))
 ;; end grid skeleton
 
 (defn build-pdf-template [row]
@@ -330,8 +345,7 @@
      ":headers {\"Content-Type\" \"text/csv\"\n"
      "\"Content-Disposition\" \"attachment;filename=" filename "\"}\n"
      ":body my-file}"
-     "))"
-     )))
+     "))")))
 
 (defn build-skeleton-model [options]
   (let [folder (:folder options)
@@ -390,11 +404,26 @@
   [options]
   (let [folder (:folder options)
         root (:root options)
-        path (str root folder)]
+        path (str root folder)
+        menu-id nil
+        menu-type "P"
+        menu-admin "F"
+        menu-secure (:secure options)
+        menu-root root
+        menu-link (:link options)
+        menu-desc (:title options)
+        mrow {:id menu-id
+              :type menu-type
+              :admin menu-admin
+              :secure menu-secure
+              :root menu-root
+              :link menu-link
+              :description menu-desc}]
     (create-path path)
     (spit (str path "/handler.clj") (build-skeleton-handler options))
     (spit (str path "/model.clj") (build-skeleton-model options))
-    (spit (str path "/view.clj") (build-skeleton-view options))))
+    (spit (str path "/view.clj") (build-skeleton-view options))
+    (Save db "menus" mrow ["id = ?" menu-id])))
 
 (comment
   (build-grid-skeleton {:folder "contactos"

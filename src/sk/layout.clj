@@ -1,25 +1,24 @@
 (ns sk.layout
   (:require [clj-time.core :as t]
+            [sk.handlers.menus.handler :refer [build-public-menus
+                                               build-private-menus
+                                               build-private-user-admin-menus
+                                               build-private-admin-admin-menus
+                                               build-private-admin-system-menus]]
             [hiccup.page :refer [html5 include-css include-js]]
             [sk.models.util :refer [user-level user-name]]
             [sk.migrations :refer [config]]))
 
 (defn build-admin []
   (list
-   [:a.dropdown-item {:href "#"} "menu1"]
-   [:a.dropdown-item {:href "#"} "menu2"]
+   (or (build-private-user-admin-menus) nil)
    (when (or
           (= (user-level) "A")
           (= (user-level) "S"))
      (list
-      [:a.dropdown-item {:href "#"} "admin1"]
-      [:a.dropdown-item {:href "#"} "admin2"]
-      [:a.dropdown-item {:href "#"} "admin3"]
-      [:a.dropdown-item {:href "#"} "admin4"]
-      [:a.dropdown-item {:href "#"} "admin5"]
-      [:a.dropdown-item {:href "#"} "admin6"]))
+      (or (build-private-admin-admin-menus) nil)))
    (when (= (user-level) "S")
-     [:a.dropdown-item {:href "/admin/users"} "Usuarios"])))
+     (or (build-private-admin-system-menus) nil))))
 
 (defn menus-private []
   (list
@@ -34,14 +33,7 @@
      [:span.navbar-toggler-icon]]
     [:div#collapsibleNavbar.collapse.navbar-collapse
      [:ul.navbar-nav
-      [:li.nav-item [:a.nav-link {:href "#"} "menu1"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "menu2"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "menu3"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "menu4"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "menu5"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "menu6"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "menu6"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "menu6"]]
+      (or (build-private-menus) nil)
       (when
        (or
         (= (user-level) "U")
@@ -68,15 +60,7 @@
      [:span.navbar-toggler-icon]]
     [:div#collapsibleNavbar.collapse.navbar-collapse
      [:ul.navbar-nav
-      [:li.nav-item [:a.nav-link {:href "#"} "menu1"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "menu2"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "menu3"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "menu4"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "menu5"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "menu6"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "menu7"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "menu8"]]
-      [:li.nav-item [:a.nav-link {:href "/home/login"} "Conectar"]]]]]))
+      (or (build-public-menus) nil)]]]))
 
 (defn menus-none []
   (list
