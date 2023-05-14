@@ -11,7 +11,7 @@ pom.xml.asc
 *.class
 *.calva
 *.clj-kondo
-*.lsp
+*.lsp/*
 /.lein-*
 /.nrepl-port
 .hgignore
