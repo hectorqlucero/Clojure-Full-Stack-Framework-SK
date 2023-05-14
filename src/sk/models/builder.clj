@@ -2,6 +2,9 @@
   (:require [clojure.java.io :as io]
             [clojure.string :as st]
             [hiccup.core :refer [html]]
+            [sk.models.cdb :refer [populate-tables]]
+            [sk.models.b-proutes :as private-routes]
+            [sk.models.b-routes :as open-routes]
             [sk.models.crud :refer
              [build-grid-columns get-table-describe Save db]]))
 
@@ -182,15 +185,30 @@
      "(defn " folder "-scripts []\n"
      "(include-js \"/js/grid.js\"))")))
 
+(defn build-grid-includes [options]
+  (let [folder (:folder options)
+        root (:root options)
+        ns-root (subs (str (st/replace root #"/" ".") folder) 4)]
+    (str "[" ns-root ".handler :as " folder "]")))
+
+(defn build-grid-routes [options]
+  [{:dt (str "(GET \"" (:link options) "\" req [] (" (:folder options) "/" (:folder options) " req))")}
+   {:dt (str "(POST \"" (:link options) "\" req [] (" (:folder options) "/" (:folder options) "-grid req))")}
+   {:dt (str "(GET \"" (:link options) "/edit/:id\" [id] (" (:folder options) "/" (:folder options) "-form id))")}
+   {:dt (str "(POST \"" (:link options) "/save\" req [] (" (:folder options) "/" (:folder options) "-save req))")}
+   {:dt (str "(POST \"" (:link options) "/delete\" req [] (" (:folder options) "/" (:folder options) "-delete req))")}])
+
 (defn build-grid-skeleton
   "secure: 1=s/a, 2=s, 3=all"
   [options]
   (let [folder (:folder options)
         root (:root options)
         path (str root folder)
+        route-rows (build-grid-routes options)
+        include-row {:dt (build-grid-includes options)}
         menu-id nil
-        menu-type "P"
-        menu-admin "T"
+        menu-type (:menu-type options)
+        menu-admin (:menu-admin options)
         menu-secure (:secure options)
         menu-root root
         menu-link (:link options)
@@ -206,7 +224,10 @@
     (spit (str path "/handler.clj") (build-grid-handler options))
     (spit (str path "/model.clj") (build-grid-model options))
     (spit (str path "/view.clj") (build-grid-view options))
-    (Save db "menus" mrow ["id = ?" menu-id])))
+    (populate-tables "proutes" route-rows)
+    (Save db "pincludes" include-row ["id = ?" nil])
+    (Save db "menus" mrow ["id = ?" menu-id])
+    (private-routes/main)))
 ;; end grid skeleton
 
 (defn build-pdf-template [row]
@@ -399,15 +420,31 @@
      \"
      ])\n")))
 
+(defn build-skeleton-includes [options]
+  (let [folder (:folder options)
+        root (:root options)
+        ns-root (subs (str (st/replace root #"/" ".") folder) 4)]
+    (str "[" ns-root ".handler :as " folder "-output]")))
+
+(defn build-skeleton-routes [options]
+  [{:dt (str "(GET \"" (:link options) "\" req [] (" (:folder options) "-output/" (:folder options) " req))")}
+   {:dt (str "(GET \"" (:link options) "/reporte\" req [] (" (:folder options) "-output/" (:folder options) "-reporte req))")}
+   {:dt (str "(GET \"" (:link options) "/pdf\" req [] (" (:folder options) "-output/" (:folder options) "-pdf req))")}
+   {:dt (str "(GET \"" (:link options) "/csv\" req [] (" (:folder options) "-output/" (:folder options) "-csv req))")}])
+
 (defn build-skeleton
   "secure: 1=s/a, 2=s, 3=all"
   [options]
   (let [folder (:folder options)
         root (:root options)
         path (str root folder)
+        route-rows (build-skeleton-routes options)
+        include-row {:dt (build-skeleton-includes options)}
         menu-id nil
-        menu-type "P"
-        menu-admin "F"
+        menu-type (:menu-type options)
+        include-table (if (= menu-type "P") "pincludes" "rincludes")
+        route-table (if (= menu-type "P") "proutes" "routes")
+        menu-admin (:menu-admin options)
         menu-secure (:secure options)
         menu-root root
         menu-link (:link options)
@@ -423,19 +460,26 @@
     (spit (str path "/handler.clj") (build-skeleton-handler options))
     (spit (str path "/model.clj") (build-skeleton-model options))
     (spit (str path "/view.clj") (build-skeleton-view options))
-    (Save db "menus" mrow ["id = ?" menu-id])))
+    (populate-tables route-table route-rows)
+    (Save db include-table include-row ["id = ?" nil])
+    (Save db "menus" mrow ["id = ?" menu-id])
+    (if (= menu-type "P") (private-routes/main) (open-routes/main))))
 
 (comment
-  (build-grid-skeleton {:folder "contactos"
-                        :title "Contactos"
-                        :table "contactos"
-                        :args "{:sort-extra \"nombre,paterno,materno\"}"
-                        :secure 1
-                        :link "/admin/contactos"
-                        :root "src/sk/handlers/admin/"})
+  (build-grid-skeleton {:folder "rincludes"
+                        :title "Open Includes"
+                        :table "rincludes"
+                        :args "{:sort-extra \"dt\"}"
+                        :secure 2
+                        :link "/admin/rincludes"
+                        :root "src/sk/handlers/admin/"
+                        :menu-type "P"
+                        :menu-admin "T"})
   (build-skeleton {:folder "contactos"
                    :title "Contactos"
                    :table "contactos"
                    :secure 3
                    :link "/contactos"
-                   :root "src/sk/handlers/"}))
+                   :root "src/sk/handlers/"
+                   :menu-type "P"
+                   :menu-admin "F"}))
