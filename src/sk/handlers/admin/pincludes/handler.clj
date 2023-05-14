@@ -1,9 +1,11 @@
 (ns sk.handlers.admin.pincludes.handler
-  (:require [sk.models.crud :refer [build-form-row build-form-save build-form-delete]]
-            [sk.models.grid :refer [build-grid]]
+  (:require [sk.handlers.admin.pincludes.view :refer [pincludes-scripts
+                                                      pincludes-view]]
             [sk.layout :refer [application]]
-            [sk.models.util :refer [get-session-id user-level]]
-            [sk.handlers.admin.pincludes.view :refer [pincludes-view pincludes-scripts]]))
+            [sk.models.crud :refer [build-form-delete build-form-row
+                                    build-form-save]]
+            [sk.models.grid :refer [build-grid]]
+            [sk.models.util :refer [get-session-id user-level]]))
 
 (defn pincludes [_]
   (let [title "Include Libraries"

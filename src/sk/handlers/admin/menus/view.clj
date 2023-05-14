@@ -1,9 +1,9 @@
 (ns sk.handlers.admin.menus.view
-  (:require
-   [hiccup.page :refer [include-js]]
-   [ring.util.anti-forgery :refer [anti-forgery-field]]
-   [sk.models.util :refer
-    [build-dialog build-dialog-buttons build-field build-table build-toolbar build-radio-buttons]]))
+  (:require [hiccup.page :refer [include-js]]
+            [ring.util.anti-forgery :refer [anti-forgery-field]]
+            [sk.models.util :refer
+    [build-dialog build-dialog-buttons build-field build-radio-buttons
+     build-table build-toolbar]]))
 
 (defn dialog-fields []
   (list

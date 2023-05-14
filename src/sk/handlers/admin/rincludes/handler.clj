@@ -1,9 +1,11 @@
 (ns sk.handlers.admin.rincludes.handler
-  (:require [sk.models.crud :refer [build-form-row build-form-save build-form-delete]]
-            [sk.models.grid :refer [build-grid]]
+  (:require [sk.handlers.admin.rincludes.view :refer [rincludes-scripts
+                                                      rincludes-view]]
             [sk.layout :refer [application]]
-            [sk.models.util :refer [get-session-id user-level]]
-            [sk.handlers.admin.rincludes.view :refer [rincludes-view rincludes-scripts]]))
+            [sk.models.crud :refer [build-form-delete build-form-row
+                                    build-form-save]]
+            [sk.models.grid :refer [build-grid]]
+            [sk.models.util :refer [get-session-id user-level]]))
 
 (defn rincludes [_]
   (let [title "Open Includes"

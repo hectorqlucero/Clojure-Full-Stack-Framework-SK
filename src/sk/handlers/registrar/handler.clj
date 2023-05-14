@@ -7,11 +7,11 @@
                                                 registrar-view reset-jwt-scripts
                                                 reset-jwt-view reset-password-scripts reset-password-view]]
             [sk.layout :refer [application error-404]]
+            [sk.migrations :refer [config]]
             [sk.models.crud :refer [build-postvars db Query Save Update]]
             [sk.models.email :refer [host send-email]]
             [sk.models.util :refer [check-token create-token get-reset-url
-                                    get-session-id]]
-            [sk.migrations :refer [config]]))
+                                    get-session-id]]))
 
 ;; Start registrar
 (defn registrar

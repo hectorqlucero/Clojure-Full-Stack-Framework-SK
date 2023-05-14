@@ -1,6 +1,5 @@
 (ns sk.models.b-proutes
-  (:require [sk.models.crud :refer [Query db]]
-            [clojure.java.io :as io]))
+  (:require [sk.models.crud :refer [db Query]]))
 
 (defn get-rows [table]
   (Query db (str "select * from " table " order by id")))
@@ -22,9 +21,9 @@
    (apply str (process "proutes"))
    ")"))
 
-(defn main []
+(defn main-private []
   (spit (str  "src/sk/routes/proutes.clj") (build-routes)))
 
 (comment
-  (main)
+  (main-private)
   (build-routes))

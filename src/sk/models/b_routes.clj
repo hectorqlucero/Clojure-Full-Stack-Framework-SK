@@ -1,6 +1,5 @@
 (ns sk.models.b-routes
-  (:require [sk.models.crud :refer [Query db]]
-            [clojure.java.io :as io]))
+  (:require [sk.models.crud :refer [db Query]]))
 
 (defn get-rows [table]
   (Query db (str "select * from " table " order by id")))
@@ -22,9 +21,9 @@
    (apply str (process "routes"))
    ")"))
 
-(defn main []
+(defn main-open []
   (spit (str  "src/sk/routes/routes.clj") (build-routes)))
 
 (comment
-  (main)
+  (main-open)
   (build-routes))

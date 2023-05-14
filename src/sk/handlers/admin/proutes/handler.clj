@@ -1,9 +1,11 @@
 (ns sk.handlers.admin.proutes.handler
-  (:require [sk.models.crud :refer [build-form-row build-form-save build-form-delete]]
-            [sk.models.grid :refer [build-grid]]
+  (:require [sk.handlers.admin.proutes.view :refer [proutes-scripts
+                                                    proutes-view]]
             [sk.layout :refer [application]]
-            [sk.models.util :refer [get-session-id user-level]]
-            [sk.handlers.admin.proutes.view :refer [proutes-view proutes-scripts]]))
+            [sk.models.crud :refer [build-form-delete build-form-row
+                                    build-form-save]]
+            [sk.models.grid :refer [build-grid]]
+            [sk.models.util :refer [get-session-id user-level]]))
 
 (defn proutes [_]
   (let [title "Private Routes"

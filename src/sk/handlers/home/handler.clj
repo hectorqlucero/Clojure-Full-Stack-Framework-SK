@@ -7,9 +7,9 @@
             [ring.util.anti-forgery :refer [anti-forgery-field]]
             [sk.handlers.home.view :refer [login-script login-view]]
             [sk.layout :refer [application error-404]]
+            [sk.migrations :refer [config]]
             [sk.models.crud :refer [db Query]]
-            [sk.models.util :refer [get-session-id]]
-            [sk.migrations :refer [config]]))
+            [sk.models.util :refer [get-session-id]]))
 
 ;; Start Main
 (def main-sql

@@ -1,5 +1,5 @@
 (ns sk.handlers.menus.model
-  (:require [sk.models.crud :refer [Query db]]))
+  (:require [sk.models.crud :refer [db Query]]))
 
 ;; Start build-open-menus
 (def open-menus-sql

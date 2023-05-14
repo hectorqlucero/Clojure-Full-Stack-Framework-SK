@@ -1,13 +1,10 @@
 (ns sk.layout
   (:require [clj-time.core :as t]
-            [sk.handlers.menus.handler :refer [build-public-menus
-                                               build-private-menus
-                                               build-private-user-admin-menus
-                                               build-private-admin-admin-menus
-                                               build-private-admin-system-menus]]
             [hiccup.page :refer [html5 include-css include-js]]
-            [sk.models.util :refer [user-level user-name]]
-            [sk.migrations :refer [config]]))
+            [sk.handlers.menus.handler :refer [build-private-admin-admin-menus
+                                               build-private-admin-system-menus build-private-menus build-private-user-admin-menus build-public-menus]]
+            [sk.migrations :refer [config]]
+            [sk.models.util :refer [user-level user-name]]))
 
 (defn build-admin []
   (list

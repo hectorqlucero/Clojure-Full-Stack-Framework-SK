@@ -1,12 +1,11 @@
 (ns sk.routes.proutes
-  (:require
-   [compojure.core :refer [defroutes GET POST]]
-   [sk.handlers.admin.menus.handler :as menus]
-   [sk.handlers.admin.users.handler :as users]
-   [sk.handlers.admin.pincludes.handler :as pincludes]
-   [sk.handlers.admin.proutes.handler :as proutes]
-   [sk.handlers.admin.rincludes.handler :as rincludes]
-   [sk.handlers.admin.routes.handler :as routes]))
+  (:require [compojure.core :refer [defroutes GET POST]]
+            [sk.handlers.admin.menus.handler :as menus]
+            [sk.handlers.admin.pincludes.handler :as pincludes]
+            [sk.handlers.admin.proutes.handler :as proutes]
+            [sk.handlers.admin.rincludes.handler :as rincludes]
+            [sk.handlers.admin.routes.handler :as routes]
+            [sk.handlers.admin.users.handler :as users]))
 
 (defroutes proutes
   (GET "/admin/menus" req [] (menus/menus req))

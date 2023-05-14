@@ -1,9 +1,8 @@
 (ns sk.handlers.menus.view
   (:require [sk.handlers.menus.model :refer [build-open-menus-rows
-                                             build-private-menus-rows
-                                             build-private-user-admin-menus-rows
                                              build-private-admin-admin-menus-rows
-                                             build-private-admin-system-menus-rows]]))
+                                             build-private-admin-system-menus-rows build-private-menus-rows
+                                             build-private-user-admin-menus-rows]]))
 
 ;; Start build-open-menus-view
 (defn build-open-menus [row]

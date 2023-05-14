@@ -1,9 +1,10 @@
 (ns sk.handlers.admin.routes.handler
-  (:require [sk.models.crud :refer [build-form-row build-form-save build-form-delete]]
-            [sk.models.grid :refer [build-grid]]
+  (:require [sk.handlers.admin.routes.view :refer [routes-scripts routes-view]]
             [sk.layout :refer [application]]
-            [sk.models.util :refer [get-session-id user-level]]
-            [sk.handlers.admin.routes.view :refer [routes-view routes-scripts]]))
+            [sk.models.crud :refer [build-form-delete build-form-row
+                                    build-form-save]]
+            [sk.models.grid :refer [build-grid]]
+            [sk.models.util :refer [get-session-id user-level]]))
 
 (defn routes [_]
   (let [title "Open Routes"

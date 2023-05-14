@@ -1,8 +1,7 @@
 (ns sk.handlers.admin.proutes.view
-  (:require
-   [hiccup.page :refer [include-js]]
-   [ring.util.anti-forgery :refer [anti-forgery-field]]
-   [sk.models.util :refer
+  (:require [hiccup.page :refer [include-js]]
+            [ring.util.anti-forgery :refer [anti-forgery-field]]
+            [sk.models.util :refer
     [build-dialog build-dialog-buttons build-field build-table build-toolbar]]))
 
 (defn dialog-fields []

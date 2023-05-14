@@ -9,10 +9,10 @@
             [ring.middleware.reload :as reload]
             [ring.middleware.session :refer [wrap-session]]
             [ring.middleware.session.cookie :refer [cookie-store]]
+            [sk.migrations :refer [config]]
             [sk.models.crud :refer [KEY]]
             [sk.routes.proutes :refer [proutes]]
-            [sk.routes.routes :refer [open-routes]]
-            [sk.migrations :refer [config]])
+            [sk.routes.routes :refer [open-routes]])
   (:gen-class))
 
 (defn wrap-login [hdlr]

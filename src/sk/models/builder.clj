@@ -2,11 +2,11 @@
   (:require [clojure.java.io :as io]
             [clojure.string :as st]
             [hiccup.core :refer [html]]
+            [sk.models.b-proutes :refer [main-private]]
+            [sk.models.b-routes :refer [main-open]]
             [sk.models.cdb :refer [populate-tables]]
-            [sk.models.b-proutes :as private-routes]
-            [sk.models.b-routes :as open-routes]
             [sk.models.crud :refer
-             [build-grid-columns get-table-describe Save db]]))
+             [build-grid-columns db get-table-describe Save]]))
 
 (defn create-path [path]
   (.mkdir (io/file path)))
@@ -227,7 +227,7 @@
     (populate-tables "proutes" route-rows)
     (Save db "pincludes" include-row ["id = ?" nil])
     (Save db "menus" mrow ["id = ?" menu-id])
-    (private-routes/main)))
+    (main-private)))
 ;; end grid skeleton
 
 (defn build-pdf-template [row]
@@ -463,15 +463,15 @@
     (populate-tables route-table route-rows)
     (Save db include-table include-row ["id = ?" nil])
     (Save db "menus" mrow ["id = ?" menu-id])
-    (if (= menu-type "P") (private-routes/main) (open-routes/main))))
+    (if (= menu-type "P") (main-private) (main-open))))
 
 (comment
-  (build-grid-skeleton {:folder "rincludes"
-                        :title "Open Includes"
-                        :table "rincludes"
-                        :args "{:sort-extra \"dt\"}"
+  (build-grid-skeleton {:folder "contactos"
+                        :title "Contactos"
+                        :table "contactos"
+                        :args "{:sort-extra \"nombre,paterno,materno\"}"
                         :secure 2
-                        :link "/admin/rincludes"
+                        :link "/admin/contactos"
                         :root "src/sk/handlers/admin/"
                         :menu-type "P"
                         :menu-admin "T"})

@@ -1,10 +1,10 @@
 (ns sk.handlers.admin.users.view
   (:require [hiccup.page :refer [include-js]]
             [ring.util.anti-forgery :refer [anti-forgery-field]]
+            [sk.migrations :refer [config]]
             [sk.models.util :refer [build-dialog build-dialog-buttons
                                     build-field build-image-field
-                                    build-image-field-script build-radio-buttons build-table]]
-            [sk.migrations :refer [config]]))
+                                    build-image-field-script build-radio-buttons build-table]]))
 
 (def dialog-fields
   (list
