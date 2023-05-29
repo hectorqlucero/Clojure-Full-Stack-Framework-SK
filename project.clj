@@ -33,5 +33,8 @@
          :auto-refresh? false}
   :resources-paths ["shared" "resources"]
   :aliases {"migrate" ["run" "-m" "sk.migrations/migrate"]
-            "rollback" ["run" "-m" "sk.migrations/rollback"]}
+            "rollback" ["run" "-m" "sk.migrations/rollback"]
+            "database" ["run" "-m" "sk.models.cdb/database"]
+            "private" ["run" "-m" "sk.models.b-proutes/main-private"]
+            "open" ["run" "-m" "sk.models.b-routes/main-open"]}
   :profiles {:uberjar {:aot :all}})
