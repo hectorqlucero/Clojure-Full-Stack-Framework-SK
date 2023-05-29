@@ -214,6 +214,14 @@
   (Insert-multi db (keyword table) rows)
   (Query! db "UNLOCK TABLES;"))
 
+(defn database []
+  (populate-tables "rincludes" rincludes-rows)
+  (populate-tables "routes" routes-rows)
+  (populate-tables "pincludes" pincludes-rows)
+  (populate-tables "proutes" proutes-rows)
+  (populate-tables "menus" menus-rows)
+  (populate-tables "users" users-rows))
+
 (comment
   (populate-tables "rincludes" rincludes-rows)
   (populate-tables "routes" routes-rows)
