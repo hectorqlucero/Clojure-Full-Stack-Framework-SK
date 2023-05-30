@@ -404,6 +404,7 @@
      "])\n\n"
      "(defn " folder "-view [title]\n"
      "(let [rows (get-rows \"" tabla "\")]\n"
+     "(list\n"
      "[:table.dg {:data-options \"remoteSort:false,fit:true,rownumbers:true,fitColumns:true\" :title title}\n"
      "[:thead\n"
      "[:tr\n"
@@ -420,7 +421,7 @@
      "[:a {:href\"/" folder "/csv\"\n"
      ":class \"easyui-linkbutton\"\n"
      ":data-options \"iconCls:'icon-large-smartart',plain: true\"} \"CSV\"]]\n"
-     "))\n\n"
+     ")))\n\n"
      "(defn " folder "-scripts []\n"
      "(include-js \"js/grid.js\""
      "))\n")))
