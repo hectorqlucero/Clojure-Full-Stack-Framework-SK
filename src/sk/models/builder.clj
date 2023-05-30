@@ -395,6 +395,7 @@
     (str
      "(ns " ns-root ".view\n"
      "(:require "
+     "[hiccup.page :refer [include-js]]"
      "[" ns-root ".model :refer [get-rows]]\n"
      "))\n\n"
      "(defn my-body [row]\n"
@@ -408,17 +409,21 @@
      "[:tr\n"
      (html  cols)
      "]]\n"
-     "[:tbody (map my-body rows)]]))\n\n"
+     "[:tbody (map my-body rows)]]\n"
+     "[:div#toolbar\n"
+     "[:a {:href\"/" folder "/reporte\n"
+     ":class \"easyui-linkbutton\""
+     ":data-options \"iconCls:'icon-print',plain: true\"} \"Reporte\"]\n"
+     "[:a {:href\"/" folder "/pdf\n"
+     ":class \"easyui-linkbutton\""
+     ":data-options \"iconCls:'icon-save',plain: true\"} \"PDF\"]\n"
+     "[:a {:href\"/" folder "/csv\n"
+     ":class \"easyui-linkbutton\""
+     ":data-options \"iconCls:'icon-large-smartart',plain: true\"} \"CSV\"]\n"
+     "))\n\n"
      "(defn " folder "-scripts []\n"
-     "[:script 
-     \"
-     var dg = $('.dg');
-     $(document).ready(function() {
-      dg.datagrid();
-      dg.datagrid('enableFilter');
-     });
-     \"
-     ])\n")))
+     "(include-js \"js/grid.js\""
+     ")\n")))
 
 (defn build-skeleton-includes [options]
   (let [folder (:folder options)
