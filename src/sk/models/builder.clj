@@ -405,7 +405,7 @@
      "(defn " folder "-view [title]\n"
      "(let [rows (get-rows \"" tabla "\")]\n"
      "(list\n"
-     "[:table.dg {:data-options \"remoteSort:false,fit:true,rownumbers:true,fitColumns:true\" :title title}\n"
+     "[:table.dg {:data-options \"remoteSort:false,fit:true,rownumbers:true,fitColumns:true,toolbar:'#toolbar'\" :title title}\n"
      "[:thead\n"
      "[:tr\n"
      (html  cols)
