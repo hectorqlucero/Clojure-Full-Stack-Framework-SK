@@ -411,19 +411,19 @@
      "]]\n"
      "[:tbody (map my-body rows)]]\n"
      "[:div#toolbar\n"
-     "[:a {:href\"/" folder "/reporte\n"
-     ":class \"easyui-linkbutton\""
+     "[:a {:href\"/" folder "/reporte\"\n"
+     ":class \"easyui-linkbutton\"\n"
      ":data-options \"iconCls:'icon-print',plain: true\"} \"Reporte\"]\n"
-     "[:a {:href\"/" folder "/pdf\n"
-     ":class \"easyui-linkbutton\""
+     "[:a {:href\"/" folder "/pdf\"\n"
+     ":class \"easyui-linkbutton\"\n"
      ":data-options \"iconCls:'icon-save',plain: true\"} \"PDF\"]\n"
-     "[:a {:href\"/" folder "/csv\n"
-     ":class \"easyui-linkbutton\""
-     ":data-options \"iconCls:'icon-large-smartart',plain: true\"} \"CSV\"]\n"
+     "[:a {:href\"/" folder "/csv\"\n"
+     ":class \"easyui-linkbutton\"\n"
+     ":data-options \"iconCls:'icon-large-smartart',plain: true\"} \"CSV\"]]\n"
      "))\n\n"
      "(defn " folder "-scripts []\n"
      "(include-js \"js/grid.js\""
-     ")\n")))
+     "))\n")))
 
 (defn build-skeleton-includes [options]
   (let [folder (:folder options)
@@ -475,7 +475,7 @@
                         :title "Contactos"
                         :table "contactos"
                         :args "{:sort-extra \"nombre,paterno,materno\"}"
-                        :secure 2
+                        :secure 1
                         :link "/admin/contactos"
                         :root "src/sk/handlers/admin/"
                         :menu-type "P"
