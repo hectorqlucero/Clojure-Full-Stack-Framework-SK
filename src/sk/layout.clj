@@ -78,7 +78,6 @@
    (include-css "/bootstrap/css/bootstrap.min.css")
    (include-css "/bootstrap/css/lumen.min.css")
    (include-css "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
-   (include-css "/bxslider/dist/jquery.bxslider.min.css")
    (include-css "/easyui/themes/material-teal/easyui.css")
    (include-css "/easyui/themes/icon.css")
    (include-css "/easyui/themes/color.css")
@@ -89,7 +88,6 @@
   (list
    (include-js "/easyui/jquery.min.js")
    (include-js "/popper/popper.min.js")
-   (include-js "/bxslider/dist/jquery.bxslider.min.js")
    (include-js "/bootstrap/js/bootstrap.min.js")
    (include-js "/easyui/jquery.easyui.min.js")
    (include-js "/easyui/jquery.edatagrid.js")
