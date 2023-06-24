@@ -35,6 +35,8 @@
   :aliases {"migrate" ["run" "-m" "sk.migrations/migrate"]
             "rollback" ["run" "-m" "sk.migrations/rollback"]
             "database" ["run" "-m" "sk.models.cdb/database"]
+            "grid" ["run" "-m" "sk.models.builder/build-grid"]
+            "dashboard" ["run" "-m" "sk.models.builder/build-dashboard"]
             "private" ["run" "-m" "sk.models.b-proutes/main-private"]
             "open" ["run" "-m" "sk.models.b-routes/main-open"]}
   :profiles {:uberjar {:aot :all}})

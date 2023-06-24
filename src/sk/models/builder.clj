@@ -471,6 +471,31 @@
     (Save db "menus" mrow ["id = ?" menu-id])
     (if (= menu-type "P") (main-private) (main-open))))
 
+(defn build-grid [table]
+  (build-grid-skeleton
+   {:folder table
+    :title (st/capitalize table)
+    :table table
+    :args "{:sort-extra \"id\"}"
+    :secure 1
+    :link (str "/admin/" table)
+    :root "src/sk/handlers/admin/"
+    :menu-type "P"
+    :menu-admin "T"})
+  (println (str "Codigo generado en: src/sk/handlers/admin/" table)))
+
+(defn build-dashboard [table]
+  (build-skeleton
+    {:folder table
+     :title (st/capitalize table)
+     :table table
+     :secure 3
+     :link "/contactos"
+     :root "src/sk/handlers/"
+     :menu-type "P"
+     :menu-admin "F"})
+  (println (str "Codigo generado en: src/sk/handlers/" table)))
+
 (comment
   (build-grid-skeleton {:folder "contactos"
                         :title "Contactos"
