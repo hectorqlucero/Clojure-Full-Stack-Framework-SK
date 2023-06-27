@@ -1,6 +1,6 @@
 {:db-protocol  "mysql"
  :db-name      "//localhost:3306/sk?characterEncoding=UTF-8&serverTimezone=America/Los_Angeles"
- :database-url "mysql://localhost:3306/sk?user=root&password=Patito0257.&serverTimezone=America/Los_Angeles"
+ :database-url "mysql://localhost:3306/sk?user=root&password=xxxxx&serverTimezone=America/Los_Angeles"
  :db-user      "root"
  :db-pwd       "xxxxx"
  :db-class     "com.mysql.cj.jdbc.Driver"
