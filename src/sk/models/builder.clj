@@ -490,7 +490,7 @@
      :title (st/capitalize table)
      :table table
      :secure 3
-     :link "/contactos"
+     :link (str "/" table)
      :root "src/sk/handlers/"
      :menu-type "P"
      :menu-admin "F"})
