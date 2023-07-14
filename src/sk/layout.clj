@@ -58,7 +58,7 @@
     [:div#collapsibleNavbar.collapse.navbar-collapse
      [:ul.navbar-nav
       (do (or (build-public-menus) nil)
-      [:li.nav-item [:a.nav-link {:href "/home/login"} "Conectar"]])]]]))
+          [:li.nav-item [:a.nav-link {:href "/home/login"} "Conectar"]])]]]))
 
 (defn menus-none []
   (list
@@ -79,6 +79,7 @@
    (include-css "/bootstrap/css/lumen.min.css")
    (include-css "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
    (include-css "/easyui/themes/material-teal/easyui.css")
+   (include-css "/easyui/themes/mobile.css")
    (include-css "/easyui/themes/icon.css")
    (include-css "/easyui/themes/color.css")
    (include-css "/css/main.css")
@@ -90,6 +91,7 @@
    (include-js "/popper/popper.min.js")
    (include-js "/bootstrap/js/bootstrap.min.js")
    (include-js "/easyui/jquery.easyui.min.js")
+   (include-js "/easyui/jquery.easyui.mobile.js")
    (include-js "/easyui/jquery.edatagrid.js")
    (include-js "/easyui/datagrid-detailview.js")
    (include-js "/easyui/datagrid-groupview.js")
@@ -108,43 +110,48 @@
                     (:site-name config))]
           [:meta {:charset "UTF-8"}]
           [:meta {:name "viewport"
-                  :content "width=device-width, initial-scale=1"}]
+                  :content "initial-scale=1.0,maximum-scale=1.0,user-scalable=no"}]
           (app-css)
           [:link {:rel "shortcut icon"
                   :type "image/x-icon"
                   :href "data:image/x-icon;,"}]]
-         [:body {:style "width:100vw;height:98vh;border:1px solid #000;"}
-          [:div.container {:style "height:88vh;margin-top:75px;"}
-           (cond
-             (= ok -1) (menus-none)
-             (= ok 0) (menus-public)
-             (> ok 0) (menus-private))
-           [:div.easyui-panel {:data-options "fit:true,border:false" :style "padding-left:14px;"} content]]
+         [:body
+          [:div.easyui-navpanel
+           [:header
+            [:div.m-toolbar
+             (cond
+               (= ok -1) (menus-none)
+               (= ok 0) (menus-public)
+               (> ok 0) (menus-private))]]
+           content
+           [:footer
+            [:div.m-toolbar
+             [:div.m-title  "Copyright &copy" (t/year (t/now)) " Lucero Systems - All Rights Reserved"]]]]
           (app-js)
-          js]
-         [:footer.bg-secondary.text-center.fixed-bottom
-          [:span  "Copyright &copy" (t/year (t/now)) " Lucero Systems - All Rights Reserved"]]))
+          js]))
 
 (defn error-404 [content return-url]
   (html5 {:ng-app (:site-name config) :lang "es"}
          [:head
-          [:title "Mesaje"]
+          [:title "Mensaje"]
           [:meta {:charset "UTF-8"}]
           [:meta {:name "viewport"
-                  :content "width=device-width, initial-scale=1"}]
+                  :content "initial-scale=1.0,maximum-scale=1.0,user-scalable=no"}]
           (app-css)
-          [:link {:rel "shortcut iconcompojure"
+          [:link {:rel "shortcut icon"
                   :type "image/x-icon"
                   :href "data:image/x-icon;,"}]]
-         [:body {:style "width:100vw;height:98vh;border:1px solid #000;"}
-          [:div.container {:style "height:88vh;margin-top:75px;"}
-           (menus-none)
+         [:body
+          [:div.easyui-navpanel
+           [:header
+            [:div.m-toolbar
+             (menus-none)]]
            [:div.easyui-panel {:data-options "fit:true,border:false" :style "padding-left:14px;"}
             [:div
              [:p [:h3 [:b "Mensaje: "]] content]
-             [:p [:h3 [:a {:href return-url} "Clic aqui para " [:strong "Continuar"]]]]]]]
-
+             [:p [:h3 [:a {:href return-url} "Clic aqui para " [:strong "Continuar"]]]]]]
+           [:footer
+            [:div.m-toolbar
+             [:div.m-title  "Copyright &copy" (t/year (t/now)) " Lucero Systems - All Rights Reserved"]]]]
           (app-js)
-          nil]
-         [:footer.bg-secondary.text-center.fixed-bottom
-          [:span  "Copyright &copy" (t/year (t/now)) " Lucero Systems - All Rights Reserved"]]))
+          nil]))
