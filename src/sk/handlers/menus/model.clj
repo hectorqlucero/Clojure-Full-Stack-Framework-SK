@@ -9,8 +9,8 @@
     *
     FROM menus
     WHERE
-    type = 'O' and
-    secure = '0'
+    (type = 'O' or type = 'B')
+    and secure = '0'
     ORDER BY description
     "))
 
@@ -27,9 +27,9 @@
     *
     FROM menus
     WHERE
-    type = 'P' and
-    admin = 'F' and
-    secure = 3
+    (type = 'P' or type = 'B')
+   and admin = 'F' 
+   and (secure = 3 or secure = 0)
     ORDER BY description
     "))
 

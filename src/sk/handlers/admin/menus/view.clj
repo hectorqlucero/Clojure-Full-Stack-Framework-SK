@@ -23,7 +23,12 @@
       :name "type"
       :class "easyui-radiobutton"
       :value "P"
-      :label "Private"}))
+      :label "Private"}
+     {:id "type_b"
+      :name "type"
+      :class "easyui-radiobutton"
+      :value "B"
+      :label "Both"}))
    (build-radio-buttons
     "Admin:"
     (list

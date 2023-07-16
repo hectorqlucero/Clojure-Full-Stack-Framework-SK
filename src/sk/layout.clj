@@ -2,7 +2,10 @@
   (:require [clj-time.core :as t]
             [hiccup.page :refer [html5 include-css include-js]]
             [sk.handlers.menus.handler :refer [build-private-admin-admin-menus
-                                               build-private-admin-system-menus build-private-menus build-private-user-admin-menus build-public-menus]]
+                                               build-private-admin-system-menus 
+                                               build-private-menus 
+                                               build-private-user-admin-menus 
+                                               build-public-menus]]
             [sk.migrations :refer [config]]
             [sk.models.util :refer [user-level user-name]]))
 
@@ -118,7 +121,7 @@
          [:body
           [:div.easyui-navpanel
            [:header
-            [:div.m-toolbar
+            [:div.m-toolbar {:style "margin-bottom:30px;"}
              (cond
                (= ok -1) (menus-none)
                (= ok 0) (menus-public)
