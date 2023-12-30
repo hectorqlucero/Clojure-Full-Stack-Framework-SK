@@ -29,12 +29,12 @@ An application skeleton that creates a skeleton for a full stack webpage
   :uploads        "./uploads"
   :path           "/uploads/"}
   ```
-4. To create first migration: lein migrate
+## From project directory:
+4. lein migrate
+5. lein database
+6. lein run
 
-   resources/migrations
-
-## Database migrations
-Go to project directory and type: lein migrate
+## Database migrations - from 4
 ### Tables created:
 1. users
 2. menus
@@ -43,16 +43,11 @@ Go to project directory and type: lein migrate
 5. routes
 6. rincludes
 
-## Create temporary users. Users created below:
-Go to project directory and type: lein database
+## Create temporary users from 5. Users created below:
 ### Users created:
 1. user: sistema@gmail.com pass: sistema
 2. user: admin@gmail.com   pass: admin
 3. user: user@gmail.com    pass: user
-
-## Running
-Go to project directory and type: Lein run
-
 
 ## License
 
