@@ -109,17 +109,20 @@
 1. Look at /resources/templates for examples of different input types ex. combobox, date, email, image etc...
 2. Look at /src/sk/handlers/tref/handler.clj for examples of lookups for combobox fields, or other misc routes.
 3. Look at /src/sk/models/crud.clj for functions to generate crud sql stmts.
-- Query ex:
+- Query ex: (note on all of the crud examples 'db' is the database connection from /src/sk/models/crud.clj
  ``` 
 (Query db "select * from users") 
 ``` 
 - Query! ex: 
 ``` 
-(let [id 1] (Query! db ["delect from users where id = ?" id ])) 
+(let [id 1] 
+  (Query! db ["delect from users where id = ?" id ])) 
 ```
 - Insert ex: 
-``` (let [row {:username "Gido" :password "somepwd"}
-          table "users"] (Insert db table row)) 
+``` 
+(let [row {:username "Gido" :password "somepwd"}
+      table "users"] 
+   (Insert db table row)) 
 ```
 - Insert multi ex:
 ```
@@ -132,7 +135,23 @@
     ])
 (let [table "users"
       rows data]
- (Insert-multi db table rows))
+  (Insert-multi db table rows))
+```
+- Update ex:
+```
+(let [table "users"
+      row {:username "Gido"
+           :password "gpass"}
+      where-clause "id = 5"]
+  (Update db table row where-clause))
+```
+- Save ex:  (Note this will create a new item if it does not find and existing item and update an existing item if it exists)
+```
+(let [table "users"
+      row {:username "gido"
+           :password "gmpass"}
+     where-clause nil]
+  (Save db table row where-clause))
 ```
 
 ## License
