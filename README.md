@@ -33,10 +33,22 @@ An application skeleton that creates a skeleton for a full stack webpage
 
    resources/migrations
 
-  ```
-  
 ## Database migrations
 Go to project directory and type: lein migrate
+###Tables created:
+1. users
+2. menus
+3. pincludes
+4. proutes
+5. routes
+6. rincludes
+
+## Create temporary users. Users created below:
+Go to project directory and type: lein database
+###Users created:
+1. user: sistema@gmail.com pass: sistema
+2. user: admin@gmail.com   pass: admin
+3. user: user@gmail.com    pass: user
 
 ## Running
 Go to project directory and type: Lein run
