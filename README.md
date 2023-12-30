@@ -34,7 +34,7 @@ An application skeleton that creates a skeleton for a full stack webpage
 5. lein database
 6. lein run
 
-## Database migrations - from 4
+## Database migrations
 ### Tables created:
 1. users
 2. menus
@@ -43,7 +43,7 @@ An application skeleton that creates a skeleton for a full stack webpage
 5. routes
 6. rincludes
 
-## Create temporary users from 5. Users created below:
+## Temporary users
 ### Users created:
 1. user: sistema@gmail.com pass: sistema
 2. user: admin@gmail.com   pass: admin
