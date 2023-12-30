@@ -71,6 +71,21 @@
 2. user: admin@gmail.com   pass: admin
 3. user: user@gmail.com    pass: user
 
+## This concludes the installation and you have a fully functional full stack web page application
+
+# DOCUMENTATION
+
+## CREATE A CRUD GRID FOR A TABLE
+- Create migration files for new table under /resources/migrations.  Look at other migrations to get syntax
+- From project directory: execute lein migrate to create the new table on the database
+- From project directory: execute lein grid 'yourtablename' this will create the following:
+1. A folder /src/sk/handlers/'yourtablename'
+2. A file /src/sk/handlers/'yourtablename'/handler.clj
+3. A file /src/sk/handlers/'yourtablename'/model.clj
+4. A file /src/sk/handlers/'yourtablename'/view.clj
+5. Make sure to edit and modify files as needed.
+6. Make sure to recompile program with 'lein run' to update software with the new routes.
+
 ## License
 
 Copyright © 2019 LS
