@@ -1,6 +1,6 @@
 # SK Full Stack web page generation
 
-# DEMO SITE CREATED WITH THIS TOOL: ([DEMO SITE]) (https://ciclismomexicali.org).
+## DEMO SITE CREATED WITH THIS TOOL: [Cicloturismo] (https://ciclismomexicali.org).
 
 # Front End
 - bootstrap4
