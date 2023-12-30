@@ -1,12 +1,29 @@
-# SK
+# SK Full Stack web page generation
 
-An application skeleton that creates a skeleton for a full stack webpage
 # Front End
-1. bootstrap4
-2. easyui
+- bootstrap4
+- easyui
 
 # Back End
-1. clojure - look at project.clj for libraries used
+- MySQL database
+- clojure - look at project.clj for libraries used
+
+# Features
+- User validation
+- Email generation
+- PDF report generation
+- CRUD Grid generation with filter, search, sort etc...
+- DASHBOARD generation with filter, search, sort, pdf, export to csv...
+- Migrations with ragtime
+- Automated menus generated and stored in the database, with an administration crud grid to administer.
+- Automated routes generated and stored in the database, with an administration crud grid to administer.
+- lein migrate is a lein alias to create a ragtime migration
+- lein rollback is a lein alias to rollback a migration
+- lein database is a lein alias to create temporary users
+- lein grid 'tablename' is a lein alias to create crud grid and all menus and routes.
+- lein dashboard 'tablename' is a lein alias to create dashboard grid and all menus and routes.
+- Supports both open and private routes. i.e. open no login and private you must have valid user to login.
+- All menus, routes, and private routes are stored in the database. Crud grids available to administer menus and routes.
 
 ## Pre-requisites
 1. leiningen 2.0.0 or above installed
