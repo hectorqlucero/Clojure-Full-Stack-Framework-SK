@@ -1,7 +1,12 @@
 # SK
 
 An application skeleton that creates a skeleton for a full stack webpage
+# Front End
+1. bootstrap4
+2. easyui
 
+# Back End
+1. clojure - look at project.clj for libraries used
 
 ## Pre-requisites
 1. leiningen 2.0.0 or above installed
