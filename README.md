@@ -108,6 +108,7 @@
 ## TIPS FOR CREATING FORM INPUT PROMPTS
 - Look at /resources/templates for examples of different input types ex. combobox, date, email, image etc...
 - Look at /src/sk/handlers/tref/handler.clj for examples of lookups for combobox fields, or other misc routes.
+- Look at /src/sk/models/crud.clj for functions to generate crud sql stmts.
 
 ## License
 
