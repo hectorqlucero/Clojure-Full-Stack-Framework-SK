@@ -148,9 +148,10 @@
 - Save ex:  (Note this will create a new item if it does not find and existing item and update an existing item if it exists)
 ```
 (let [table "users"
+      id nil
       row {:username "gido"
            :password "gmpass"}
-     where-clause nil]
+     where-clause (str "id = ?" id)]
   (Save db table row where-clause))
 ```
 
