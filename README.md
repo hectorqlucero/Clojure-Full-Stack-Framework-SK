@@ -109,12 +109,20 @@
 1. Look at /resources/templates for examples of different input types ex. combobox, date, email, image etc...
 2. Look at /src/sk/handlers/tref/handler.clj for examples of lookups for combobox fields, or other misc routes.
 3. Look at /src/sk/models/crud.clj for functions to generate crud sql stmts.
-- Query ex. ... (Query db "select * from users") ...
-- Query! ex. ... (let [id 1] (Query! db ["delect from users where id = ?" id ])) ...
-- Insert ex. ... (let [row {:username "Gido" :password "somepwd"}
-                       table "users"] (Insert db table row)) ...
+- Query ex:
+ ``` 
+(Query db "select * from users") 
+``` 
+- Query! ex: 
+``` 
+(let [id 1] (Query! db ["delect from users where id = ?" id ])) 
+```
+- Insert ex: 
+``` (let [row {:username "Gido" :password "somepwd"}
+          table "users"] (Insert db table row)) 
+```
 - Insert multi ex:
-...
+```
 (def data
     [
         {:username "Gido"
@@ -125,7 +133,7 @@
 (let [table "users"
       rows data]
  (Insert-multi db table rows))
-...
+```
 
 ## License
 
