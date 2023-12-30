@@ -1,5 +1,7 @@
 # SK Full Stack web page generation
 
+# DEMO SITE CREATED WITH THIS TOOL: [DEMO SITE] (https://ciclismomexicali.org).
+
 # Front End
 - bootstrap4
 - easyui
@@ -75,16 +77,37 @@
 
 # DOCUMENTATION
 
-## CREATE A CRUD GRID FOR A TABLE
-- Create migration files for new table under /resources/migrations.  Look at other migrations to get syntax
-- From project directory: execute lein migrate to create the new table on the database
-- From project directory: execute lein grid 'yourtablename' this will create the following:
-1. A folder /src/sk/handlers/'yourtablename'
-2. A file /src/sk/handlers/'yourtablename'/handler.clj
-3. A file /src/sk/handlers/'yourtablename'/model.clj
-4. A file /src/sk/handlers/'yourtablename'/view.clj
-5. Make sure to edit and modify files as needed.
-6. Make sure to recompile program with 'lein run' to update software with the new routes.
+## CREATE A CRUD GRID FOR A TABLE - FROM PROJECT FOLDER COMMAND LINE USING THE LEIN ALIASES
+1. Create migration files for new table under /resources/migrations.  Look at other migrations to get syntax
+2. From project directory: execute lein migrate to create the new table on the database
+3. From project directory: execute lein grid 'yourtablename' this will create the following:
+- A folder /src/sk/handlers/admin/'yourtablename'
+- A file /src/sk/handlers/admin/'yourtablename'/handler.clj
+- A file /src/sk/handlers/admin/'yourtablename'/model.clj
+- A file /src/sk/handlers/admin/'yourtablename'/view.clj
+- Make sure to edit and modify files as needed.
+- Make sure to recompile program with 'lein run' to update software with the new routes.
+
+## CREATE A DASHBOARD FOR A TABLE - FROM PROJECT FOLDER COMMAND LINE USING THE LEIN ALIASES
+1. From project directory: execute lein dashboard 'yourtablename' this will create the following:
+- A folder /scr/sk/handlers/'yourtablename'
+- A file /src/sk/handlers/'yourtablename'/handler.clj
+- A file /src/sk/handlers/'yourtablename'/model.clj
+- A file /src/sk/handlers/'yourtablename'/view.clj
+- Make sure to edit and modify files as needed.
+- Make suer to recompile program with 'lein run' to update software with the new routes.
+
+## REBUILD PRIVATE ROUTES IF MANUALLY CREATED - FROM PROJECT FOLDER COMMAND LINE USING THE LEIN ALIASES
+1. lein private
+- Will update system to accomodate changes for menus/private routes etc...
+
+## REBUILD OPEN ROUTES IF MANUALLY CREATED - FROM PROJECT FOLDER COMMAND LINE USING THE LEIN ALIASES
+1. lein open
+- Will update system to accomodate changes for msnu/routes etc...
+
+## TIPS FOR CREATING FORM INPUT PROMPTS
+- Look at /resources/templates for examples of different input types ex. combobox, date, email, image etc...
+- Look at /src/sk/handlers/tref/handler.clj for examples of lookups for combobox fields, or other misc routes.
 
 ## License
 
