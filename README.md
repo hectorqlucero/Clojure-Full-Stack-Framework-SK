@@ -29,13 +29,13 @@ An application skeleton that creates a skeleton for a full stack webpage
   :uploads        "./uploads"
   :path           "/uploads/"}
   ```
-4. To create the tables needed you can find the information here:
+4. To create first migration: lein migrate
 
    resources/migrations
 
 ## Database migrations
 Go to project directory and type: lein migrate
-###Tables created:
+### Tables created:
 1. users
 2. menus
 3. pincludes
@@ -45,7 +45,7 @@ Go to project directory and type: lein migrate
 
 ## Create temporary users. Users created below:
 Go to project directory and type: lein database
-###Users created:
+### Users created:
 1. user: sistema@gmail.com pass: sistema
 2. user: admin@gmail.com   pass: admin
 3. user: user@gmail.com    pass: user
