@@ -31,6 +31,7 @@
 1. leiningen 2.0.0 or above installed
 2. jdk8 or above
 3. mySQL or MariaDB
+4. wkhtmltopdf *Needed for pdfkit-clj library*
 
 ## Usage
 1. Create a database "xxxxx" in mySQL or MariaDB.  Note: "xxxxx" refers to what you will call your database, so replace with your database name created.
