@@ -82,6 +82,149 @@
 
 # DOCUMENTATION
 
+## LETS CREATE A CONTACTS WEB PAGE WITH A GRID TO MAINTAIN CONTACTS AND A DASHBOARD TO DISPLAY, SORT, FILTER, OUTPUT REPORTS AND EXPORT DATA TO CSV
+### I am asumming you have your development editor configured to work with Clojure. Vim/Fireplace or Spacemac, vscode/Calba etc...
+1. Create an empty MySQL database with any client. Call this database 'demo'
+2. From a terminal Clone the repository *git clone https://github.com/hectorqlucero/Clojure-Full-Stack-Framework-SK.git*
+3. mv Clojure-Full-Stack-Framework-SK demo *Rename the clone folder demo*
+4. cd demo
+5. cp resources/private/config_example.clj config.clj
+   config.clj will look like this:
+   ```
+    ;; Replace all "xxxxx" with your configuration
+    {:db-protocol  "mysql"
+    :db-name      "//localhost:3306/xxxxx?characterEncoding=UTF-8&serverTimezone=America/Los_Angeles" ; Change me
+    :database-url "mysql://localhost:3306/xxxxx?user=root&password=xxxxx&serverTimezone=America/Los_Angeles" ; Change me
+    :db-user      "root"
+    :db-pwd       "xxxxx" ; Change me
+    :db-class     "com.mysql.cj.jdbc.Driver"
+    :email-host   "xxxxx" ; Optional
+    :email-user   "xxxxx" ; Optional
+    :email-pwd    "xxxxx" ; Optional
+    :port         3000
+    :tz           "US/Pacific"
+    :site-name    "xxxxx" ; Change me
+    :company-name "xxxxx" ; Change me
+    :uploads      "./uploads/xxxxx/" ; Change me
+    :base-url     "http://0.0.0.0:3000/"
+    :img-url      "https://0.0.0.0/uploads/"
+    :path         "/uploads/"}
+   ```
+6. With your editor/IDE of choice open /resources/private/config.clj and modify file to look like this:
+   ```
+    ;; Replace all "xxxxx" with your configuration
+    {:db-protocol  "mysql"
+    :db-name      "//localhost:3306/demo?characterEncoding=UTF-8&serverTimezone=America/Los_Angeles" ; Change me
+    :database-url "mysql://localhost:3306/demo?user=root&password=your_database_password&serverTimezone=America/Los_Angeles" ; Change me
+    :db-user      "root"
+    :db-pwd       "your_database_password" ; Change me
+    :db-class     "com.mysql.cj.jdbc.Driver"
+    :email-host   "xxxxx" ; Optional
+    :email-user   "xxxxx" ; Optional
+    :email-pwd    "xxxxx" ; Optional
+    :port         3000
+    :tz           "US/Pacific"
+    :site-name    "Contacs" ; Change me
+    :company-name "XYZ Company" ; Change me
+    :uploads      "./uploads/demo/" ; Change me
+    :base-url     "http://0.0.0.0:3000/"
+    :img-url      "https://0.0.0.0/uploads/"
+    :path         "/uploads/"}
+   ```
+   *Note:* your_database_password is the password that you gave to MySQL.  Please setup MySQL with a password, don't use a blak password
+7. Go to the root of your project with your editor of choice and edit *project.clj* the file looks like this:
+  ```
+  (defproject sk "0.1.0"
+  :description "Sitio" ; Change me
+  :url "https://github.com/hectorqlucero/sk" ; Change me
+  :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
+            :url "https://www.eclipse.org/legal/epl-2.0/"}
+  :dependencies [[org.clojure/clojure "1.11.1"]
+                 [org.clojure/data.csv "1.0.1"]
+                 [compojure "1.7.0"]
+                 [hiccup "1.0.5"]
+                 [lib-noir "0.9.9"]
+                 [com.draines/postal "2.0.5"]
+                 [cheshire "5.12.0"]
+                 [clj-pdf "2.6.8"]
+                 [ondrs/barcode "0.1.0"]
+                 [pdfkit-clj "0.1.7"]
+                 [cljfmt "0.9.2"]
+                 [clj-jwt "0.1.1"]
+                 [clj-time "0.15.2"]
+                 [date-clj "1.0.1"]
+                 [org.clojure/java.jdbc "0.7.12"]
+                 [org.clojure/data.codec "0.1.1"]
+                 [mysql/mysql-connector-java "8.0.33"]
+                 [ragtime "0.8.1"]
+                 [ring/ring-core "1.11.0"]]
+  :main ^:skip-aot sk.core
+  :aot [sk.core]
+  :plugins [[lein-ancient "0.7.0"]
+            [lein-pprint "1.3.2"]]
+  :uberjar-name "sk.jar" ; Change me
+  :target-path "target/%s"
+  :ring {:handler sk.core
+         :auto-reload? true
+         :auto-refresh? false}
+  :resources-paths ["shared" "resources"]
+  :aliases {"migrate" ["run" "-m" "sk.migrations/migrate"]
+            "rollback" ["run" "-m" "sk.migrations/rollback"]
+            "database" ["run" "-m" "sk.models.cdb/database"]
+            "grid" ["run" "-m" "sk.models.builder/build-grid"]
+            "dashboard" ["run" "-m" "sk.models.builder/build-dashboard"]
+            "private" ["run" "-m" "sk.models.b-proutes/main-private"]
+            "open" ["run" "-m" "sk.models.b-routes/main-open"]}
+  :profiles {:uberjar {:aot :all}})
+  ```
+  Change this file to look like this:
+  ```
+  (defproject sk "0.1.0"
+  :description "Contacts" ; Change me
+  :url "https://github.com/hectorqlucero/demo" ; Change me
+  :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
+            :url "https://www.eclipse.org/legal/epl-2.0/"}
+  :dependencies [[org.clojure/clojure "1.11.1"]
+                 [org.clojure/data.csv "1.0.1"]
+                 [compojure "1.7.0"]
+                 [hiccup "1.0.5"]
+                 [lib-noir "0.9.9"]
+                 [com.draines/postal "2.0.5"]
+                 [cheshire "5.12.0"]
+                 [clj-pdf "2.6.8"]
+                 [ondrs/barcode "0.1.0"]
+                 [pdfkit-clj "0.1.7"]
+                 [cljfmt "0.9.2"]
+                 [clj-jwt "0.1.1"]
+                 [clj-time "0.15.2"]
+                 [date-clj "1.0.1"]
+                 [org.clojure/java.jdbc "0.7.12"]
+                 [org.clojure/data.codec "0.1.1"]
+                 [mysql/mysql-connector-java "8.0.33"]
+                 [ragtime "0.8.1"]
+                 [ring/ring-core "1.11.0"]]
+  :main ^:skip-aot sk.core
+  :aot [sk.core]
+  :plugins [[lein-ancient "0.7.0"]
+            [lein-pprint "1.3.2"]]
+  :uberjar-name "demo.jar" ; Change me
+  :target-path "target/%s"
+  :ring {:handler sk.core
+         :auto-reload? true
+         :auto-refresh? false}
+  :resources-paths ["shared" "resources"]
+  :aliases {"migrate" ["run" "-m" "sk.migrations/migrate"]
+            "rollback" ["run" "-m" "sk.migrations/rollback"]
+            "database" ["run" "-m" "sk.models.cdb/database"]
+            "grid" ["run" "-m" "sk.models.builder/build-grid"]
+            "dashboard" ["run" "-m" "sk.models.builder/build-dashboard"]
+            "private" ["run" "-m" "sk.models.b-proutes/main-private"]
+            "open" ["run" "-m" "sk.models.b-routes/main-open"]}
+  :profiles {:uberjar {:aot :all}})
+  ```
+  *Note:* We just changed the description, url and ubejar-name
+    
+
 ## CREATE A CRUD GRID FOR A TABLE - FROM PROJECT FOLDER COMMAND LINE USING THE LEIN ALIASES
 1. Create migration files for new table under /resources/migrations.  Look at other migrations to get syntax
 2. From project directory: execute lein migrate to create the new table on the database
