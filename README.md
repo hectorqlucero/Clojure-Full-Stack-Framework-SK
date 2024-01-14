@@ -33,25 +33,29 @@
 3. mySQL or MariaDB
 
 ## Usage
-1. Create a database "xxxxxxxxxx" in mySQL or MariaDB.  Note: "xxxxxxxxxx" refers to what you will call your database, so replace with your database name created.
+1. Create a database "xxxxx" in mySQL or MariaDB.  Note: "xxxxx" refers to what you will call your database, so replace with your database name created.
 2. Clone the repository
-3. Copy resources/private/config_example to config.clj and change all of the "xxxxxxxxxx" to what applies to you setup
+3. Copy resources/private/config_example to config.clj and change all of the "xxxxx" to what applies to you setup
   Example of resources/private/config_example.clj
   ```
-  {:db-protocol    "mysql"
-  :db-name        "//localhost:3306/xxxxxxxxxxx?characterEncoding=UTF-8"
-  :db-user        "root"
-  :db-pwd         "xxxxxxxxxx"
-  :db-class       "com.mysql.cj.jdbc.Driver"
-  :email-host     "smtp.gmail.com"
-  :email-user     "xxxxxxxxxxx@gmail.com"
-  :email-password "xxxxxxxxxx"
-  :port           3000
-  :tz             "US/Pacific"
-  :site-name      "xxxxxxxxxx"
-  :base-url       "http://0.0.0.0:3000/"
-  :uploads        "./uploads"
-  :path           "/uploads/"}
+    ;; Replace all "xxxxx" with your configuration
+    {:db-protocol  "mysql"
+     :db-name      "//localhost:3306/xxxxx?characterEncoding=UTF-8&serverTimezone=America/Los_Angeles" ; Change me
+     :database-url "mysql://localhost:3306/xxxxx?user=root&password=xxxxx&serverTimezone=America/Los_Angeles" ; Change me
+     :db-user      "xxxxx" ; Change me
+     :db-pwd       "xxxxx" ; Change me
+     :db-class     "com.mysql.cj.jdbc.Driver"
+     :email-host   "xxxxx" ; Optional
+     :email-user   "xxxxx" ; Optional
+     :email-pwd    "xxxxx" ; Optional
+     :port         3000
+     :tz           "US/Pacific" ;Change if in different time zone
+     :site-name    "xxxxx" ; Change me
+     :company-name "xxxxx" ; Change me
+     :uploads      "./uploads/xxxxx/" ; Change me
+     :base-url     "http://0.0.0.0:3000/"
+     :img-url      "https://0.0.0.0/uploads/"
+     :path         "/uploads/"}
   ```
 ## From project directory:
 4. lein migrate
@@ -103,7 +107,7 @@
 
 ## REBUILD OPEN ROUTES IF MANUALLY CREATED - FROM PROJECT FOLDER COMMAND LINE USING THE LEIN ALIASES
 1. lein open
-- Will update system to accomodate changes for msnu/routes etc...
+- Will update system to accomodate changes for menus/routes etc...
 
 ## TIPS
 1. Look at /resources/templates for examples of different input types ex. combobox, date, email, image etc...

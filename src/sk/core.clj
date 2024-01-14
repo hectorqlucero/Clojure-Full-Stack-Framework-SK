@@ -36,20 +36,22 @@
   (wrap-login proutes)
   (route/not-found "Not Found"))
 
-(defn -main []
-  (jetty/run-jetty
-   (-> (routes
-        (wrap-exception-handling app-routes))
-       (wrap-session)
-       (session/wrap-noir-session*)
-       (wrap-multipart-params)
-       (reload/wrap-reload)
-       (wrap-defaults (-> site-defaults
-                          (assoc-in [:security :anti-forgery] true)
-                          (assoc-in [:session :store] (cookie-store {:key KEY}))
-                          (assoc-in [:session :cookie-attrs] {:max-age 28800})
-                          (assoc-in [:session :cookie-name] "LS"))))
-   {:port (:port config)}))
+(def app
+  (-> (routes
+       (wrap-exception-handling app-routes))
+      (wrap-session)
+      (session/wrap-noir-session*)
+      (wrap-multipart-params)
+      (reload/wrap-reload)
+      (wrap-defaults (-> site-defaults
+                         (assoc-in [:security :anti-forgery] true)
+                         (assoc-in [:session :store] (cookie-store {:key KEY}))
+                         (assoc-in [:session :cookie-attrs] {:max-age 28800})
+                         (assoc-in [:session :cookie-name] "LS")))))
+
+(defn -main
+  []
+  (jetty/run-jetty #'app {:port (:port config)}))
 
 (comment
   (:port config))

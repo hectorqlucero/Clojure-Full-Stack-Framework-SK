@@ -103,6 +103,7 @@
    (include-js "/easyui/datagrid-filter.js")
    (include-js "/easyui/locale/easyui-lang-es.js")
    (include-js "/RichText/src/jquery.richtext.min.js")
+   (include-js "/js/htmx.js")
    (include-js "/js/main.js")))
 
 (defn application [title ok js & content]
@@ -129,7 +130,7 @@
            content
            [:footer
             [:div.m-toolbar
-             [:div.m-title  "Copyright &copy" (t/year (t/now)) " Lucero Systems - All Rights Reserved"]]]]
+             [:div.m-title  "Copyright &copy" (t/year (t/now)) " " (:company-name config) " All Rights Reserved"]]]]
           (app-js)
           js]))
 
@@ -155,6 +156,6 @@
              [:p [:h3 [:a {:href return-url} "Clic aqui para " [:strong "Continuar"]]]]]]
            [:footer
             [:div.m-toolbar
-             [:div.m-title  "Copyright &copy" (t/year (t/now)) " Lucero Systems - All Rights Reserved"]]]]
+             [:div.m-title  "Copyright &copy" (t/year (t/now)) " " (:company-name config) " All Rights Reserved"]]]]
           (app-js)
           nil]))
