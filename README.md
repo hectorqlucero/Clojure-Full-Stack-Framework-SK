@@ -725,7 +725,7 @@
 - Query! ex: 
 ``` 
 (let [id 1] 
-  (Query! db ["delect from users where id = ?" id ])) 
+  (Query! db ["delete from users where id = ?" id ])) 
 ```
 - Insert ex: 
 ``` 
