@@ -131,7 +131,7 @@
     :img-url      "https://0.0.0.0/uploads/"
     :path         "/uploads/"}
    ```
-   *Note:* your_database_password is the password that you gave to MySQL.  Please setup MySQL with a password, don't use a blak password
+   *Note:* your_database_password is the password that you gave to MySQL.  Please setup MySQL with a password, don't use a blank password
 7. Go to the root of your project with your editor of choice and edit *project.clj* the file looks like this:
   ```
   (defproject sk "0.1.0"
