@@ -222,7 +222,6 @@
             "open" ["run" "-m" "sk.models.b-routes/main-open"]}
   :profiles {:uberjar {:aot :all}})
   ```
-  *Note:* We just changed the description, url and ubejar-name
 8. Open a terminal at the root of your project and type: *lein run* If everything is ok go to: *http://localhost:3000*  You will get a webpage with two options *Contacts" and *Conectar*
 9. Open a terminal at the root of your project and type: *lein repl* if you are using vim/fireplace, otherwise start the rpl with jack-in or whatever your dev setup needs.
 10. Open a terminal at the root of your project and type:
