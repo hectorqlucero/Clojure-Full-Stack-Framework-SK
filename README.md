@@ -269,6 +269,7 @@
     1. *lein grid contacts* to create a data grid for the table contacts. You will see on the terminal:
       - Codigo generado en: src/sk/handlers/admin/contacts *creates a folder contacts with 3 files inside*:
         ```
+        ;; This is the handler
         (ns sk.handlers.admin.contacts.handler
         (:require [sk.models.crud :refer [build-form-row build-form-save build-form-delete]]
                     [sk.models.grid :refer [build-grid]]
@@ -308,6 +309,7 @@
             (build-form-delete params table)))
 
         
+        ;; This is the model
         (ns sk.handlers.admin.contacts.model
         (:require [sk.models.crud :refer [Query db]]))
 
@@ -318,6 +320,7 @@
         (get-rows "contacts"))
 
 
+        ;; This is the view
         (ns sk.handlers.admin.contacts.view
         (:require
         [hiccup.page :refer [include-js]]
@@ -399,6 +402,289 @@
         (defn contacts-scripts []
         (include-js "/js/grid.js"))
         ``` 
+16. Now let's fine tune this view to be more user friendly. The view should look like this below:
+    ```
+    (ns sk.handlers.admin.contacts.view
+    (:require
+    [hiccup.page :refer [include-js]]
+    [ring.util.anti-forgery :refer [anti-forgery-field]]
+    [sk.models.util :refer
+        [build-dialog build-dialog-buttons build-field build-table build-toolbar]]))
+
+    (defn dialog-fields []
+    (list
+    (build-field
+        {:id "id"
+        :name "id"
+        :type "hidden"})
+    (build-field
+        {:id "firstname"
+        :name "firstname"
+        :class "easyui-textbox"
+        :prompt "This is the contact firstname..."
+        :data-options "label:'First Name:',
+            labelPosition:'top',
+            required:true,
+            width:'100%'"})
+    (build-field
+        {:id "lastname"
+        :name "lastname"
+        :class "easyui-textbox"
+        :prompt "This is the contact lastname..."
+        :data-options "label:'Lastname:',
+            labelPosition:'top',
+            required:true,
+            width:'100%'"})
+    (build-field
+        {:id "phone"
+        :name "phone"
+        :class "easyui-maskedbox"
+        :mask "(999) 999-9999"
+        :data-options "label:'Phone:',
+            labelPosition:'top',
+            required:false,
+            width:'100%'"})
+    (build-field
+        {:id "email"
+        :name "email"
+        :class "easyui-textbox easyui-validatebox"
+        :prompt "This is the contact email..."
+        :validType "email"
+        :data-options "label:'Email:',
+            labelPosition:'top',
+            required:true,
+            width:'100%'"})
+    (build-field
+        {:id "comments"
+        :name "comments"
+        :class "easyui-textbox"
+        :prompt "This is the contact comments..."
+        :data-options "label:'Comments:',
+            labelPosition:'top',
+            required:false,
+            multiline:true,
+            height:120,
+            width:'100%'"})))
+
+    (defn contacts-view [title]
+    (list
+    (anti-forgery-field)
+    (build-table
+        title
+        "/admin/contacts"
+        (list
+        [:th {:data-options "field:'id',sortable:true,width:100"} "ID"]
+        [:th {:data-options "field:'firstname',sortable:true,width:100"} "FIRSTNAME"]
+        [:th {:data-options "field:'lastname',sortable:true,width:100"} "LASTNAME"]
+        [:th {:data-options "field:'phone',sortable:true,width:100"} "PHONE"]
+        [:th {:data-options "field:'email',sortable:true,width:100"} "EMAIL"]
+        [:th {:data-options "field:'comments',sortable:true,width:100"} "COMMENTS"]))
+    (build-toolbar)
+    (build-dialog title (dialog-fields))
+    (build-dialog-buttons)))
+
+    (defn contacts-scripts []
+    (include-js "/js/grid.js"))
+    ```
+17. Now go to the terminal where you have the server running and type ctl-c to stop the process. Start process again with *lein run*
+    - A new menu option *Contacts* will now be available in the *Administrar* menu. Click on the menu option *Contacts* and enter a few contacs.
+18. Open a terminal in the root of the app and type:
+    1. *lein dashboard contacts* to create a dashboard for the table contacts. You will see on the terminal:
+        - Codigo generado en: src/sk/handlers/contacts *creates folder contacts with 3 files inside:
+        ```
+        ;; This is the handler
+        (ns sk.handlers.contacts.handler
+        (:require
+        [clojure.data.csv :as csv]
+        [clojure.java.io :as java-io]
+        [ring.util.io :refer [piped-input-stream]]
+        [hiccup.core :refer [html]]
+        [pdfkit-clj.core :refer [as-stream gen-pdf]]
+        [clj-pdf.core :refer [pdf template]]
+        [sk.layout :refer [application]]
+        [sk.models.util :refer [get-session-id user-level]]
+        [sk.handlers.contacts.model :refer [get-rows]]
+        [sk.handlers.contacts.view :refer [contacts-view contacts-scripts]]))
+
+        (defn contacts [_]
+        (let [title "Contacts"
+                ok (get-session-id)
+                js (contacts-scripts)
+                content (contacts-view title)]
+            (application title ok js content)))
+
+        (defn contacts-reporte [_]
+        (let [title "Contacts"
+                ok (get-session-id)
+                js nil
+                content (html (contacts-view title))]
+            (if
+            (or
+            (= (user-level) "U")
+            (= (user-level) "A")
+            (= (user-level) "S"))
+            {:status 200
+            :headers {"Content-Type" "application/pdf"
+                        "Content-Disposition" "attachment;filename=contacts.pdf"}
+            :body (as-stream (gen-pdf content))}
+            (application title ok js "Solo miembros pueden accessar esta opción!!!"))))
+
+        (def contacts-pdf-template
+        (template
+        (list
+            [:cell {:align :left} (str $firstname)]
+            [:cell {:align :left} (str $lastname)]
+            [:cell {:align :left} (str $phone)]
+            [:cell {:align :left} (str $email)]
+            [:cell {:align :left} (str $comments)])))
+
+        (defn generate-report-header []
+        [{:background-color [233 233 233]}
+        [:paragraph {:align :left} "FIRSTNAME"]
+        [:paragraph {:align :left} "LASTNAME"]
+        [:paragraph {:align :left} "PHONE"]
+        [:paragraph {:align :left} "EMAIL"]
+        [:paragraph {:align :left} "COMMENTS"]])
+
+        (defn generate-report-body []
+        (let [rows (get-rows "contacts")]
+            (into
+            [:table
+            {:cell-border true
+            :style :normal
+            :size 10
+            :border true
+            :header (generate-report-header)}]
+            (contacts-pdf-template rows))))
+
+        (defn generate-report-header-options [title]
+        {:title title
+        :header {:x 20
+                    :y 830
+                    :table
+                    [:pdf-table
+                    {:border false
+                    :width-percent 100}
+                    [100]
+                    [[:pdf-cell {:type :bold :size 16 :align :center} title]]]}
+        :footer "page"
+        :left-margin 10
+        :right-margin 10
+        :top-margin 10
+        :bottom-margin 25
+        :size :a4
+        :orientation :portrait
+        :font {:family :helvetica :size 10}
+        :align :center
+        :pages true})
+
+        (defn generate-report [title]
+        (piped-input-stream
+        (fn [output-stream]
+            (pdf
+            [(generate-report-header-options title)
+            (generate-report-body)]
+            output-stream))))
+
+        (defn contacts-pdf [_]
+        (let [title "Contacts"
+                ok (get-session-id)
+                js nil
+                content "Solo miembros pueden accessar esta opción!!!"]
+            (if
+            (or
+            (= (user-level) "U")
+            (= (user-level) "A")
+            (= (user-level) "S"))
+            {:status 200
+            :headers {"Content-Type" "application/pdf"
+                        "Content-Disposition" "attachment;filename=contacts"}
+            :body (generate-report title)}
+            (application title ok js content))))
+
+        (def contacts-csv-headers
+        ["FIRSTNAME " "LASTNAME " "PHONE " "EMAIL " "COMMENTS "])
+
+        (def contacts-csv-template
+        (template
+        [(str $firstname) (str $lastname) (str $phone) (str $email) (str $comments)]))
+
+        (defn build-csv [filename]
+        (let [rows (get-rows "contacts")]
+            (with-open [writer (java-io/writer filename)]
+            (csv/write-csv writer (cons (vec contacts-csv-headers) (contacts-csv-template rows))))))
+
+        (defn contacts-csv [_]
+        (build-csv "contacts.csv")
+        (let [filename "contacts.csv"
+                my-file (slurp filename)]
+            (java-io/delete-file filename)
+            {:status 200
+            :headers {"Content-Type" "text/csv"
+                    "Content-Disposition" "attachment;filename=contacts.csv"}
+            :body my-file}))
+
+
+        ;; This is the model
+        (ns sk.handlers.contacts.model
+        (:require [sk.models.crud :refer [Query db]]))
+
+        (defn get-rows [tabla]
+        (Query db [(str "select * from " tabla)]))
+
+        (comment
+        (get-rows "contacts"))
+
+        ;; This is the view
+        (ns sk.handlers.contacts.view
+        (:require [hiccup.page :refer [include-js]] [sk.handlers.contacts.model :refer [get-rows]]))
+
+        (defn my-body [row]
+        [:tr
+        [:td (:id row)]
+        [:td (:firstname row)]
+        [:td (:lastname row)]
+        [:td (:phone row)]
+        [:td (:email row)]
+        [:td (:comments row)]])
+
+        (defn contacts-view [title]
+        (let [rows (get-rows "contacts")]
+            (list
+            [:table.dg {:data-options "remoteSort:false,fit:true,rownumbers:true,fitColumns:true,toolbar:'#toolbar'" :title title}
+            [:thead
+            [:tr
+                [:th {:data-options "field:'id',sortable:true,width:100"} "ID"]
+                [:th {:data-options "field:'firstname',sortable:true,width:100"} "FIRSTNAME"]
+                [:th {:data-options "field:'lastname',sortable:true,width:100"} "LASTNAME"]
+                [:th {:data-options "field:'phone',sortable:true,width:100"} "PHONE"]
+                [:th {:data-options "field:'email',sortable:true,width:100"} "EMAIL"]
+                [:th {:data-options "field:'comments',sortable:true,width:100"} "COMMENTS"]]]
+            [:tbody (map my-body rows)]]
+            [:div#toolbar
+            [:a {:href "/contacts/reporte"
+                :class "easyui-linkbutton"
+                :data-options "iconCls:'icon-print',plain: true"} "Reporte"]
+            [:a {:href "/contacts/pdf"
+                :class "easyui-linkbutton"
+                :data-options "iconCls:'icon-save',plain: true"} "PDF"]
+            [:a {:href "/contacts/csv"
+                :class "easyui-linkbutton"
+                :data-options "iconCls:'icon-large-smartart',plain: true"} "CSV"]])))
+
+        (defn contacts-scripts []
+        (include-js "js/grid.js"))
+        ```
+
+19. Now go to to the terminal where you have the server running and type ctl-c to stop the process.    Start process again with *lein run*
+    - A new menu option will now be available *Contacts*
+        - Clicking on the *Contacts* menu option will bring up a dashboard
+        - Click on the headers to sort the data
+        - Enter data on the filter input boxes to filter the data
+        - Click on the *Reporte* on the toolbar to compile a pdf report from html with pdfkit-clj
+        - Click on the *PDF* on the toolbar to compile a pdf report with clj-pdf
+        - Click on the *CSV* on the toolbar to export to csv
+## THIS CONCLUDES THE TUTORIAL FOR BUILDING A SIMPLE CONTACT MANAGEMENT APP
 
 ## CREATE A CRUD GRID FOR A TABLE - FROM PROJECT FOLDER COMMAND LINE USING THE LEIN ALIASES
 1. Create migration files for new table under /resources/migrations.  Look at other migrations to get syntax
@@ -430,6 +716,9 @@
 
 ## TIPS
 1. Look at /resources/templates for examples of different input types ex. combobox, date, email, image etc...
+   ```
+
+   ```
 2. Look at /src/sk/handlers/tref/handler.clj for examples of lookups for combobox fields, or other misc routes.
 3. Look at /src/sk/models/crud.clj for functions to generate crud sql stmts.
 - Query ex: (note on all of the crud examples 'db' is the database connection from /src/sk/models/crud.clj
