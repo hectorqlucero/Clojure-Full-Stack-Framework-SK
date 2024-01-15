@@ -222,7 +222,7 @@
             "open" ["run" "-m" "sk.models.b-routes/main-open"]}
   :profiles {:uberjar {:aot :all}})
   ```
-8. Open a terminal at the root of your project and type: *lein run* If everything is ok go to: *http://localhost:3000*  You will get a webpage with two options *Contacts" and *Conectar*
+8. Open a terminal at the root of your project and type: *lein run* If everything is ok go to: *http://localhost:3000*  You will get a webpage with two options *Contacts* and *Conectar*
 9. Open a terminal at the root of your project and type: *lein repl* if you are using vim/fireplace, otherwise start the rpl with jack-in or whatever your dev setup needs.
 10. Open a terminal at the root of your project and type:
     1. *lein migrate* to create the first database migration. You will see on the terminal:
