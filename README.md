@@ -731,7 +731,7 @@
 ``` 
 (let [row {:username "Gido" :password "somepwd"}
       table "users"] 
-   (Insert db table row)) 
+   (Insert db (keyword table) row)) 
 ```
 - Insert multi ex:
 ```
@@ -744,15 +744,16 @@
     ])
 (let [table "users"
       rows data]
-  (Insert-multi db table rows))
+  (Insert-multi db (keyword table) rows))
 ```
 - Update ex:
 ```
 (let [table "users"
+      id 5
       row {:username "Gido"
            :password "gpass"}
-      where-clause "id = 5"]
-  (Update db table row where-clause))
+      where-clause "[id = ?" id]
+  (Update db (keyword table) row where-clause))
 ```
 - Save ex:  (Note this will create a new item if it does not find and existing item and update an existing item if it exists)
 ```
@@ -761,13 +762,14 @@
       row {:username "gido"
            :password "gmpass"}
      where-clause (str "id = ?" id)]
-  (Save db table row where-clause))
+  (Save db (keyword table) row where-clause))
 ```
 - Delete ex:
 ```
 (let [table "users"
-      where-clause "id = 1"]
-  (Delete db table where-clause))
+      id 1
+      where-clause "[id = ?" id]
+  (Delete db (keyword table) where-clause))
 ```
 
 ## License
