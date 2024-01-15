@@ -763,6 +763,12 @@
      where-clause (str "id = ?" id)]
   (Save db table row where-clause))
 ```
+- Delete ex:
+```
+(let [table "users"
+      where-clause "id = 1"]
+  (Delete db table where-clause))
+```
 
 ## License
 
