@@ -716,9 +716,6 @@
 
 ## TIPS
 1. Look at /resources/templates for examples of different input types ex. combobox, date, email, image etc...
-   ```
-
-   ```
 2. Look at /src/sk/handlers/tref/handler.clj for examples of lookups for combobox fields, or other misc routes.
 3. Look at /src/sk/models/crud.clj for functions to generate crud sql stmts.
 - Query ex: (note on all of the crud examples 'db' is the database connection from /src/sk/models/crud.clj
