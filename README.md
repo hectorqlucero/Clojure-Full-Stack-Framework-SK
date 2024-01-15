@@ -681,9 +681,9 @@
         - Clicking on the *Contacts* menu option will bring up a dashboard
         - Click on the headers to sort the data
         - Enter data on the filter input boxes to filter the data
-        - Click on the *Reporte* on the toolbar to compile a pdf report from html with pdfkit-clj
-        - Click on the *PDF* on the toolbar to compile a pdf report with clj-pdf
-        - Click on the *CSV* on the toolbar to export to csv
+        - Click on the *Reporte* button on the toolbar to compile a pdf report from html with pdfkit-clj
+        - Click on the *PDF* button on the toolbar to compile a pdf report with clj-pdf
+        - Click on the *CSV* button on the toolbar to export to csv
 ## THIS CONCLUDES THE TUTORIAL FOR BUILDING A SIMPLE CONTACT MANAGEMENT APP
 
 ## CREATE A CRUD GRID FOR A TABLE - FROM PROJECT FOLDER COMMAND LINE USING THE LEIN ALIASES
