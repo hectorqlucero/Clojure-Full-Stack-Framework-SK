@@ -223,7 +223,183 @@
   :profiles {:uberjar {:aot :all}})
   ```
   *Note:* We just changed the description, url and ubejar-name
-    
+8. Open a terminal at the root of your project and type: *lein run* If everything is ok go to: *http://localhost:3000*  You will get a webpage with two options *Contacts" and *Conectar*
+9. Open a terminal at the root of your project and type: *lein repl* if you are using vim/fireplace, otherwise start the rpl with jack-in or whatever your dev setup needs.
+10. Open a terminal at the root of your project and type:
+    1. *lein migrate* to create the first database migration. You will see on the terminal:
+        - Applying 001-users        *users table*
+        - Applying 002-menus        *menus table*
+        - Applying 003-pincludes    *pincludes table*
+        - Applying 004-proutes      *proutes*
+        - Applying 005-routes       *routes*
+        - Applying 006-rincludes    *rincludes*
+11. Open a terminal at the root of your project and type:
+    1. *lein database* to create your dummy users to allow you to login to the web app.
+        1. *username:* user@gmail.com       *password*  user
+        2. *username:* admin@gmail.com      *password*  admin
+        3. *username:* sistema@gmail.com    *password:* sistema
+12. Login to *http://localhost:3000/home/login* On the form: *Email:* sistema@gmail.com  *Contraseña:* sistema Click the button *Acceder al sitio* - You will now be logged in.
+    1. First link on menu *Contacts* lands you on the home page. you will see the logged on user *Usuario:* sistema@gmail.com
+    2. Second link is a dropdown menu *Administrar*
+        1. First menu option *Menus* This will show you a grid to administer menus.
+        2. Second menu option *Open Includes* This will show you a grid to administer the open routes namespace includes. No login required routes.
+        3. Third menu option *Open Routes* This will show you a grid to administer the open routes. No login required routes.
+        4. Fourth menu option *Private Includes* This will show you a grid to administer the private routes namespace includes. Login required routes.
+        5. Fifth menu option *Private Routes* This will show you a grid to administer the Private routes. Login required routes.
+        6. Sixth menu option *Usuarios* This wil show you a grid to administer the users.
+13. Now let's create a new migration in resources/migrations:
+    1. resources/migrations/007-contacts.down.sql
+        ```
+        drop table contacts;
+        ```
+    2. resources/migrations/007-contacts.up.sql
+        ```
+        create table contacts (
+          id int unsigned not null auto_increment primary key,
+          firstname varchar(255) default null,
+          lastname varchar(255) default null,
+          phone varchar(255) default null,
+          email varchar(255) default null,
+          comments text default null
+        ) engine=innodb default charset=utf8;
+        ```
+14. Open a terminal at the root of your project and type:
+    1. *lein migrate* to create the contacts table. You will see on the terminal:
+       - Applying 007-contacts *contacts table*
+15. Open a terminal at the root of you project and type:
+    1. *lein grid contacts* to create a data grid for the table contacts. You will see on the terminal:
+      - Codigo generado en: src/sk/handlers/admin/contacts *creates a folder contacts with 3 files inside*:
+        ```
+        (ns sk.handlers.admin.contacts.handler
+        (:require [sk.models.crud :refer [build-form-row build-form-save build-form-delete]]
+                    [sk.models.grid :refer [build-grid]]
+                    [sk.layout :refer [application]]
+                    [sk.models.util :refer [get-session-id user-level]]
+                    [sk.handlers.admin.contacts.view :refer [contacts-view contacts-scripts]]))
+
+        (defn contacts [_]
+        (let [title "Contacts"
+                ok (get-session-id)
+                js (contacts-scripts)
+                content (contacts-view title)]
+            (if
+            (or
+            (= (user-level) "A")
+            (= (user-level) "S"))
+            (application title ok js content)
+            (application title ok nil "solo <strong>los administradores </strong> pueden accessar esta opción!!!"))))
+
+        (defn contacts-grid
+        "builds grid. parameters: params table & args args: {:join 'other-table' :search-extra name='pedro' :sort-extra 'name,lastname'}"
+        [{params :params}]
+        (let [table "contacts"
+                args {:sort-extra "id"}]
+            (build-grid params table args)))
+
+        (defn contacts-form [id]
+        (let [table "contacts"]
+            (build-form-row table id)))
+
+        (defn contacts-save [{params :params}]
+        (let [table "contacts"]
+            (build-form-save params table)))
+
+        (defn contacts-delete [{params :params}]
+        (let [table "contacts"]
+            (build-form-delete params table)))
+
+        
+        (ns sk.handlers.admin.contacts.model
+        (:require [sk.models.crud :refer [Query db]]))
+
+        (defn get-rows [tabla]
+        (Query db [(str "select * from " tabla)]))
+
+        (comment
+        (get-rows "contacts"))
+
+
+        (ns sk.handlers.admin.contacts.view
+        (:require
+        [hiccup.page :refer [include-js]]
+        [ring.util.anti-forgery :refer [anti-forgery-field]]
+        [sk.models.util :refer
+            [build-dialog build-dialog-buttons build-field build-table build-toolbar]]))
+
+        (defn dialog-fields []
+        (list
+        (build-field
+            {:id "id"
+            :name "id"
+            :type "hidden"})
+        (build-field
+            {:id "firstname"
+            :name "firstname"
+            :class "easyui-textbox"
+            :prompt "xxx"
+            :data-options "label:'xxx:',
+                labelPosition:'top',
+                required:true,
+                width:'100%'"})
+        (build-field
+            {:id "lastname"
+            :name "lastname"
+            :class "easyui-textbox"
+            :prompt "xxx"
+            :data-options "label:'xxx:',
+                labelPosition:'top',
+                required:true,
+                width:'100%'"})
+        (build-field
+            {:id "phone"
+            :name "phone"
+            :class "easyui-textbox"
+            :prompt "xxx"
+            :data-options "label:'xxx:',
+                labelPosition:'top',
+                required:true,
+                width:'100%'"})
+        (build-field
+            {:id "email"
+            :name "email"
+            :class "easyui-textbox"
+            :prompt "xxx"
+            :data-options "label:'xxx:',
+                labelPosition:'top',
+                required:true,
+                width:'100%'"})
+        (build-field
+            {:id "comments"
+            :name "comments"
+            :class "easyui-textbox"
+            :prompt "xxx"
+            :data-options "label:'xxx:',
+                labelPosition:'top',
+                required:true,
+                multiline:true,
+                height:120,
+                width:'100%'"})))
+
+        (defn contacts-view [title]
+        (list
+        (anti-forgery-field)
+        (build-table
+            title
+            "/admin/contacts"
+            (list
+            [:th {:data-options "field:'id',sortable:true,width:100"} "ID"]
+            [:th {:data-options "field:'firstname',sortable:true,width:100"} "FIRSTNAME"]
+            [:th {:data-options "field:'lastname',sortable:true,width:100"} "LASTNAME"]
+            [:th {:data-options "field:'phone',sortable:true,width:100"} "PHONE"]
+            [:th {:data-options "field:'email',sortable:true,width:100"} "EMAIL"]
+            [:th {:data-options "field:'comments',sortable:true,width:100"} "COMMENTS"]))
+        (build-toolbar)
+        (build-dialog title (dialog-fields))
+        (build-dialog-buttons)))
+
+        (defn contacts-scripts []
+        (include-js "/js/grid.js"))
+        ``` 
 
 ## CREATE A CRUD GRID FOR A TABLE - FROM PROJECT FOLDER COMMAND LINE USING THE LEIN ALIASES
 1. Create migration files for new table under /resources/migrations.  Look at other migrations to get syntax
