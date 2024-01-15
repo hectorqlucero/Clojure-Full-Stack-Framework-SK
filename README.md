@@ -490,7 +490,7 @@
     - A new menu option *Contacts* will now be available in the *Administrar* menu. Click on the menu option *Contacts* and enter a few contacs.
 18. Open a terminal in the root of the app and type:
     1. *lein dashboard contacts* to create a dashboard for the table contacts. You will see on the terminal:
-        - Codigo generado en: src/sk/handlers/contacts *creates folder contacts with 3 files inside:
+        - Codigo generado en: src/sk/handlers/contacts *creates folder contacts with 3 files inside:*
         ```
         ;; This is the handler
         (ns sk.handlers.contacts.handler
