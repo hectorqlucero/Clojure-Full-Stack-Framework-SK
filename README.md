@@ -752,7 +752,7 @@
       id 5
       row {:username "Gido"
            :password "gpass"}
-      where-clause "[id = ?" id]
+      where-clause ["id = ?" id]
   (Update db (keyword table) row where-clause))
 ```
 - Save ex:  (Note this will create a new item if it does not find and existing item and update an existing item if it exists)
@@ -761,14 +761,14 @@
       id nil
       row {:username "gido"
            :password "gmpass"}
-     where-clause (str "id = ?" id)]
+     where-clause ["id = ?" id]]
   (Save db (keyword table) row where-clause))
 ```
 - Delete ex:
 ```
 (let [table "users"
       id 1
-      where-clause "[id = ?" id]
+      where-clause ["id = ?" id]
   (Delete db (keyword table) where-clause))
 ```
 
