@@ -37,12 +37,11 @@
   (route/not-found "Not Found"))
 
 (def app
-  (-> (routes
-       (wrap-exception-handling app-routes))
+  (-> (routes #'app-routes)
+      (wrap-exception-handling)
+      (wrap-multipart-params)
       (wrap-session)
       (session/wrap-noir-session*)
-      (wrap-multipart-params)
-      (reload/wrap-reload)
       (wrap-defaults (-> site-defaults
                          (assoc-in [:security :anti-forgery] true)
                          (assoc-in [:session :store] (cookie-store {:key KEY}))
@@ -51,7 +50,7 @@
 
 (defn -main
   []
-  (jetty/run-jetty #'app {:port (:port config)}))
+  (jetty/run-jetty (reload/wrap-reload #'app) {:port (:port config)}))
 
 (comment
   (:port config))

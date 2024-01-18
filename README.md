@@ -14,6 +14,7 @@
 - User validation
 - Email generation
 - PDF report generation
+- Upload images
 - CRUD Grid generation with filter, search, sort etc...
 - DASHBOARD generation with filter, search, sort, pdf, export to csv...
 - Migrations with ragtime
