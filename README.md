@@ -89,7 +89,7 @@
 2. From a terminal Clone the repository *git clone https://github.com/hectorqlucero/Clojure-Full-Stack-Framework-SK.git*
 3. mv Clojure-Full-Stack-Framework-SK demo *Rename the clone folder demo*
 4. cd demo
-5. cp resources/private/config_example.clj config.clj
+5. cp resources/private/config_example.clj resources/private/config.clj
    config.clj will look like this:
    ```
     ;; Replace all "xxxxx" with your configuration
