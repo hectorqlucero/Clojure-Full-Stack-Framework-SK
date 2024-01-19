@@ -113,7 +113,7 @@
        "{:id \"" field "\"\n"
        " :name \"" field "\"\n"
        " :class \"easyui-datebox\"\n"
-       " :prompt \"mm/dd/aaaa ex. 02/07/1957 es: Febreo 2 de 1957\"\n"
+       " :prompt \"mm/dd/yyyy ex. 02/07/1957\"\n"
        " :data-options \"label:'xxx:',
         labelPosition:'top',
         required:true,
@@ -124,7 +124,7 @@
        "{:id \"" field "\"\n"
        " :name \"" field "\"\n"
        " :class \"easyui-combobox\"\n"
-       " :prompt \"Escojer la hora...\"\n"
+       " :prompt \"Select time...\"\n"
        " :data-options \"label:'xxx:',
         labelPosition:'top',
         method:'GET',
@@ -337,7 +337,7 @@
      "(let [title \"" titulo "\"\n"
      "ok (get-session-id)\n"
      "js nil\n"
-     "content \"Solo miembros pueden accessar esta opción!!!\"]\n"
+     "content \"Only members can access this option!!!\"]\n"
      "(if\n"
      "(or\n"
      "(= (user-level) \"U\")\n"
@@ -414,7 +414,7 @@
      "[:div#toolbar\n"
      "[:a {:href\"/" folder "/reporte\"\n"
      ":class \"easyui-linkbutton\"\n"
-     ":data-options \"iconCls:'icon-print',plain: true\"} \"Reporte\"]\n"
+     ":data-options \"iconCls:'icon-print',plain: true\"} \"Report\"]\n"
      "[:a {:href\"/" folder "/pdf\"\n"
      ":class \"easyui-linkbutton\"\n"
      ":data-options \"iconCls:'icon-save',plain: true\"} \"PDF\"]\n"
@@ -482,7 +482,7 @@
     :root "src/sk/handlers/admin/"
     :menu-type "P"
     :menu-admin "T"})
-  (println (str "Codigo generado en: src/sk/handlers/admin/" table)))
+  (println (str "Code generated at: src/sk/handlers/admin/" table)))
 
 (defn build-dashboard [table]
   (build-skeleton
@@ -494,7 +494,7 @@
      :root "src/sk/handlers/"
      :menu-type "P"
      :menu-admin "F"})
-  (println (str "Codigo generado en: src/sk/handlers/" table)))
+  (println (str "Code generated at: src/sk/handlers/" table)))
 
 (comment
   (build-grid-skeleton {:folder "contactos"

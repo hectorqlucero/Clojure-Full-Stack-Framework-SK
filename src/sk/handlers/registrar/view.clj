@@ -10,34 +10,34 @@
     (build-field {:id "firstname"
                   :name "firstname"
                   :class "easyui-textbox"
-                  :prompt "Nombre"
-                  :data-options "label:'Nombre:', labelPosition:'top', required:true,width:'100%'"})
+                  :prompt "Name..."
+                  :data-options "label:'First Name:', labelPosition:'top', required:true,width:'100%'"})
     (build-field {:id "lastname"
                   :name "lastname"
                   :class "easyui-textbox"
-                  :prompt "Apellidos..."
-                  :data-options "label:'Apellidos:', labelPosition:'top', required:true,width:'100%'"})
+                  :prompt "Lastname..."
+                  :data-options "label:'Lastname:', labelPosition:'top', required:true,width:'100%'"})
     (build-field {:id "email"
                   :name "email"
                   :class "easyui-textbox easyui-validatebox"
-                  :prompt "Un email valido..."
+                  :prompt "A valid email..."
                   :validType "email"
                   :data-options "label:'Email:', labelPosition:'top', required:true,width:'100%'"})
     (build-field {:id "dob"
                   :name "dob"
                   :class "easyui-datebox"
                   :prompt "mm/dd/yyyy"
-                  :data-options "label:'Fecha de nacimiento:', labelPosition:'top', width:'100%'"})
+                  :data-options "label:'DOB:', labelPosition:'top', width:'100%'"})
     (build-field {:id "cell"
                   :name "cell"
                   :class "easyui-maskedbox"
                   :mask "(999) 999-9999"
-                  :data-options "label:'Celular:', labelPosition:'top', width:'100%'"})
+                  :data-options "label:'Cell:', labelPosition:'top', width:'100%'"})
     (build-field {:id "phone"
                   :name "phone"
                   :class "easyui-maskedbox"
                   :mask "(999) 999-9999"
-                  :data-options "label:'Telefono:', labelPosition:'top', width:'100%'"})
+                  :data-options "label:'Phone:', labelPosition:'top', width:'100%'"})
     (build-field {:id "fax"
                   :name "fax"
                   :class "easyui-maskedbox"
@@ -46,17 +46,17 @@
     (build-field {:id "password"
                   :name "password"
                   :class "easyui-passwordbox"
-                  :prompt "Su contraseña preferida aqui..."
-                  :data-options "label:'Contraseña:', labelPosition:'top', required:true,width:'100%'"})
+                  :prompt "Your preferred password here..."
+                  :data-options "label:'Password:', labelPosition:'top', required:true,width:'100%'"})
     (build-field {:id "password1"
                   :name "password1"
                   :class "easyui-passwordbox"
-                  :prompt "Repita su contraseña aqui..."
+                  :prompt "Repeat your password here..."
                   :validType "confirmPass['#password']"
-                  :data-options "label:'Confirmar Contraseña:', labelPosition:'top', required:true,width:'100%'"}))
+                  :data-options "label:'Confirm Password:', labelPosition:'top', required:true,width:'100%'"}))
    (list
     (build-button {:href "javascript:void(0)"
-                   :text "Registrarse"
+                   :text "Register"
                    :class "easyui-linkbutton c6"
                    :id "submit"}))))
 
@@ -80,7 +80,7 @@
                         if(dta.hasOwnProperty('url')) {
                             $.messager.alert({
                                 title: 'Processed!',
-                                msg: 'Usuario registrado exitosamente!',
+                                msg: 'User registered successfully!',
                                 fn: function() {
                                     window.location.href = dta.url;
                                 }
@@ -91,7 +91,7 @@
                                 msg: dta.error
                             });
                             $('a#submit').linkbutton('enable');
-                            $('a#submit').linkbutton({text: 'Registrarse'});
+                            $('a#submit').linkbutton({text: 'Register'});
                         }
                     } catch(e) {
                         console.error('Invalid JSON');
@@ -110,7 +110,7 @@
                             if(value == dta.email) {
                                 $.messager.alert({
                                     title: 'Error',
-                                    msg: 'Este usuario existe en la base de datos!',
+                                    msg: 'This user exists in the database!',
                                     fn: function() {
                                         window.location.href = '/registrar';
                                     }
@@ -128,7 +128,7 @@
                     var password = $(param[0]).passwordbox('getValue');
                     return value == password;
                 },
-                message: 'La contraseña confirmadora no es igual que la contraseña!'
+                message: 'Your confirm password does not match!'
             }
         });
     });
@@ -150,7 +150,7 @@
    (build-button
     {:id "submit"
      :href "javascript:void(0)"
-     :text "Resetear Contraseña"
+     :text "Reset Password"
      :onclick "submitForm()"
      :class "easyui-linkbutton c6"})))
 
@@ -168,7 +168,7 @@
             if(dta.hasOwnProperty('url')) {
               $.messager.alert({
                 title: 'Información!',
-                msg: 'Revise su email para instrucciones de como resetear su contraseña!',
+                msg: 'Check your email for instructions to reset your password!',
                 fn: function() {
                   window.location.href = dta.url;
                 }
@@ -189,7 +189,7 @@
     function give_error() {
       $.messager.alert({
         title: 'Error',
-        msg: 'Este email no existe en la base de datos, por favor intente otra vez!',
+        msg: 'This email does not exist in the database, please try again!',
         fn: function() {
           window.location.href = '/rpaswd';
         }
@@ -232,18 +232,18 @@
      {:id "password"
       :name "password"
       :class "easyui-passwordbox"
-      :data-options "label:'Contraseña:',labelPosition:'top',required:true,width:'100%'"})
+      :data-options "label:'Password:',labelPosition:'top',required:true,width:'100%'"})
     (build-field
      {:id "password1"
       :name "password1"
       :class "easyui-passwordbox"
       :validType "confirmPass['#password']"
-      :data-options "label:'Confirmar Contraseña:',labelPosition:'top',required:true,width:'100%'"}))
+      :data-options "label:'Confirm Password',labelPosition:'top',required:true,width:'100%'"}))
    (list
     (build-button
      {:id "submit"
       :href "javascript:void(0)"
-      :text "Resetear Contraseña"
+      :text "Reset Password"
       :class "easyui-linkbutton c6"}))))
 
 (defn reset-jwt-scripts []
@@ -256,7 +256,7 @@
             var password = $(param[0]).passwordbox('getValue');
             return value == password;
           },
-          message: 'La contraseña de confirmación no es igual que su contraseña!'
+          message: 'The confirmation password does not match your password!'
         }
       });
 
@@ -272,7 +272,7 @@
               if(dta.hasOwnProperty('url')) {
                 $.messager.alert({
                   title: 'Processed!',
-                  msg: 'Su contraseña se reseteo!',
+                  msg: 'Your password has been reset successfully!',
                   fn: function() {
                     window.location.href = dta.url;
                   }

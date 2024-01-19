@@ -23,8 +23,8 @@
   (try
     (let [id (get-session-id)
           title (if (> id 0)
-                  (str "<strong>Usuario:</strong> " (:username (first (Query db [main-sql id]))))
-                  "Clic en <strong>Conectar</strong> para accesar el sitio.")]
+                  (str "<strong>User:</strong> " (:username (first (Query db [main-sql id]))))
+                  "Clic on <strong>Login</strong> access site.")]
       title)
     (catch Exception e (.getMessage e))))
 
@@ -42,7 +42,7 @@
 (defn login
   [_]
   (try
-    (let [title "Conectar"
+    (let [title "Login"
           ok (get-session-id)
           content (login-view (anti-forgery-field))
           scripts (login-script)]
@@ -61,8 +61,8 @@
           (do
             (session/put! :user_id (:id row))
             (generate-string {:url "/"}))
-          (generate-string {:error "Incapaz de accesar al sitio!"}))
-        (generate-string {:error "El usuario esta inactivo!"})))
+          (generate-string {:error "Unable to access site!"}))
+        (generate-string {:error "User is inactive!"})))
     (catch Exception e (.getMessage e))))
 ;; End login
 
@@ -70,5 +70,5 @@
   []
   (try
     (session/clear!)
-    (error-404 "Salida del sitio con exito!" "/")
+    (error-404 "Logoff successful!" "/")
     (catch Exception e (.getMessage e))))

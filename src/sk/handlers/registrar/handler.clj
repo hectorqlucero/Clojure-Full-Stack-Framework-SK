@@ -17,11 +17,11 @@
 (defn registrar
   [_]
   (try
-    (let [title "Registro de Usuarios"
+    (let [title "Register users"
           token (anti-forgery-field)
           ok (get-session-id)
           js (registrar-scripts)
-          error-text "Existe una session, no se puede crear un usuario nuevo!"
+          error-text "A session exists, unable to create a new user!"
           return-url "/"
           content (registrar-view title token)]
       (if (> ok 0)
@@ -47,7 +47,7 @@
           result (Save db :users postvars ["username = ?" email])]
       (if (seq result)
         (generate-string {:url "/login"})
-        (generate-string {:error "Incapaz de registrar usuario!"})))
+        (generate-string {:error "Unable to register user!"})))
     (catch Exception e (.getMessage e))))
 ;; End registrar
 
@@ -55,10 +55,10 @@
 (defn reset-password
   [_]
   (try
-    (let [title "Resetear Contraseña"
+    (let [title "Reset Password"
           token (anti-forgery-field)
           ok (get-session-id)
-          error-text "Existe una session, no se puede crear un nuevo usuario!"
+          error-text "A session exists, unable to create new user!"
           return-url "/"
           js (reset-password-scripts)
           content (reset-password-view title token)]
@@ -79,15 +79,15 @@
   (try
     (let [nombre       (str (:firstname row) " " (:lastname row))
           email        (:email row)
-          subject      "Resetear su contraseña"
-          content      (str "<strong>Hola</strong> " nombre ",</br></br>"
-                            "Para resetear su contraseña <strong>" "<a href='" url "'>Clic Aqui</a>" "</strong>.</br></br>"
-                            "Como alternativa usted puede copiar y pegar el siguiente enlace en su navegador ex. Firefox, Chrome:</br></br>"
+          subject      "Reset your password"
+          content      (str "<strong>Hi</strong> " nombre ",</br></br>"
+                            "To reset your password <strong>" "<a href='" url "'>Click here</a>" "</strong>.</br></br>"
+                            "As an alternative you can copy and paste the following link in your browser uri:</br></br>"
                             url "</br></br>"
-                            "Este enlace es valido solo por 10 minutos.</br></br>"
-                            "Si usted no intento cambiar su contraseña o no desea cambiarla, simplemente ignore este mensage.</br></br></br>"
-                            "Sinceramente,</br></br>"
-                            "La Administración")
+                            "This link is valid for only 10 minutes.</br></br>"
+                            "If you did not request to change your password or you don't desire to change it, simply ignore this message.</br></br></br>"
+                            "Sincerely,</br></br>"
+                            "The Administration")
           body         {:from    (:email-user config)
                         :to      email
                         :subject subject
@@ -107,18 +107,18 @@
           email-body (email-body row url)]
       (if (future (send-email host email-body))
         (generate-string {:url "/"})
-        (generate-string {:error "Incapaz de resetear su contraseña!"})))
+        (generate-string {:error "Unable to reset your password"})))
     (catch Exception e (.getMessage e))))
 ;; End reset-password
 
 (defn reset-jwt
   [token]
   (try
-    (let [title "Resetear Contraseña"
+    (let [title "Reset Password"
           csrf (anti-forgery-field)
           ok (get-session-id)
           username (check-token token)
-          error-text "Su token es incorrecto o ya se expiro!"
+          error-text "Your token is incorrect or it has expired!"
           return-url "/"
           js (reset-jwt-scripts)
           content (reset-jwt-view title csrf username)]
@@ -136,7 +136,7 @@
           result (Update db :users postvars ["username = ?" username])]
       (if (seq result)
         (generate-string {:url "/"})
-        (generate-string {:error "Incapaz de resetear su contraseña!"})))
+        (generate-string {:error "Unable to reset your password!"})))
     (catch Exception e (.getMessage e))))
 ;; End reset-password
 

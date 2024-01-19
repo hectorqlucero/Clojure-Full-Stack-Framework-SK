@@ -18,7 +18,7 @@
         (= (user-level) "A")
         (= (user-level) "S"))
         (application title ok js content)
-        (application title ok nil "Solo <strong>administradores</strong> pueden accesar esta opción!!!")))
+        (application title ok nil "Only <strong>administrators</strong> can access this option!!!")))
     (catch Exception e (.getMessage e))))
 
 (defn users-grid

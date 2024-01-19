@@ -545,18 +545,18 @@
 
 (defn get-month-name [month]
   (cond
-    (= month 1) "Enero"
-    (= month 2) "Febrero"
-    (= month 3) "Marzo"
-    (= month 4) "Abril"
-    (= month 5) "Mayo"
-    (= month 6) "Junio"
-    (= month 7) "Julio"
-    (= month 8) "Agosto 4"
-    (= month 9) "Septiembre"
-    (= month 10) "Octubre"
-    (= month 11) "Noviembre"
-    (= month 12) "Diciembre"))
+    (= month 1) "January"
+    (= month 2) "February"
+    (= month 3) "March"
+    (= month 4) "April"
+    (= month 5) "May"
+    (= month 6) "June"
+    (= month 7) "July"
+    (= month 8) "August"
+    (= month 9) "September"
+    (= month 10) "October"
+    (= month 11) "November"
+    (= month 12) "December"))
 
 (defn get-counter []
   (let [row (first (Query db "select numero_registro from contador where id = 'C'"))
@@ -725,8 +725,8 @@
                :name         "file"
                :class        "easyui-filebox"
                :style        "width:300px;"
-               :data-options "prompt:'Escoge imagen...',
-                              buttonText:'Escoge imagen...',
+               :data-options "prompt:'Choose File...',
+                              buttonText:'Choose File...',
                               onChange: function(value) {
                                 var f = $(this).next().find('input[type=file]')[0];
                                 if (f.files && f.files[0]) {
@@ -794,15 +794,15 @@
    [:a {:href         "javascript:void(0)"
         :class        "easyui-linkbutton"
         :data-options "iconCls: 'icon-add',plain: true"
-        :onclick      "newItem()"} "Nuevo"]
+        :onclick      "newItem()"} "New"]
    [:a {:href         "javascript:void(0)"
         :class        "easyui-linkbutton"
         :data-options "iconCls: 'icon-edit',plain: true"
-        :onclick      "editItem({})"} "Editar"]
+        :onclick      "editItem({})"} "Edit"]
    [:a {:href         "javascript:void(0)"
         :class        "easyui-linkbutton"
         :data-options "iconCls: 'icon-remove',plain: true"
-        :onclick      "deleteItem()"} "Remover"]
+        :onclick      "deleteItem()"} "Remove"]
    extra
    [:div {:style "float: right"}]])
 
@@ -812,11 +812,11 @@
         :class        "easyui-linkbutton c6"
         :style        "margin-right:5px;"
         :data-options "iconCls: 'icon-ok'"
-        :onclick      "saveItem()"} "Procesar"]
+        :onclick      "saveItem()"} "Submit"]
    [:a {:href         "javascript:void(0)"
         :class        "easyui-linkbutton"
         :data-options "iconCls: 'icon-cancel'"
-        :onclick      "dialogClose()"} "Cancelar"]])
+        :onclick      "dialogClose()"} "Cancel"]])
 
 (defn build-table [title url fields]
   [:table.dg

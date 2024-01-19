@@ -150,7 +150,7 @@
     :secure 2
     :root "scr/sk/handlers/admin/"
     :link "/admin/users"
-    :description "Usuarios"}
+    :description "Users"}
    {:id 3
     :type "P"
     :admin "T"
@@ -198,7 +198,7 @@
     :level "A"
     :active "T"}
    {:lastname "User"
-    :firstname "Sistema"
+    :firstname "System"
     :username "sistema@gmail.com"
     :password (crypt/encrypt "sistema")
     :dob "1957-02-07"

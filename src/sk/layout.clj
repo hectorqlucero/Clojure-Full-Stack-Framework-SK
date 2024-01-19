@@ -42,10 +42,10 @@
         [:li.nav-item.dropdown
          [:a.nav-link.dropdown-toggle {:href "#"
                                        :id "navdrop"
-                                       :data-toggle "dropdown"} "Administrar"]
+                                       :data-toggle "dropdown"} "Admin"]
          [:div.dropdown-menu
           (build-admin)]])
-      [:li.nav-item [:a.nav-link {:href "/home/logoff"} (str "Salir [" (user-name) "]")]]]]]))
+      [:li.nav-item [:a.nav-link {:href "/home/logoff"} (str "Logoff [" (user-name) "]")]]]]]))
 
 (defn menus-public []
   (list
@@ -61,7 +61,7 @@
     [:div#collapsibleNavbar.collapse.navbar-collapse
      [:ul.navbar-nav
       (do (or (build-public-menus) nil)
-          [:li.nav-item [:a.nav-link {:href "/home/login"} "Conectar"]])]]]))
+          [:li.nav-item [:a.nav-link {:href "/home/login"} "Login"]])]]]))
 
 (defn menus-none []
   (list
@@ -101,7 +101,7 @@
    (include-js "/easyui/datagrid-bufferview.js")
    (include-js "/easyui/datagrid-scrollview.js")
    (include-js "/easyui/datagrid-filter.js")
-   (include-js "/easyui/locale/easyui-lang-es.js")
+   (include-js "/easyui/locale/easyui-lang-en.js")
    (include-js "/RichText/src/jquery.richtext.min.js")
    (include-js "/js/htmx.js")
    (include-js "/js/main.js")))
@@ -137,7 +137,7 @@
 (defn error-404 [content return-url]
   (html5 {:ng-app (:site-name config) :lang "es"}
          [:head
-          [:title "Mensaje"]
+          [:title "Message"]
           [:meta {:charset "UTF-8"}]
           [:meta {:name "viewport"
                   :content "initial-scale=1.0,maximum-scale=1.0,user-scalable=no"}]
@@ -152,8 +152,8 @@
              (menus-none)]]
            [:div.easyui-panel {:data-options "fit:true,border:false" :style "padding-left:14px;"}
             [:div
-             [:p [:h3 [:b "Mensaje: "]] content]
-             [:p [:h3 [:a {:href return-url} "Clic aqui para " [:strong "Continuar"]]]]]]
+             [:p [:h3 [:b "Message: "]] content]
+             [:p [:h3 [:a {:href return-url} "Click here to " [:strong "Continue"]]]]]]
            [:footer
             [:div.m-toolbar
              [:div.m-title  "Copyright &copy" (t/year (t/now)) " " (:company-name config) " All Rights Reserved"]]]]

@@ -315,8 +315,8 @@
           postvars (build-postvars table params)
           result (Save db (keyword table) postvars ["id = ?" id])]
       (if (seq result)
-        (generate-string {:success "Procesado con éxito!"})
-        (generate-string {:error "No se puede procesar!"})))
+        (generate-string {:success "Processed successfuly!"})
+        (generate-string {:error "Unable to process!"})))
     (catch Exception e (.getMessage e))))
 
 ;; Start upload form
@@ -351,8 +351,8 @@
           postvars (assoc postvars :imagen image-name :id the-id)
           result (Save db (keyword table) postvars ["id = ?" the-id])]
       (if (seq result)
-        (generate-string {:success "Procesado con éxito!"})
-        (generate-string {:error "No se puede procesar!"})))
+        (generate-string {:success "Processed successfully!"})
+        (generate-string {:error "Unable to process!"})))
     (catch Exception e (.getMessage e))))
 ;; End upload form
 
@@ -373,8 +373,8 @@
                    (Delete db (keyword table) ["id = ?" id])
                    nil)]
       (if (seq result)
-        (generate-string {:success "Eliminado con éxito!"})
-        (generate-string {:error "Incapaz de eliminar!"})))
+        (generate-string {:success "Successfully deleted!"})
+        (generate-string {:error "Unable to delete!"})))
     (catch Exception e (.getMessage e))))
 
 (comment

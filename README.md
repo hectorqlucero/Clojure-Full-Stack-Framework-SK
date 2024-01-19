@@ -89,6 +89,7 @@
 2. From a terminal Clone the repository *git clone https://github.com/hectorqlucero/Clojure-Full-Stack-Framework-SK.git*
 3. mv Clojure-Full-Stack-Framework-SK demo *Rename the clone folder demo*
 4. cd demo
+   1. *mkdir -p uploads/demo*  This will create the directory to upload images.
 5. cp resources/private/config_example.clj resources/private/config.clj
    config.clj will look like this:
    ```
@@ -133,6 +134,7 @@
     :path         "/uploads/"}
    ```
    *Note:* your_database_password is the password that you gave to MySQL.  Please setup MySQL with a password, don't use a blank password
+   *Optional* setup above is to allow you to send emails.  If you don't have an email-host, you won't be able to send emails.
 7. Go to the root of your project with your editor of choice and edit *project.clj* the file looks like this:
   ```
   (defproject sk "0.1.0"
@@ -268,7 +270,7 @@
        - Applying 007-contacts *contacts table*
 15. Open a terminal at the root of you project and type:
     1. *lein grid contacts* to create a data grid for the table contacts. You will see on the terminal:
-      - Codigo generado en: src/sk/handlers/admin/contacts *creates a folder contacts with 3 files inside*:
+      - Code generated at: src/sk/handlers/admin/contacts *creates a folder contacts with 3 files inside*:
         ```
         ;; This is the handler
         (ns sk.handlers.admin.contacts.handler
@@ -403,7 +405,7 @@
         (defn contacts-scripts []
         (include-js "/js/grid.js"))
         ``` 
-16. Now let's fine tune this view to be more user friendly. The view should look like this below:
+16. Edit the files and format the code with your editor/IDE. Now let's fine tune this view to be more user friendly. The view should look like this below:
     ```
     (ns sk.handlers.admin.contacts.view
     (:require
@@ -491,7 +493,7 @@
     - A new menu option *Contacts* will now be available in the *Administrar* menu. Click on the menu option *Contacts* and enter a few contacs.
 18. Open a terminal in the root of the app and type:
     1. *lein dashboard contacts* to create a dashboard for the table contacts. You will see on the terminal:
-        - Codigo generado en: src/sk/handlers/contacts *creates folder contacts with 3 files inside:*
+        - Code generated at: src/sk/handlers/contacts *creates folder contacts with 3 files inside:* Edit the files with your editor/IDE to format code.
         ```
         ;; This is the handler
         (ns sk.handlers.contacts.handler

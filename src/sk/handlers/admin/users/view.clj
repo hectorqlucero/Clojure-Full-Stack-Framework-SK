@@ -15,24 +15,24 @@
      :name         "username"
      :class        "easyui-textbox easyui-validatebox"
      :validType    "email"
-     :prompt       "someone@server.com - correo electronico"
-     :data-options "label:'Usuario:',
+     :prompt       "someone@server.com - Email..."
+     :data-options "label:'User:',
                      labelPosition:'top',
                      width:'100%',required: true"})
    (build-field
     {:id           "firstname"
      :name         "firstname"
      :class        "easyui-textbox"
-     :prompt       "Nombre ej. Pedro"
-     :data-options "label:'Nombre:',
+     :prompt       "Name of the user..."
+     :data-options "label:'First Name:',
                      labelPosition:'top',
                      width:'100%',required: true"})
    (build-field
     {:id           "lastname"
      :name         "lastname"
      :class        "easyui-textbox"
-     :prompt       "Apellidos ej. Lopez Contreras"
-     :data-options "label:'Apellidos:',
+     :prompt       "User Lastname..."
+     :data-options "label:'Last Name:',
                      labelPosition:'top',
                      width:'100%',required: true"})
    (build-field
@@ -40,7 +40,7 @@
      :name         "dob"
      :class        "easyui-datebox"
      :prompt       "mm/dd/yyyy"
-     :data-options "label:'Fecha de nacimiento:',
+     :data-options "label:'DOB:',
                      labelPosition:'top',
                      width:'100%',required: false"})
    (build-field
@@ -56,7 +56,7 @@
     {:id "level"
      :name "level"
      :class "easyui-combobox"
-     :data-options "label:'Nivel de Usuario:',
+     :data-options "label:'User Level:',
                      labelPosition:'top',
                      url:'/table_ref/levels',
                      method:'GET',
@@ -83,11 +83,11 @@
     title
     "/admin/users"
     (list
-     [:th {:data-options "field:'username',sortable:true,fixed:false,width:100"} "Usuario [clic para seleccionar]"]
+     [:th {:data-options "field:'username',sortable:true,fixed:false,width:100"} "Usuario [clic to select]"]
      [:th {:data-options "field:'imagen',sortable:true,fixed:false,width:100"
            :formatter "imagenShow"} "Foto [clic foto +-]"]
-     [:th {:data-options "field:'lastname',sortable:true,fixed:false,width:100"} "Apellidos"]
-     [:th {:data-options "field:'firstname',sortable:true,fixed:true,width:100"} "Nombre"]
+     [:th {:data-options "field:'lastname',sortable:true,fixed:false,width:100"} "Lastname"]
+     [:th {:data-options "field:'firstname',sortable:true,fixed:true,width:100"} "Name"]
      [:th {:data-options "field:'level',sortable:true,fixed:true,width:100"
            :formatter "levelDesc"} "Nivel"]
      [:th {:data-options "field:'active',sortable:true,fixed:false,width:100"
@@ -138,17 +138,17 @@
 
   function levelDesc(val, row, index) {
     if(row.level == 'A') {
-      return 'Administrador';
+      return 'Administrator';
     } else if(row.level == 'U') {
-      return 'Usuario';
+      return 'User';
     } else if(row.level == 'S') {
-      return 'Sistema';
+      return 'System';
     }
   }
 
   function statusDesc(val, row, index) {
     if(row.active == 'T') {
-      return 'Si';
+      return 'Yes';
     } else {
       return 'No';
     }

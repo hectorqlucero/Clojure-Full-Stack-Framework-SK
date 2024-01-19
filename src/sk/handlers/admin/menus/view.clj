@@ -87,7 +87,7 @@
     {:id "description"
      :name "description"
      :class "easyui-textbox"
-     :prompt "The description ex. Conectar"
+     :prompt "The description"
      :data-options "label:'Description:',
         labelPosition:'top',
         required:true,

@@ -14,7 +14,7 @@
         content (rincludes-view title)]
     (if (= (user-level) "S")
       (application title ok js content)
-      (application title ok nil "solo <strong>los administradores nivel sistema </strong> pueden accessar esta opción!!!"))))
+      (application title ok nil "Only <strong>administrators</strong> can access this option!!!"))))
 
 (defn rincludes-grid
   "builds grid. parameters: params table & args args: {:join 'other-table' :search-extra name='pedro' :sort-extra 'name,lastname'}"

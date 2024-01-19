@@ -94,24 +94,24 @@
   "Returns months name ex: (months)"
   []
   (list
-   {:value 1 :text "Enero"}
-   {:value 2 :text "Febrero"}
-   {:value 3 :text "Marzo"}
-   {:value 4 :text "Abril"}
-   {:value 5 :text "Mayo"}
-   {:value 6 :text "Junio"}
-   {:value 7 :text "Julio"}
-   {:value 8 :text "Agosto"}
-   {:value 9 :text "Septiembre"}
-   {:value 10 :text "Octubre"}
-   {:value 11 :text "Noviembre"}
-   {:value 12 :text "Diciembre"}))
+   {:value 1 :text "January"}
+   {:value 2 :text "February"}
+   {:value 3 :text "March"}
+   {:value 4 :text "April"}
+   {:value 5 :text "May"}
+   {:value 6 :text "June"}
+   {:value 7 :text "July"}
+   {:value 8 :text "August"}
+   {:value 9 :text "September"}
+   {:value 10 :text "October"}
+   {:value 11 :text "November"}
+   {:value 12 :text "December"}))
 
 (defn level-options []
   (list
-   {:value "U" :text "Usuarios"}
-   {:value "A" :text "Administrador"}
-   {:value "S" :text "Systema"}))
+   {:value "U" :text "Users"}
+   {:value "A" :text "Administrator"}
+   {:value "S" :text "System"}))
 
 (defn years
   "Genera listado para dropdown dependiendo de p=anterioriores de este año, n=despues de este año,
