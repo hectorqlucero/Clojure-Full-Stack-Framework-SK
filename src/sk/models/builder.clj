@@ -17,10 +17,10 @@
    "builds grid. parameters: params table & args args: {:join 'other-table' :search-extra name='pedro' :sort-extra 'name,lastname'}"))
 
 (def security-comments-1
-  "solo <strong>los administradores </strong> pueden accessar esta opción!!!")
+  "Only <strong>los administrators </strong> can access this option!!!")
 
 (def security-comments-2
-  "solo <strong>los administradores nivel sistema </strong> pueden accessar esta opción!!!")
+  "Only <strong>system administrators </strong> can access this option!!!")
 
 (defn process-security [security]
   (cond
@@ -285,7 +285,7 @@
      ":headers {\"Content-Type\" \"application/pdf\"\n"
      "\"Content-Disposition\" \"attachment;filename=" folder ".pdf\"}\n"
      ":body (as-stream (gen-pdf content))}\n"
-     "(application title ok js \"Solo miembros pueden accessar esta opción!!!\"))"
+     "(application title ok js \"Only members can access this option!!!\"))"
      "))\n\n"
      "(def " table "-pdf-template\n"
      "(template\n"
