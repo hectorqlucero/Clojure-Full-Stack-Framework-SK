@@ -20,7 +20,7 @@ function saveItem() {
         $('a#submit').linkbutton('enable');
       } else {
         $.messager.alert({
-          title: 'Exito',
+          title: 'Success',
           msg: json.success,
           fn: function() {
             window.location.href = return_url;
